@@ -9,11 +9,18 @@
 		<relativePath/>
 	</parent>
 
-	<name>PrivateBot</name>
+	<name>Private Bot</name>
+
+	<modules>
+		<module>main-service</module>
+	</modules>
+
 	<groupId>com.github.jon7even</groupId>
 	<artifactId>java-support-telegram-private-bot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
 	<description>Telegram bot for personal use</description>
+
 	<properties>
 		<telegram.version>6.5.0</telegram.version>
 		<lombok.version>1.18.30</lombok.version>
@@ -36,12 +43,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.telegram</groupId>
-			<artifactId>telegrambots</artifactId>
-			<version>${telegram.version}</version>
-		</dependency>
-
-		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>${lombok.version}</version>
@@ -50,12 +51,19 @@
 	</dependencies>
 
 	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<configuration>
+						<systemPropertyVariables>
+							<spring.profiles.active>test</spring.profiles.active>
+						</systemPropertyVariables>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 
 </project>
