@@ -1,0 +1,116 @@
+server:
+  port: ${SERVER_PORT_NODE}
+
+localeTag: ${LOCALE_TAG}
+
+logging:
+  level:
+    com:
+      github:
+        jon7even: DEBUG
+    org:
+      springframework:
+        orm:
+          jpa: INFO
+          JpaTransactionManager: DEBUG
+        transaction: INFO
+      hibernate:
+        SQL: DEBUG
+        type.descriptor:
+          sql:
+            BasicBinder: TRACE
+
+# Configuration for the 'ci' profile
+spring:
+  config:
+    activate:
+      on-profile: ci
+
+  liquibase:
+    enabled: true
+
+  main:
+    banner-mode: off
+
+  output:
+    ansi:
+      enabled: ALWAYS
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL10Dialect
+        format_sql: true
+    open-in-view: false
+
+  rabbitmq:
+    host: ${RABBIT_IP}
+    port: ${RABBIT_PORT}
+    username: ${RABBIT_USER}
+    password: ${RABBIT_PASS}
+
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASS}
+
+---
+# Configuration for the 'test' profile
+server:
+  port: ${SERVER_TEST_PORT_NODE}
+
+localeTag: ${LOCALE_TAG}
+
+logging:
+  level:
+    com:
+      github:
+        jon7even: DEBUG
+    org:
+      springframework:
+        orm:
+          jpa: DEBUG
+          JpaTransactionManager: DEBUG
+        transaction: DEBUG
+      hibernate:
+        SQL: DEBUG
+        type.descriptor:
+          sql:
+            BasicBinder: DEBUG
+
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  liquibase:
+    enabled: true
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+      database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
+    properties:
+      hibernate:
+        use_sql_comments: true
+        format_sql: true
+  h2:
+    console:
+      enabled: true
+      path: /console
+
+  rabbitmq:
+    host: ${RABBIT_IP}
+    port: ${RABBIT_PORT}
+    username: ${RABBIT_USER}
+    password: ${RABBIT_PASS}
+
+  datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:mainserver
+    username: test
+    password: test
