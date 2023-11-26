@@ -1,0 +1,76 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: jon7even
+      context: dev
+      changes:
+        - tagDatabase:
+            tag: db_init_user
+        - sqlFile:
+            encoding: utf8
+            endDelimiter: \nGO
+            stripComments: false
+            dbms: postgresql, h2
+            splitStatements: false
+            relativeToChangeLogFile: true
+            path: v-2.0/data/001-create-users-table.sql
+  - changeSet:
+      id: 2
+      author: jon7even
+      context: dev
+      changes:
+        - tagDatabase:
+            tag: db_init_gifts
+        - sqlFile:
+            encoding: utf8
+            endDelimiter: \nGO
+            stripComments: false
+            dbms: postgresql, h2
+            splitStatements: false
+            relativeToChangeLogFile: true
+            path: v-2.0/data/002-create-gifts-table.sql
+  - changeSet:
+      id: 3
+      author: jon7even
+      context: dev
+      changes:
+        - tagDatabase:
+            tag: db_init_companies
+        - sqlFile:
+            encoding: utf8
+            endDelimiter: \nGO
+            stripComments: false
+            dbms: postgresql, h2
+            splitStatements: false
+            relativeToChangeLogFile: true
+            path: v-2.0/data/003-create-companies-table.sql
+  - changeSet:
+      id: 4
+      author: jon7even
+      context: dev
+      changes:
+        - tagDatabase:
+            tag: db_init_competitors
+        - sqlFile:
+            encoding: utf8
+            endDelimiter: \nGO
+            stripComments: false
+            dbms: postgresql, h2
+            splitStatements: false
+            relativeToChangeLogFile: true
+            path: v-2.0/data/004-create-competitors-table.sql
+  - changeSet:
+      id: 5
+      author: jon7even
+      context: dev
+      changes:
+        - tagDatabase:
+            tag: db_init_events
+        - sqlFile:
+            encoding: utf8
+            endDelimiter: \nGO
+            stripComments: false
+            dbms: postgresql, h2
+            splitStatements: false
+            relativeToChangeLogFile: true
+            path: v-2.0/data/005-create-events-table.sql

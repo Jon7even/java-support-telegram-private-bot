@@ -1,0 +1,83 @@
+server:
+  port: 7099
+
+localeTag: ru-RU
+
+logging:
+  level:
+    com:
+      github:
+        jon7even: DEBUG
+    org:
+      springframework:
+        orm:
+          jpa: DEBUG
+          JpaTransactionManager: DEBUG
+        transaction: DEBUG
+      hibernate:
+        SQL: DEBUG
+        type.descriptor:
+          sql:
+            BasicBinder: DEBUG
+
+info:
+  app:
+    name: "Node Service Test"
+    description: "Service test containing business logic for Telegram Bot"
+
+# Configuration for the 'test' profile
+spring:
+  application:
+    name: node
+
+  config:
+    activate:
+      on-profile: test
+
+  liquibase:
+    enabled: true
+    liquibase-schema: public
+    default-schema: bot
+    change-log: classpath:db/changelog/changelog-master.xml
+
+  main:
+    banner-mode: off
+
+  output:
+    ansi:
+      enabled: ALWAYS
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        use_sql_comments: true
+        format_sql: true
+        default-schema: bot
+        cacheable: false
+    show-sql: true
+    open-in-view: false
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: test_username
+    password: test_password
+
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/test_db
+    username: test_username
+    password: test_password
+    hikari:
+      schema: bot
+      connection-timeout: 30000
+      maximum-pool-size: 17
+      minimum-idle: 3
+      idle-timeout: 37777
+      max-lifetime: 1800777
+      connection-test-timeout: 5000
+      pool-name: NodePoolTest
+      validation-timeout: 3777
+      leak-detection-threshold: 2777

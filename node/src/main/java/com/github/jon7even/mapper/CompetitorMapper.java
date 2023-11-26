@@ -1,0 +1,33 @@
+package com.github.jon7even.mapper;
+
+import com.github.jon7even.dto.competitor.CompetitorBuildingDto;
+import com.github.jon7even.dto.competitor.CompetitorShortDto;
+import com.github.jon7even.entity.competitor.CompetitorEntity;
+import com.github.jon7even.entity.user.UserEntity;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
+
+import java.time.LocalDateTime;
+
+/**
+ * Интерфейс для маппинга DTO и сущностей конкурентов
+ *
+ * @author Jon7even
+ * @version 1.0
+ */
+@Mapper(componentModel = "spring")
+public interface CompetitorMapper {
+    CompetitorMapper INSTANCE = Mappers.getMapper(CompetitorMapper.class);
+
+    @Mapping(source = "competitorEntity.name", target = "name")
+    CompetitorShortDto toShortDtoFromEntity(CompetitorEntity competitorEntity);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(source = "competitorBuildingDto.name", target = "name")
+    @Mapping(source = "now", target = "created")
+    @Mapping(source = "userEntity", target = "creator")
+    CompetitorEntity toEntityFromBuildingDto(CompetitorBuildingDto competitorBuildingDto,
+                                             LocalDateTime now,
+                                             UserEntity userEntity);
+}

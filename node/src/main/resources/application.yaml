@@ -1,0 +1,82 @@
+server:
+  port: ${SERVER_EXTERNAL_PORT_NODE}
+
+localeTag: ${LOCALE_TAG}
+
+logging:
+  level:
+    com:
+      github:
+        jon7even: DEBUG
+    org:
+      springframework:
+        orm:
+          jpa: INFO
+          JpaTransactionManager: DEBUG
+        transaction: INFO
+      hibernate:
+        SQL: DEBUG
+        type.descriptor:
+          sql:
+            BasicBinder: TRACE
+
+info:
+  app:
+    name: "Node Service"
+    description: "Service containing business logic for Telegram Bot"
+
+# Configuration for the 'ci' profile
+
+spring:
+  application:
+    name: node
+
+  config:
+    activate:
+      on-profile: ci
+
+  liquibase:
+    enabled: true
+    liquibase-schema: public
+    default-schema: ${SCHEMA_APP}
+    change-log: classpath:db/changelog/changelog-master.xml
+
+  main:
+    banner-mode: off
+
+  output:
+    ansi:
+      enabled: ALWAYS
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+        default-schema: ${SCHEMA_APP}
+    show-sql: true
+    open-in-view: false
+
+  rabbitmq:
+    host: ${RABBIT_HOST}
+    port: ${RABBIT_AMQP_PORT_LOCAL}
+    username: ${RABBIT_USER}
+    password: ${RABBIT_PASS}
+
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT_LOCAL}/${DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASS}
+    hikari:
+      schema: ${SCHEMA_APP}
+      connection-timeout: 30000
+      maximum-pool-size: 17
+      minimum-idle: 3
+      idle-timeout: 37777
+      max-lifetime: 1800777
+      connection-test-timeout: 5000
+      pool-name: NodePoolCi
+      validation-timeout: 3777
+      leak-detection-threshold: 2777
