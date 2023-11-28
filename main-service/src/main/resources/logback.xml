@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="LOG_BOT" value="C:\direct\dev\KronaPrivateBot/tg-bots/krona_private_bot.log"/>
+
+    <appender name="FILE-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_BOT}</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>/var/log/tg-bots/support_private_bot.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxFileSize>8MB</maxFileSize>
+            <totalSizeCap>128MB</totalSizeCap>
+            <maxHistory>90</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>
+                %d %p %c{1} [%t] %m%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <appender name="CONSOLE-ROLLING"
+              class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %white(%d{ISO8601}) %highlight(%-5level) [%yellow(%t)] : %msg%n%throwable
+            </Pattern>
+        </layout>
+    </appender>
+
+    <logger name="ru.krona27.KronaPrivateBot" level="debug" additivity="false">
+        <appender-ref ref="FILE-ROLLING"/>
+        <appender-ref ref="CONSOLE-ROLLING"/>
+    </logger>
+
+    <root level="error">
+        <appender-ref ref="FILE-ROLLING"/>
+        <appender-ref ref="CONSOLE-ROLLING"/>
+    </root>
+
+    <root level="info">
+        <appender-ref ref="FILE-ROLLING"/>
+        <appender-ref ref="CONSOLE-ROLLING"/>
+    </root>
+
+</configuration>
