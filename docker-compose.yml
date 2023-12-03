@@ -3,28 +3,29 @@ services:
 
   bot-private-db:
     image: postgres:14-alpine
-    container_name: bot-private-db
+    container_name: db_bot_private
     volumes:
       - /var/lib/postgresql/data/
     ports:
       - "6541:5432"
     restart: on-failure
     environment:
-      - POSTGRES_DB=1
-      - POSTGRES_USER=1
-      - POSTGRES_PASSWORD=1
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
 
-  server:
-    build: .
-    container_name: bot_private
+  main-service:
+    image: main-service
+    build: ./main-service
+    container_name: ms_bot_private
     restart: on-failure
     depends_on:
       - bot-private-db
     environment:
-      - TG_NAME=111
-      - TG_TOKEN=111
-      - DB_NAME=111
-      - POSTGRES_USER=111
-      - POSTGRES_PASSWORD=111
-      - DB_HOST=111
+      - TG_NAME=${TG_NAME}
+      - TG_TOKEN=${TG_TOKEN}
+      - DB_NAME=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=bot-private-db
       - DB_PORT=5432

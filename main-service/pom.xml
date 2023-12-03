@@ -6,11 +6,11 @@
 
     <parent>
         <groupId>com.github.jon7even</groupId>
-        <artifactId>java-support-telegram-private-bot</artifactId>
+        <artifactId>private-support-telegram-bot</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <name>Private Bot ***Main Service Server***</name>
+    <name>Private Support Bot ***Main Service***</name>
     <artifactId>main-service</artifactId>
 
     <properties>
@@ -20,11 +20,39 @@
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots</artifactId>
             <version>${telegram.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
     
 </project>

@@ -4,8 +4,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class PrivateBotApplicationTests {
+@SpringBootTest(
+		properties = { "TG_NAME=test", "TG_TOKEN=test" }
+)
+class PrivateBotAppTests {
 
 	@Test
 	void contextLoads() {

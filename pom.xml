@@ -9,14 +9,14 @@
 		<relativePath/>
 	</parent>
 
-	<name>Private Bot</name>
+	<name>Private Support Bot</name>
 
 	<modules>
 		<module>main-service</module>
 	</modules>
 
 	<groupId>com.github.jon7even</groupId>
-	<artifactId>java-support-telegram-private-bot</artifactId>
+	<artifactId>private-support-telegram-bot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<description>Telegram bot for personal use</description>

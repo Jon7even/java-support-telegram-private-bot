@@ -1,4 +1,4 @@
-package com.github.jon7even.service;
+package com.github.jon7even.controller;
 
 import com.github.jon7even.config.BotConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -16,11 +16,11 @@ import java.util.List;
 
 @Slf4j
 @Component
-public class TelegramBot extends TelegramLongPollingBot {
+public class TelegramBotController extends TelegramLongPollingBot {
     private final BotConfig config;
 
-    public TelegramBot(BotConfig config) {
-        super(config.getBotToken());
+    public TelegramBotController(BotConfig config) {
+        super(config.getToken());
         this.config = config;
         List<BotCommand> commandsMenu = new ArrayList<>();
         commandsMenu.add(new BotCommand("/1", "текст"));
@@ -81,6 +81,6 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return config.getBotName();
+        return config.getName();
     }
 }
