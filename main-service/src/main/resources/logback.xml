@@ -28,7 +28,7 @@
         </layout>
     </appender>
 
-    <logger name="ru.krona27.KronaPrivateBot" level="debug" additivity="false">
+    <logger name="com.github.jon7even" level="debug" additivity="false">
         <appender-ref ref="FILE-ROLLING"/>
         <appender-ref ref="CONSOLE-ROLLING"/>
     </logger>

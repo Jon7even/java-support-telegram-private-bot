@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest(
-		properties = { "TG_NAME=test", "TG_TOKEN=test" }
+		properties = { "TG_NAME=${TEST_NAME}", "TG_TOKEN=${TEST_TOKEN}" }
 )
 class PrivateBotAppTests {
 

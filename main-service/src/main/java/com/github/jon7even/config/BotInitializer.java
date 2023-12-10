@@ -25,4 +25,5 @@ public class BotInitializer {
             log.error("Произошла ошибка: " + e.getMessage());
         }
     }
+
 }

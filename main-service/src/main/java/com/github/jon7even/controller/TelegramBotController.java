@@ -16,16 +16,22 @@ import java.util.List;
 
 @Slf4j
 @Component
-public class TelegramBotController extends TelegramLongPollingBot {
+public final class TelegramBotController extends TelegramLongPollingBot {
     private final BotConfig config;
 
     public TelegramBotController(BotConfig config) {
         super(config.getToken());
         this.config = config;
         List<BotCommand> commandsMenu = new ArrayList<>();
-        commandsMenu.add(new BotCommand("/1", "текст"));
-        commandsMenu.add(new BotCommand("/2", "текст"));
-        commandsMenu.add(new BotCommand("/3", "текст"));
+        commandsMenu.add(new BotCommand("/start", "Описание и команды бота"));
+        commandsMenu.add(new BotCommand("/help", "Список доступных команд"));
+        commandsMenu.add(new BotCommand("/items", "Дать информацию о товаре"));
+        commandsMenu.add(new BotCommand("/checkitems", "Новая работа с товарами"));
+        commandsMenu.add(new BotCommand("/newtask", "Добавить задачу для команды"));
+        commandsMenu.add(new BotCommand("/tasklist", "Получить задачи к выполнению"));
+        commandsMenu.add(new BotCommand("/gifts", "Начать работать с подарками"));
+        commandsMenu.add(new BotCommand("/checkgifts", "Проверить кто еще без подарка"));
+        commandsMenu.add(new BotCommand("/competitors", "Работа с конкурентами"));
 
         try {
             this.execute(new SetMyCommands(commandsMenu, new BotCommandScopeDefault(), null));
@@ -33,7 +39,6 @@ public class TelegramBotController extends TelegramLongPollingBot {
             log.error("Что-то пошло не так с загрузкой команд для бота: " + e.getMessage());
         }
     }
-
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -78,9 +83,9 @@ public class TelegramBotController extends TelegramLongPollingBot {
         }
     }
 
-
     @Override
     public String getBotUsername() {
         return config.getName();
     }
+
 }
