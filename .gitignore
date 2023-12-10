@@ -34,3 +34,5 @@ db/*
 
 .env
 *.env
+application-test.properties
+*application-test.properties
