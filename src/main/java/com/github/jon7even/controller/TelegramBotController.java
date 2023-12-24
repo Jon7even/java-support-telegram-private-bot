@@ -8,15 +8,22 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.github.jon7even.utils.Emoji.SMAIL;
 
 @Slf4j
 @Component
@@ -76,7 +83,7 @@ public final class TelegramBotController extends TelegramLongPollingBot {
                     sendMessage(chaId, "текст");
                     break;
                 case "/gifts":
-                    sendMessage(chaId, "текст");
+                    sendMessage(chaId, String.valueOf(SMAIL));
                     break;
                 case "/checkgifts":
                     sendMessage(chaId, "текст");
@@ -85,15 +92,74 @@ public final class TelegramBotController extends TelegramLongPollingBot {
                     sendMessage(chaId, "текст");
                     break;
                 case "/userinfo":
-                    sendMessage(chaId, "текст");
+                    sendMessageVariant(chaId);
                     break;
 
                 default:
-                    sendMessage(chaId, "текст");
+                    sendMessage(chaId, "\uD83E\uDEE0 НЕ поддерживается команда \uD83E\uDEE0 \uD83E\uDEE0");
                     log.error("Эту команду мы еще не поддерживаем. Команда пользователя: " + result);
             }
+        } else if (update.hasCallbackQuery()) {
+            String result = update.getCallbackQuery().getData();
+            long chaId = update.getCallbackQuery().getMessage().getChatId();
+            int messageId = update.getCallbackQuery().getMessage().getMessageId();
+
+            switch (result) {
+                case "YES_BUTTON":
+                    sendMessage(chaId, "Ну");
+                    break;
+                case "NO_BUTTON":
+                    String text = "Тебе !";
+                    EditMessageText messageText = new EditMessageText();
+                    messageText.setChatId(chaId);
+                    messageText.setText(text);
+                    messageText.setMessageId(messageId);
+
+                    try {
+                        execute(messageText);
+                    } catch (TelegramApiException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+
+                default:
+                    sendMessage(chaId, "\uD83E\uDEE0 НЕ поддерживается команда \uD83E\uDEE0 \uD83E\uDEE0");
+                    log.error("Эту команду мы еще не поддерживаем. Команда пользователя: " + result);
+            }
+
         }
 
+    }
+
+    private void sendMessageVariant(long chatId) {
+        SendMessage message = new SendMessage();
+        message.setChatId(String.valueOf(chatId));
+        message.setText("Вы хотите зарегистрировать себя в качестве пользователя?");
+
+        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
+        List<InlineKeyboardButton> rowInLine = new ArrayList<>();
+        var yesButton = new InlineKeyboardButton();
+        yesButton.setText("Да");
+        yesButton.setCallbackData("YES_BUTTON");
+
+        var noButton = new InlineKeyboardButton();
+        noButton.setText("Нет");
+        noButton.setCallbackData("NO_BUTTON");
+
+        rowInLine.add(yesButton);
+        rowInLine.add(noButton);
+
+        rowsInLine.add(rowInLine);
+
+        markup.setKeyboard(rowsInLine);
+        message.setReplyMarkup(markup);
+
+        try {
+            execute(message);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void startCommandReceived(long chatId, String name) {
@@ -105,6 +171,23 @@ public final class TelegramBotController extends TelegramLongPollingBot {
         SendMessage message = new SendMessage();
         message.setChatId(String.valueOf(chatId));
         message.setText(textToSend);
+
+        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+        List<KeyboardRow> keyboardRows = new ArrayList<>();
+
+        KeyboardRow row = new KeyboardRow();
+
+        row.add("test");
+        row.add("home");
+
+        keyboardRows.add(row);
+
+        row.add("checkgifts");
+        row.add("gifts");
+
+        keyboardRows.add(row);
+        keyboardMarkup.setKeyboard(keyboardRows);
+        message.setReplyMarkup(keyboardMarkup);
 
         try {
             execute(message);
