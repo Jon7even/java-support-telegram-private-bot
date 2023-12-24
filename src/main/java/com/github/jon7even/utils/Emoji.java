@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 public enum Emoji {
     SMAIL(EmojiParser.parseToUnicode(":blush:"));
 
-    private String emojiCode;
+    private final String emojiCode;
 
     @Override
     public String toString() {

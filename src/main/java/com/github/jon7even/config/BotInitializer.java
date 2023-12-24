@@ -1,6 +1,6 @@
 package com.github.jon7even.config;
 
-import com.github.jon7even.controller.TelegramBotController;
+import com.github.jon7even.controller.TelegramBot;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -14,7 +14,7 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 @Component
 public class BotInitializer {
     @Autowired
-    private TelegramBotController bot;
+    private TelegramBot bot;
 
     @EventListener({ContextRefreshedEvent.class})
     public void init() throws TelegramApiException {

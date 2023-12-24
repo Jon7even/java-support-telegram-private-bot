@@ -1,6 +1,6 @@
 package com.github.jon7even.setup;
 
-import com.github.jon7even.model.UserEntity;
+import com.github.jon7even.model.user.UserEntity;
 
 import java.time.LocalDateTime;
 

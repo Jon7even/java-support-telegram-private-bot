@@ -1,4 +1,4 @@
-package com.github.jon7even.model;
+package com.github.jon7even.model.user;
 
 import lombok.*;
 

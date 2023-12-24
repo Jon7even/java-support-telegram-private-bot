@@ -1,6 +1,6 @@
 package com.github.jon7even.repository;
 
-import com.github.jon7even.model.UserEntity;
+import com.github.jon7even.model.user.UserEntity;
 import com.github.jon7even.setup.GenericTests;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
