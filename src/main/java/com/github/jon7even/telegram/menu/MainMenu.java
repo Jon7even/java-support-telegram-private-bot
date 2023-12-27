@@ -1,4 +1,4 @@
-package com.github.jon7even.model.menu;
+package com.github.jon7even.telegram.menu;
 
 import lombok.AllArgsConstructor;
 

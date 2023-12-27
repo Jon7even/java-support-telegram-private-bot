@@ -1,5 +1,7 @@
-package com.github.jon7even.model.gift;
+package com.github.jon7even.model.company;
 
+import com.github.jon7even.model.user.UserEntity;
+import com.github.jon7even.telegram.menu.gift.TypeGift;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,8 +14,8 @@ import java.time.LocalDateTime;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "gifts", schema = "public")
-public class GiftEntity {
+@Table(name = "companies", schema = "public")
+public class CompanyEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -40,4 +42,9 @@ public class GiftEntity {
 
     @Column(name = "given_on")
     private LocalDateTime given;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "creator_id", nullable = false)
+    @ToString.Exclude
+    private UserEntity creator;
 }
