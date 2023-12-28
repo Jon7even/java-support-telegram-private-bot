@@ -10,6 +10,7 @@ import com.github.jon7even.repository.UserRepository;
 import com.github.jon7even.telegram.BotState;
 import com.github.jon7even.telegram.menu.gift.TypeGift;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
@@ -70,7 +71,6 @@ public final class TelegramBot extends TelegramLongPollingBot {
         commandsMenu.add(new BotCommand(START.toString(), "Регистрация"));
         commandsMenu.add(new BotCommand(HELP.toString(), "Список доступных команд"));
         commandsMenu.add(new BotCommand(GIFTS.toString(), "Начать работать с подарками"));
-        commandsMenu.add(new BotCommand(ITEMS.toString(), "Начать работать с товарами"));
         log.debug("Меню бота инициализировано");
 
         try {
@@ -82,143 +82,192 @@ public final class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-
         if (update.hasMessage() && update.getMessage().hasText()) {
-            String result = update.getMessage().getText();
+            String resultMessage = update.getMessage().getText();
             Long chaId = update.getMessage().getChatId();
+            UserEntity userFromBD = registerUser(update.getMessage());
 
-            BotState botState = userDataCache.getBotStateFromCache(chaId);
-            log.debug("Текущий статус пользователя: {}", botState);
-            CompanyBuildingDto companyBuildingDto = userDataCache.getCompanyFromCache(chaId);
-            log.debug("Текущий конструктор компании: {}", companyBuildingDto);
+            if (processAuthorization(chaId, userFromBD)) {
+                BotState botState = userDataCache.getBotStateFromCache(chaId);
+                log.debug("Текущее состояние бота у пользователя: {}", botState);
+                CompanyBuildingDto companyBuildingDto = userDataCache.getCompanyFromCache(chaId);
+                log.debug("Текущий конструктор компании: {}", companyBuildingDto);
 
-            if (botState.equals(BotState.COMPANY_NAME)) {
-                companyBuildingDto.setNameCompany(result);
-                userDataCache.setBotStateForCacheUser(chaId, BotState.COMPANY_SUM);
-                prepareAndSendMessage(chaId, "Отлично, а теперь укажите сумму за год");
-            }
-
-            if (botState.equals(BotState.COMPANY_SUM)) {
-                companyBuildingDto.setTotalSum(Integer.valueOf(result));
-                userDataCache.setBotStateForCacheUser(chaId, BotState.COMPANY_TYPE_GIFT);
-                prepareAndSendMessage(chaId, "Укажите тип подарка - стандарт или премиум");
-            }
-
-            if (botState.equals(BotState.COMPANY_TYPE_GIFT)) {
-                if (result.equals("стандарт")) {
-                    companyBuildingDto.setType(TypeGift.LIGHT);
-                } else if (result.equals("премиум")) {
-                    companyBuildingDto.setType(TypeGift.PREMIUM);
-                } else {
-                    prepareAndSendMessage(chaId, "Что-то пошло не так, ставим, что подарок стандарт...");
-                    companyBuildingDto.setType(TypeGift.LIGHT);
+                if (botState.equals(BotState.COMPANY_NAME)) {
+                    companyBuildingDto.setNameCompany(resultMessage);
+                    userDataCache.setBotStateForCacheUser(chaId, BotState.COMPANY_SUM);
+                    prepareAndSendMessage(chaId, "Отлично, а теперь укажите сумму за год");
                 }
-                userDataCache.setBotStateForCacheUser(chaId, BotState.COMPANY_IS_GIVEN);
-                prepareAndSendMessage(chaId, "Подарок уже выдан? Отвечайте да или нет.");
-            }
 
-            if (botState.equals(BotState.COMPANY_IS_GIVEN)) {
-                if (result.equals("да")) {
-                    companyBuildingDto.setIsGiven(true);
-                } else if (result.equals("нет")) {
-                    companyBuildingDto.setIsGiven(false);
-                } else {
-                    companyBuildingDto.setIsGiven(false);
-                }
-                userDataCache.setBotStateForCacheUser(chaId, BotState.COMPANY_IS_DONE);
-                prepareAndSendMessage(chaId, "Отлично! Сейчас будем сохранять в базу \uD83E\uDD73");
-
-                UserEntity userCreator = userRepository.findByChatId(chaId);
-                log.debug("Юзер: {}", userCreator);
-
-                log.debug("Вот оно: {}", companyBuildingDto);
-                CompanyEntity company = CompanyEntity.builder()
-                        .nameCompany(companyBuildingDto.getNameCompany())
-                        .totalSum(companyBuildingDto.getTotalSum())
-                        .type(companyBuildingDto.getType())
-                        .isGiven(companyBuildingDto.getIsGiven())
-                        .creator(userCreator)
-                        .created(LocalDateTime.now())
-                        .given(LocalDateTime.now())
-                        .build();
-
-                company.setId(1L);
-                log.debug("Вот оно: {}", company);
-
-                CompanyEntity createdCompany = companyRepository.save(company);
-
-                userDataCache.setBotStateForCacheUser(chaId, BotState.MAIN_HELP);
-                prepareAndSendMessage(chaId, "Вы успешно добавили компанию: " + createdCompany);
-            }
-
-            userDataCache.setCompanyForCacheUser(chaId, companyBuildingDto);
-
-            switch (result) {
-                case "/start":
-                    registerUser(update.getMessage());
-                    startCommandReceived(chaId, update.getMessage().getChat().getFirstName());
-                    userDataCache.setBotStateForCacheUser(chaId, BotState.MAIN_START);
-                    break;
-                case "/help":
-                    prepareAndSendMessage(chaId, HELP_TEXT);
-                    userDataCache.setBotStateForCacheUser(chaId, BotState.MAIN_HELP);
-                    break;
-                case "/gifts":
-                    giftsCommandReceived(chaId);
-                    userDataCache.setBotStateForCacheUser(chaId, BotState.MAIN_GIFTS);
-                    break;
-                case "/items":
-                    prepareAndSendMessage(chaId, NOT_REALISED);
-                    userDataCache.setBotStateForCacheUser(chaId, BotState.MAIN_HELP);
-                    break;
-                default:
-                    if (botState.equals(BotState.MAIN_HELP) || botState.equals(BotState.MAIN_START) ||
-                            botState.equals(BotState.MAIN_GIFTS)) {
-                        prepareAndSendMessage(chaId, "Такая команда еще не поддерживается нашим ботом \uD83D\uDE31");
-                        userDataCache.setBotStateForCacheUser(chaId, BotState.MAIN_HELP);
-                        log.warn("Эту команду мы еще не поддерживаем. Команда пользователя: " + result);
-                    } else {
-                        log.debug("Текущий статус пользователя: {}", botState);
-                        log.debug("Текущий конструктор компании: {}", companyBuildingDto);
+                if (botState.equals(BotState.COMPANY_SUM)) {
+                    try {
+                        companyBuildingDto.setTotalSum(Integer.valueOf(resultMessage));
+                    } catch (NumberFormatException e) {
+                        log.warn("Пользователь шалит и передает в строку нечисловое значение. {}", e.getMessage());
+                        companyBuildingDto.setTotalSum(50000);
+                        prepareAndSendMessage(
+                                chaId, "Вы указали не число, поэтому мы поставили дефолтное значение 50 000 руб."
+                        );
                     }
+
+                    userDataCache.setBotStateForCacheUser(chaId, BotState.COMPANY_TYPE_GIFT);
+                    prepareAndSendMessage(chaId, "Укажите тип подарка - Стандарт или Премиум");
+                }
+
+                if (botState.equals(BotState.COMPANY_TYPE_GIFT)) {
+                    if (resultMessage.equals("Стандарт")) {
+                        companyBuildingDto.setType(TypeGift.LIGHT);
+                    } else if (resultMessage.equals("Премиум")) {
+                        companyBuildingDto.setType(TypeGift.PREMIUM);
+                    } else {
+                        prepareAndSendMessage(chaId, "Что-то пошло не так, ставим, что подарок стандарт...");
+                        companyBuildingDto.setType(TypeGift.LIGHT);
+                    }
+                    userDataCache.setBotStateForCacheUser(chaId, BotState.COMPANY_IS_GIVEN);
+                    prepareAndSendMessage(chaId, "Подарок уже выдан? Отвечайте Да или Нет.");
+                }
+
+                if (botState.equals(BotState.COMPANY_IS_GIVEN)) {
+                    if (resultMessage.equals("Да")) {
+                        companyBuildingDto.setIsGiven(true);
+                    } else if (resultMessage.equals("Нет")) {
+                        companyBuildingDto.setIsGiven(false);
+                    } else {
+                        companyBuildingDto.setIsGiven(false);
+                        prepareAndSendMessage(chaId, "Вы что-то не то нажали. Считаем, что подарок не выдан.");
+                    }
+                    userDataCache.setBotStateForCacheUser(chaId, BotState.COMPANY_IS_DONE);
+                    prepareAndSendMessage(chaId, "Отлично! Сейчас будем сохранять в базу \uD83E\uDD73");
+
+                    UserEntity userCreator = userRepository.findByChatId(chaId);
+                    log.debug("Проверяем, что пользователь есть в системе: {}", userCreator);
+
+                    log.debug("Текущая DTO компании: {}", companyBuildingDto);
+                    CompanyEntity company = CompanyEntity.builder()
+                            .nameCompany(companyBuildingDto.getNameCompany())
+                            .totalSum(companyBuildingDto.getTotalSum())
+                            .type(companyBuildingDto.getType())
+                            .isGiven(companyBuildingDto.getIsGiven())
+                            .creator(userCreator)
+                            .created(LocalDateTime.now())
+                            .given(LocalDateTime.now())
+                            .build();
+                    log.debug("Сконструирована новая компания: {}", company);
+
+                    CompanyEntity createdCompany = companyRepository.save(company);
+                    log.trace("Пользователь с id={} добавил новую компанию: {}", userCreator.getChatId(), company);
+
+                    userDataCache.setBotStateForCacheUser(chaId, BotState.MAIN_HELP);
+                    prepareAndSendMessage(chaId, String.format("Вы успешно добавили компанию: \n\n" +
+                                    "%s с годовым оборотом: %d руб. выбранный подарок: %s",
+                            createdCompany.getNameCompany(), createdCompany.getTotalSum(),
+                            createdCompany.getType().toString()));
+                }
+
+                userDataCache.setCompanyForCacheUser(chaId, companyBuildingDto);
+
+                switch (resultMessage) {
+                    case "/start":
+                        UserEntity userEntity = registerUser(update.getMessage());
+                        processAuthorization(chaId, userEntity);
+                        startCommandReceived(chaId, update.getMessage().getChat().getFirstName());
+                        userDataCache.setBotStateForCacheUser(chaId, BotState.MAIN_START);
+                        break;
+                    case "/help":
+                        prepareAndSendMessage(chaId, HELP_TEXT);
+                        userDataCache.setBotStateForCacheUser(chaId, BotState.MAIN_HELP);
+                        break;
+                    case "/gifts":
+                        giftsCommandReceived(chaId);
+                        userDataCache.setBotStateForCacheUser(chaId, BotState.MAIN_GIFTS);
+                        break;
+                    default:
+                        if (botState.equals(BotState.MAIN_HELP) || botState.equals(BotState.MAIN_START) ||
+                                botState.equals(BotState.MAIN_GIFTS)) {
+                            prepareAndSendMessage(chaId, "Такая команда еще не поддерживается нашим ботом \uD83D\uDE31");
+                            userDataCache.setBotStateForCacheUser(chaId, BotState.MAIN_HELP);
+                            log.warn("Эту команду мы еще не поддерживаем. Команда пользователя: " + resultMessage);
+                        } else {
+                            log.debug("Текущий статус пользователя: {}", botState);
+                            log.debug("Текущий конструктор компании: {}", companyBuildingDto);
+                        }
+                }
+            } else {
+                processInputPassword(resultMessage, chaId, userFromBD);
             }
+
         } else if (update.hasCallbackQuery()) {
             String result = update.getCallbackQuery().getData();
             Long chaId = update.getCallbackQuery().getMessage().getChatId();
             Integer messageId = update.getCallbackQuery().getMessage().getMessageId();
+            UserEntity userFromBD = registerUser(update.getCallbackQuery().getMessage());
 
-            switch (result) {
-                case "/newcompany":
-                    sendEditMessageText("Начинаем процесс добавления новой компании.\n\n " +
-                            "Давайте начнем с названия компании, введите его:\n\n", chaId, messageId);
-                    userDataCache.setBotStateForCacheUser(chaId, BotState.COMPANY_NAME);
-                    break;
-                case "/givegift":
-                    sendEditMessageText("текст", chaId, messageId);
-                    break;
-                case "/calculation":
-                    sendEditMessageText("текст", chaId, messageId);
-                    break;
-                case "/givemanual":
-                    sendEditMessageText("текст", chaId, messageId);
-                    break;
-                case "/searchcompany":
-                    sendEditMessageText("текст", chaId, messageId);
-                    break;
-                case "/removecompany":
-                    sendEditMessageText("текст", chaId, messageId);
-                    break;
-                case "/checkgifts":
-                    sendEditMessageText("текст", chaId, messageId);
-                    break;
-                default:
-                    prepareAndSendMessage(chaId, "Такая команда еще не поддерживается нашим ботом \uD83D\uDE31");
-                    log.warn("Эту команду мы еще не поддерживаем. Команда пользователя: " + result);
+            if (processAuthorization(chaId, userFromBD)) {
+                switch (result) {
+                    case "/newcompany":
+                        sendEditMessageText("Начинаем процесс добавления новой компании.\n\n " +
+                                "Давайте начнем с названия компании, введите его:\n\n", chaId, messageId);
+                        userDataCache.setBotStateForCacheUser(chaId, BotState.COMPANY_NAME);
+                        break;
+                    case "/givegift":
+                        sendEditMessageText("текст", chaId, messageId);
+                        break;
+                    case "/calculation":
+                        sendEditMessageText("текст", chaId, messageId);
+                        break;
+                    case "/givemanual":
+                        sendEditMessageText("текст", chaId, messageId);
+                        break;
+                    case "/searchcompany":
+                        sendEditMessageText("текст", chaId, messageId);
+                        break;
+                    case "/removecompany":
+                        sendEditMessageText("текст", chaId, messageId);
+                        break;
+                    case "/checkgifts":
+                        sendEditMessageText("Общий список компаний: ", chaId, messageId);
+                        processGetListCompanies(chaId);
+                        break;
+                    default:
+                        prepareAndSendMessage(chaId, "Такая команда еще не поддерживается нашим ботом \uD83D\uDE31");
+                        log.warn("Эту команду мы еще не поддерживаем. Команда пользователя: " + result);
+                }
+            } else {
+                log.error("Пользователь user={} смог зайти в дополнительное меню без авторизации", userFromBD);
             }
+
         } else {
             log.error("Произошла странная ошибка: {}", update);
         }
 
+    }
+
+    private void processGetListCompanies(Long chaId) {
+        List<CompanyEntity> listCompanies = companyRepository.findAll();
+        log.debug("Список компаний: {}", listCompanies);
+        String answer = StringUtils.join(listCompanies);
+        prepareAndSendMessage(chaId, answer);
+
+    }
+
+    private void processInputPassword(String resultMessage, Long chaId, UserEntity userEntity) {
+        int pass = 0;
+
+        try {
+            pass = Integer.parseInt(resultMessage);
+        } catch (NumberFormatException e) {
+            log.warn("Пользователь пытается ввести пароль, но передает туда не число {}", e.getMessage());
+        }
+
+        if (pass == Integer.parseInt(this.config.getPass())) {
+            userEntity.setAuthorization(true);
+            log.debug("Пользователь ввел пароль, сохраняем в базу user={}", userEntity);
+            userRepository.save(userEntity);
+            log.trace("Пользователь user={} прошел авторизацию", userEntity);
+        } else {
+            log.warn("Пользователь user={} пытается подобрать пароль", userEntity);
+            prepareAndSendMessage(chaId, "Такая команда еще не поддерживается нашим ботом \uD83D\uDE31");
+        }
     }
 
     private void startCommandReceived(Long chatId, String name) {
@@ -256,10 +305,24 @@ public final class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    private void registerUser(Message message) {
+    private Boolean processAuthorization(Long chatId, UserEntity user) {
+        if (user.getAuthorization()) {
+            log.debug("Пользователь авторизован");
+            return true;
+        } else {
+            log.warn("Пользователь user={} еще не авторизован", user);
+            prepareAndSendMessage(chatId, "Пожалуйста введите пароль для авторизации: ");
+            return false;
+        }
+    }
+
+    private UserEntity registerUser(Message message) {
         var chatId = message.getChatId();
 
+        UserEntity createdUser;
+
         if (userRepository.existsByChatId(chatId)) {
+            createdUser = userRepository.findByChatId(chatId);
             log.info("Это наш старожил, пользователь уже есть в системе.");
             log.debug("Это наш старожил, пользователь уже есть в системе с tgId={}", chatId);
         } else {
@@ -267,18 +330,21 @@ public final class TelegramBot extends TelegramLongPollingBot {
             log.debug("Начинаю регистрацию нового пользователя с tgId={}", chatId);
 
             var chat = message.getChat();
-            UserEntity user = UserEntity.builder()
+            UserEntity userForSave = UserEntity.builder()
                     .chatId(chatId)
                     .firstName(chat.getFirstName())
                     .lastName(chat.getLastName())
                     .userName(chat.getUserName())
                     .registeredOn(LocalDateTime.now())
+                    .authorization(false)
                     .build();
-            log.debug("Новый пользователь собран user={}", user);
+            log.debug("Новый пользователь собран user={}", userForSave);
 
-            userRepository.save(user);
-            log.debug("Пользователь успешно сохранен в БД");
+            createdUser = userRepository.save(userForSave);
+            log.debug("Пользователь успешно сохранен в БД user={}", createdUser);
         }
+
+        return createdUser;
     }
 
     private void giftsCommandReceived(Long chatId) {

@@ -12,4 +12,5 @@ import org.springframework.context.annotation.PropertySource;
 public class BotConfig {
     private String name;
     private String token;
+    private String pass;
 }

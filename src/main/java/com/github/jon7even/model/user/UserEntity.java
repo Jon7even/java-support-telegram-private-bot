@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 import static com.github.jon7even.constants.DataTimePattern.DATE_TIME_FORMATTER;
 
@@ -36,21 +35,19 @@ public class UserEntity {
     @Column(name = "register_on", nullable = false)
     private LocalDateTime registeredOn;
 
+    @Column(name = "auth_on")
+    private Boolean authorization;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof UserEntity)) return false;
-        UserEntity that = (UserEntity) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(chatId, that.chatId) &&
-                Objects.equals(firstName, that.firstName) &&
-                Objects.equals(lastName, that.lastName) &&
-                Objects.equals(userName, that.userName);
+        return chatId != null && chatId.equals(((UserEntity) o).getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, chatId, firstName, lastName, userName);
+        return getClass().hashCode();
     }
 
     @Override
@@ -61,7 +58,8 @@ public class UserEntity {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", userName='" + userName + '\'' +
-                ", registeredOn=" + registeredOn.format(DATE_TIME_FORMATTER) +
+                ", registeredOn=" + registeredOn.format(DATE_TIME_FORMATTER) + '\'' +
+                ", authorization='" + authorization +
                 '}';
     }
 }
