@@ -31,12 +31,3 @@ build/
 /db/
 *.db
 db/*
-
-.env
-*.env
-application-test.properties
-*application-test.properties
-*privatebot.properties
-privatebot.properties
-*application.properties
-application.properties
