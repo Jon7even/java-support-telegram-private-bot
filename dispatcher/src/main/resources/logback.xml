@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <property name="LOG_BOT" value="/var/log/tg-bots/support_private_bot.log"/>
+    <property name="LOG_BOT" value="/var/log/tg-bots/support_bot_dispatcher.log"/>
 
     <appender name="FILE-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_BOT}</file>

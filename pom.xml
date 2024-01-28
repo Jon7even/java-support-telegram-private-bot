@@ -5,7 +5,9 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>common-rabbitmq</module>
-	</modules>
+		<module>dispatcher</module>
+        <module>common</module>
+    </modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -21,13 +23,14 @@
 	<description>Telegram bot for personal use</description>
 
 	<properties>
+		<java.version>11</java.version>
 		<telegram.version>6.5.0</telegram.version>
 		<lombok.version>1.18.30</lombok.version>
 		<emoji.version>5.1.1</emoji.version>
 		<posgres.version>42.5.4</posgres.version>
 		<h2.version>2.1.214</h2.version>
-		<maven.compiler.source>11</maven.compiler.source>
-		<maven.compiler.target>11</maven.compiler.target>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
