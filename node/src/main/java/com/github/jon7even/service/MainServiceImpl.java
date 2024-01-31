@@ -1,7 +1,7 @@
-package com.github.jon7even.controller;
+package com.github.jon7even.service;
 
 import com.github.jon7even.cache.UserDataCache;
-import com.github.jon7even.config.BotConfig;
+import com.github.jon7even.configuration.BotConfig;
 import com.github.jon7even.model.company.CompanyBuildingDto;
 import com.github.jon7even.model.company.CompanyEntity;
 import com.github.jon7even.model.user.UserEntity;
@@ -9,20 +9,15 @@ import com.github.jon7even.repository.CompanyRepository;
 import com.github.jon7even.repository.UserRepository;
 import com.github.jon7even.telegram.BotState;
 import com.github.jon7even.telegram.menu.gift.TypeGift;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
-import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -33,14 +28,13 @@ import static com.github.jon7even.telegram.menu.gift.MenuGift.*;
 import static com.github.jon7even.utils.Emoji.SMAIL;
 
 @Slf4j
-@Component
-public final class TelegramBot extends TelegramLongPollingBot {
-    private final BotConfig config;
+@RequiredArgsConstructor
+public class MainServiceImpl implements MainService {
+    private final BotConfig botConfig;
     private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
     private final UserDataCache userDataCache;
-
-    static final String NOT_REALISED = "\uD83D\uDE14 Данная команда находится еще в разработке. \uD83D\uDE14";
+    private final ProducerService producerService;
 
     static final String HELP_TEXT = "\n" +
             "Данный виртуальный помощник создан для работников компании.\uD83D\uDE0E \n\n" +
@@ -60,28 +54,8 @@ public final class TelegramBot extends TelegramLongPollingBot {
             REMOVE_COMPANY + " - удалить компанию \n\n" +
             LIST_GIFTS + " - кому еще нужно выдать подарки \n\n";
 
-    public TelegramBot(BotConfig config, UserRepository userRepository, CompanyRepository companyRepository,
-                       UserDataCache userDataCache) {
-        super(config.getToken());
-        this.config = config;
-        this.userRepository = userRepository;
-        this.companyRepository = companyRepository;
-        this.userDataCache = userDataCache;
-        List<BotCommand> commandsMenu = new ArrayList<>();
-        commandsMenu.add(new BotCommand(START.toString(), "Регистрация"));
-        commandsMenu.add(new BotCommand(HELP.toString(), "Список доступных команд"));
-        commandsMenu.add(new BotCommand(GIFTS.toString(), "Начать работать с подарками"));
-        log.debug("Меню бота инициализировано");
-
-        try {
-            this.execute(new SetMyCommands(commandsMenu, new BotCommandScopeDefault(), null));
-        } catch (TelegramApiException e) {
-            log.error("Что-то пошло не так с загрузкой команд для бота: " + e.getMessage());
-        }
-    }
-
     @Override
-    public void onUpdateReceived(Update update) {
+    public void processTextMessage(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
             String resultMessage = update.getMessage().getText();
             Long chaId = update.getMessage().getChatId();
@@ -239,7 +213,6 @@ public final class TelegramBot extends TelegramLongPollingBot {
         } else {
             log.error("Произошла странная ошибка: {}", update);
         }
-
     }
 
     private void processGetListCompanies(Long chaId) {
@@ -259,7 +232,7 @@ public final class TelegramBot extends TelegramLongPollingBot {
             log.warn("Пользователь пытается ввести пароль, но передает туда не число {}", e.getMessage());
         }
 
-        if (pass == Integer.parseInt(this.config.getPass())) {
+        if (pass == Integer.parseInt(botConfig.getPass())) {
             userEntity.setAuthorization(true);
             log.debug("Пользователь ввел пароль, сохраняем в базу user={}", userEntity);
             userRepository.save(userEntity);
@@ -290,19 +263,14 @@ public final class TelegramBot extends TelegramLongPollingBot {
                 .text(text)
                 .messageId(Math.toIntExact(messageId))
                 .build();
-        try {
-            execute(messageToEdit);
-        } catch (TelegramApiException e) {
-            log.error("Произошла какая-то ошибка: " + e.getMessage());
-        }
+
+        log.debug("Отвечаем на сообщение sendMessage={}", messageToEdit);
+        producerService.producerAnswerEditText(messageToEdit);
+
     }
 
     private void sendMessageText(SendMessage message) {
-        try {
-            execute(message);
-        } catch (TelegramApiException e) {
-            log.error("Произошла какая-то ошибка: " + e.getMessage());
-        }
+        producerService.producerAnswerText(message);
     }
 
     private Boolean processAuthorization(Long chatId, UserEntity user) {
@@ -403,11 +371,6 @@ public final class TelegramBot extends TelegramLongPollingBot {
         message.setReplyMarkup(markup);
 
         sendMessageText(message);
-    }
-
-    @Override
-    public String getBotUsername() {
-        return config.getName();
     }
 
 }

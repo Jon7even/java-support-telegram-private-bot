@@ -1,6 +1,6 @@
 package com.github.jon7even.controller;
 
-import com.github.jon7even.config.BotConfig;
+import com.github.jon7even.configuration.BotConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;

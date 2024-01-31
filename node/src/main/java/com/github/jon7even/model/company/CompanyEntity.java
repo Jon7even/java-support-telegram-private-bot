@@ -8,8 +8,6 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-import static com.github.jon7even.constants.DataTimePattern.DATE_TIME_FORMATTER;
-
 @Entity
 @Builder
 @Setter

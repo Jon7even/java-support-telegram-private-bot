@@ -1,4 +1,4 @@
-package com.github.jon7even.config;
+package com.github.jon7even.configuration;
 
 import lombok.Getter;
 import lombok.Setter;

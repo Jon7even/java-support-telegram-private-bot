@@ -1,6 +1,5 @@
 package com.github.jon7even.service;
 
-import com.github.jon7even.utils.MessageUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -13,21 +12,14 @@ import static com.github.jon7even.RabbitQueue.*;
 @Service
 @RequiredArgsConstructor
 public class ConsumerServiceImpl implements ConsumerService {
-    private final ProducerService producerService;
+    private final MainService mainService;
 
     @Override
     @RabbitListener(queues = TEXT_MESSAGE_UPDATE)
     public void consumeTextMessageUpdates(Update update) {
         log.debug("Получена новая TEXT очередь update={}", update);
         log.info("Получена новая TEXT очередь text={}", update.getMessage().getText());
-
-        var sendMessage = MessageUtils.buildAnswerWithText(
-                update.getMessage(), "Отвечаем на сообщение из узла..."
-        );
-        sendMessage.setChatId(update.getMessage().getChatId().toString());
-
-        log.debug("Отвечаем на сообщение sendMessage={}", sendMessage);
-        producerService.producerAnswer(sendMessage);
+        mainService.processTextMessage(update);
     }
 
     @Override
