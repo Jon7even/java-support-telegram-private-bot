@@ -12,6 +12,7 @@ import com.github.jon7even.telegram.menu.gift.TypeGift;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -28,6 +29,7 @@ import static com.github.jon7even.telegram.menu.gift.MenuGift.*;
 import static com.github.jon7even.utils.Emoji.SMAIL;
 
 @Slf4j
+@Service
 @RequiredArgsConstructor
 public class MainServiceImpl implements MainService {
     private final BotConfig botConfig;
