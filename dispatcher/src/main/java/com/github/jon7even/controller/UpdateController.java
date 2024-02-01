@@ -1,5 +1,6 @@
 package com.github.jon7even.controller;
 
+import com.github.jon7even.service.AuthorizationService;
 import com.github.jon7even.service.UpdateProducerService;
 import com.github.jon7even.utils.MessageUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -9,7 +10,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import static com.github.jon7even.RabbitQueue.TEXT_MESSAGE_UPDATE;
+import static com.github.jon7even.configuration.RabbitQueue.TEXT_MESSAGE_UPDATE;
 import static com.github.jon7even.constants.DefaultMessagesLogs.WE_NOT_SUPPORT;
 
 @Slf4j
@@ -18,7 +19,12 @@ public class UpdateController {
     private final TelegramBot telegramBot;
     private final UpdateProducerService updateProducer;
 
-    public UpdateController(@Lazy TelegramBot telegramBot, UpdateProducerService updateProducer) {
+    private final AuthorizationService authorizationService;
+
+    public UpdateController(@Lazy TelegramBot telegramBot,
+                            UpdateProducerService updateProducer,
+                            AuthorizationService authorizationService) {
+        this.authorizationService = authorizationService;
         this.telegramBot = telegramBot;
         this.updateProducer = updateProducer;
     }
@@ -37,28 +43,31 @@ public class UpdateController {
     }
 
     private void distributeMessagesByType(Update update) {
-        Message message = update.getMessage();
-        if (message.hasText()) {
-            processTextMessage(update);
-        } else if (message.hasAudio()) {
-            processDocument(update);
-        } else if (message.hasDocument()) {
-            processPhotoMessage(update);
-        } else if (message.hasPhoto()) {
-            processAudioMessage(update);
+        if (authorizationService.processAuthorization(update)) {
+            Message message = update.getMessage();
+
+            if (message.hasText()) {
+                processTextMessage(update);
+            } else if (message.hasAudio()) {
+                processDocument(update);
+            } else if (message.hasDocument()) {
+                processPhotoMessage(update);
+            } else if (message.hasPhoto()) {
+                processAudioMessage(update);
+            } else {
+                setUnsupportedMessageTypeView(update);
+            }
         } else {
-            setUnsupportedMessageTypeView(update);
+            var sendMessage = MessageUtils.buildAnswerWithText(
+                    update.getMessage(), String.format("Такую команду %s", WE_NOT_SUPPORT)
+            );
+
+            setView(sendMessage);
         }
     }
 
     private void processTextMessage(Update update) {
         updateProducer.produce(TEXT_MESSAGE_UPDATE, update);
-
-        var sendMessage = MessageUtils.buildAnswerWithText(
-                update.getMessage(), "Ваше сообщение получено!"
-        );
-
-        setView(sendMessage);
     }
 
     public void setView(SendMessage sendMessage) {

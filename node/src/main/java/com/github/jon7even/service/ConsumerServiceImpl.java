@@ -6,7 +6,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import static com.github.jon7even.RabbitQueue.*;
+import static com.github.jon7even.configuration.RabbitQueue.*;
 
 @Slf4j
 @Service

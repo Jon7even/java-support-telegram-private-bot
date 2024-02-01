@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 
-import static com.github.jon7even.RabbitQueue.ANSWER_MESSAGE;
+import static com.github.jon7even.configuration.RabbitQueue.ANSWER_MESSAGE;
 
 @Service
 @RequiredArgsConstructor

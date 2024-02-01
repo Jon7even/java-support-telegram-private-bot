@@ -9,8 +9,8 @@ import org.springframework.context.annotation.PropertySource;
 @Getter
 @Setter
 @Configuration
-@ConfigurationProperties(prefix = "supportbot")
-@PropertySource("classpath:supportbot.properties")
-public class BotConfig {
-    private String pass;
+@ConfigurationProperties(prefix = "securitybot")
+@PropertySource("classpath:securitybot.properties")
+public class SecurityConfig {
+    private String keyPass;
 }

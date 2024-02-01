@@ -4,9 +4,8 @@
 	<modelVersion>4.0.0</modelVersion>
 	<packaging>pom</packaging>
 	<modules>
-		<module>common-rabbitmq</module>
+		<module>common</module>
 		<module>dispatcher</module>
-        <module>common</module>
         <module>node</module>
     </modules>
 	<parent>

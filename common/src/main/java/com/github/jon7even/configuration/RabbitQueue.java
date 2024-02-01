@@ -1,4 +1,4 @@
-package com.github.jon7even;
+package com.github.jon7even.configuration;
 
 import lombok.experimental.UtilityClass;
 
