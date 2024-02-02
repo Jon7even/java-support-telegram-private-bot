@@ -1,5 +1,6 @@
 package com.github.jon7even.service;
 
+import com.github.jon7even.cache.UserAuthCache;
 import com.github.jon7even.configuration.SecurityConfig;
 import com.github.jon7even.model.user.UserEntity;
 import com.github.jon7even.repository.UserRepository;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 public class AuthorizationServiceImpl implements AuthorizationService {
     private final UserRepository userRepository;
     private final SecurityConfig securityConfig;
+    private final UserAuthCache userAuthCache;
 
     @Override
     public boolean processAuthorization(Update update) {
@@ -32,28 +34,35 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     }
 
     private boolean processInputPassword(UserEntity userFromBD, Update update) {
-        String resultMessage = update.getMessage().getText();
+        if (isUserBanned(userFromBD.getId())) {
+            String resultMessage = update.getMessage().getText();
 
-        if (resultMessage.equals(securityConfig.getKeyPass())) {
-            userFromBD.setAuthorization(true);
-            log.debug("Пользователь ввел пароль, сохраняем в базу user={}", userFromBD);
-            userRepository.save(userFromBD);
-            log.trace("Пользователь user={} прошел авторизацию", userFromBD);
-            return true;
+            if (resultMessage.equals(securityConfig.getKeyPass())) {
+                userFromBD.setAuthorization(true);
+                log.debug("Пользователь ввел пароль, сохраняем в базу user={}", userFromBD);
+                userRepository.save(userFromBD);
+                log.trace("Пользователь user={} прошел авторизацию", userFromBD);
+                userAuthCache.deleteUserFromAuthCache(userFromBD.getId());
+                return true;
+            } else {
+                log.warn("Пользователь user={} пытается подобрать пароль", userFromBD);
+                return false;
+            }
         } else {
-            log.warn("Пользователь user={} пытается подобрать пароль", userFromBD);
+            log.warn("Пользователь user={} ввел count={} раз пароль неправильно и был заблокирован",
+                    userFromBD, securityConfig.getAttemptsAuth());
             return false;
         }
     }
 
     private UserEntity registerUser(Message message) {
         var chatId = message.getChatId();
-        UserEntity createdUser;
+        UserEntity user;
 
         if (userRepository.existsByChatId(chatId)) {
-            createdUser = userRepository.findByChatId(chatId);
-            log.info("Это наш старожил, пользователь уже есть в системе.");
-            log.debug("Это наш старожил, пользователь уже есть в системе с tgId={}", chatId);
+            user = userRepository.findByChatId(chatId);
+            log.info("Пользователь c userId={} уже есть в системе", user.getId());
+            log.debug("Пользователь c tgId={} уже есть в системе", chatId);
         } else {
             log.info("Начинаю регистрацию нового пользователя");
             log.debug("Начинаю регистрацию нового пользователя с tgId={}", chatId);
@@ -69,10 +78,19 @@ public class AuthorizationServiceImpl implements AuthorizationService {
                     .build();
             log.debug("Новый пользователь собран user={}", userForSave);
 
-            createdUser = userRepository.save(userForSave);
-            log.debug("Пользователь успешно сохранен в БД user={}", createdUser);
+            user = userRepository.save(userForSave);
+            log.debug("Пользователь успешно сохранен в БД user={}", user);
+
+            userAuthCache.setAttemptAuthForUserCache(chatId, 0);
         }
-        return createdUser;
+        return user;
+    }
+
+    private boolean isUserBanned(Long userId) {
+        int currentAttemptsAuthUser = userAuthCache.getAttemptsAuthForUserCache(userId);
+        currentAttemptsAuthUser++;
+        userAuthCache.setAttemptAuthForUserCache(userId, currentAttemptsAuthUser);
+        return securityConfig.getAttemptsAuth() >= currentAttemptsAuthUser;
     }
 
 }

@@ -13,4 +13,5 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource("classpath:securitybot.properties")
 public class SecurityConfig {
     private String keyPass;
+    private Integer attemptsAuth;
 }
