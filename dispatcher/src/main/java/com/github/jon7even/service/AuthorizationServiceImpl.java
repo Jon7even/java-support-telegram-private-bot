@@ -39,7 +39,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 
             if (resultMessage.equals(securityConfig.getKeyPass())) {
                 userFromBD.setAuthorization(true);
-                log.debug("Пользователь ввел пароль, сохраняем в базу user={}", userFromBD);
+                log.warn("Пользователь ввел правильный пароль, сохраняем в базу user={}", userFromBD);
                 userRepository.save(userFromBD);
                 log.trace("Пользователь user={} прошел авторизацию", userFromBD);
                 userAuthCache.deleteUserFromAuthCache(userFromBD.getId());
@@ -61,8 +61,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 
         if (userRepository.existsByChatId(chatId)) {
             user = userRepository.findByChatId(chatId);
-            log.info("Пользователь c userId={} уже есть в системе", user.getId());
-            log.debug("Пользователь c tgId={} уже есть в системе", chatId);
+            log.debug("Пользователь c tgId={} и userId={} уже есть в системе", chatId, user.getId());
         } else {
             log.info("Начинаю регистрацию нового пользователя");
             log.debug("Начинаю регистрацию нового пользователя с tgId={}", chatId);

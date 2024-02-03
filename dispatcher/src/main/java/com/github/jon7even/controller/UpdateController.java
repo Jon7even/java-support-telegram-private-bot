@@ -10,6 +10,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import static com.github.jon7even.configuration.RabbitQueue.CALLBACK_QUERY_UPDATE;
 import static com.github.jon7even.configuration.RabbitQueue.TEXT_MESSAGE_UPDATE;
 import static com.github.jon7even.constants.DefaultMessagesLogs.WE_NOT_SUPPORT;
 
@@ -18,15 +19,14 @@ import static com.github.jon7even.constants.DefaultMessagesLogs.WE_NOT_SUPPORT;
 public class UpdateController {
     private final TelegramBot telegramBot;
     private final UpdateProducerService updateProducer;
-
     private final AuthorizationService authorizationService;
 
     public UpdateController(@Lazy TelegramBot telegramBot,
                             UpdateProducerService updateProducer,
                             AuthorizationService authorizationService) {
-        this.authorizationService = authorizationService;
         this.telegramBot = telegramBot;
         this.updateProducer = updateProducer;
+        this.authorizationService = authorizationService;
     }
 
     public void processUpdate(Update update) {
@@ -35,11 +35,17 @@ public class UpdateController {
             return;
         }
 
-        if (update.hasMessage()) {
+        if (update.hasCallbackQuery()) {
+            distributeCallbackByType(update);
+        } else if (update.hasMessage()) {
             distributeMessagesByType(update);
         } else {
             log.error("Unsupported message type is received: update={}", update);
         }
+    }
+
+    private void distributeCallbackByType(Update update) {
+            processCallbackQuery(update);
     }
 
     private void distributeMessagesByType(Update update) {
@@ -61,13 +67,16 @@ public class UpdateController {
             var sendMessage = MessageUtils.buildAnswerWithText(
                     update.getMessage(), String.format("Такую команду %s", WE_NOT_SUPPORT)
             );
-
             setView(sendMessage);
         }
     }
 
     private void processTextMessage(Update update) {
-        updateProducer.produce(TEXT_MESSAGE_UPDATE, update);
+        updateProducer.produceText(TEXT_MESSAGE_UPDATE, update);
+    }
+
+    private void processCallbackQuery(Update update) {
+        updateProducer.produceCallBackQuery(CALLBACK_QUERY_UPDATE, update);
     }
 
     public void setView(SendMessage sendMessage) {
@@ -78,7 +87,6 @@ public class UpdateController {
         var sendMessage = MessageUtils.buildAnswerWithText(
                 update.getMessage(), String.format("Получение документов %s", WE_NOT_SUPPORT)
         );
-
         setView(sendMessage);
     }
 
@@ -86,7 +94,6 @@ public class UpdateController {
         var sendMessage = MessageUtils.buildAnswerWithText(
                 update.getMessage(), String.format("Получение фото %s", WE_NOT_SUPPORT)
         );
-
         setView(sendMessage);
     }
 
@@ -94,7 +101,6 @@ public class UpdateController {
         var sendMessage = MessageUtils.buildAnswerWithText(
                 update.getMessage(), String.format("Получение аудио %s", WE_NOT_SUPPORT)
         );
-
         setView(sendMessage);
     }
 
@@ -102,7 +108,6 @@ public class UpdateController {
         var sendMessage = MessageUtils.buildAnswerWithText(
                 update.getMessage(), String.format("Получение данного типа сообщений %s", WE_NOT_SUPPORT)
         );
-
         setView(sendMessage);
     }
 

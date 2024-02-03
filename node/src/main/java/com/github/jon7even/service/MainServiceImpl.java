@@ -161,8 +161,14 @@ public class MainServiceImpl implements MainService {
                         log.debug("Текущий конструктор компании: {}", companyBuildingDto);
                     }
             }
+        } else {
+            log.error("Произошла неизвестная ошибка: {}", update);
+        }
+    }
 
-        } else if (update.hasCallbackQuery()) {
+    @Override
+    public void processCallbackQuery(Update update) {
+        if (update.hasCallbackQuery()) {
             String result = update.getCallbackQuery().getData();
             Long chaId = update.getCallbackQuery().getMessage().getChatId();
             Integer messageId = update.getCallbackQuery().getMessage().getMessageId();
@@ -196,9 +202,8 @@ public class MainServiceImpl implements MainService {
                     prepareAndSendMessage(chaId, "Такая команда еще не поддерживается нашим ботом \uD83D\uDE31");
                     log.warn("Эту команду мы еще не поддерживаем. Команда пользователя: " + result);
             }
-
         } else {
-            log.error("Произошла странная ошибка: {}", update);
+            log.error("Произошла неизвестная ошибка: {}", update);
         }
     }
 
@@ -207,7 +212,6 @@ public class MainServiceImpl implements MainService {
         log.debug("Список компаний: {}", listCompanies);
         String answer = StringUtils.join(listCompanies);
         prepareAndSendMessage(chaId, answer);
-
     }
 
     private void startCommandReceived(Long chatId, String name) {
@@ -233,7 +237,6 @@ public class MainServiceImpl implements MainService {
 
         log.debug("Отвечаем на сообщение sendMessage={}", messageToEdit);
         producerService.producerAnswerEditText(messageToEdit);
-
     }
 
     private void sendMessageText(SendMessage message) {

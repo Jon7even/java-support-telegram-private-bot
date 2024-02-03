@@ -23,6 +23,14 @@ public class ConsumerServiceImpl implements ConsumerService {
     }
 
     @Override
+    @RabbitListener(queues = CALLBACK_QUERY_UPDATE)
+    public void consumeCallbackQueryUpdates(Update update) {
+        log.debug("Получена новая CALLBACK очередь update={}", update);
+        log.info("Получена новая CALLBACK очередь data={}", update.getCallbackQuery().getData());
+        mainService.processCallbackQuery(update);
+    }
+
+    @Override
     @RabbitListener(queues = DOC_MESSAGE_UPDATE)
     public void consumeDocMessageUpdates(Update update) {
         log.debug("Получена новая DOC очередь update={}", update);
