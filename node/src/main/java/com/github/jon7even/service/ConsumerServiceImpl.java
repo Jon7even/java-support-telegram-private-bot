@@ -34,20 +34,20 @@ public class ConsumerServiceImpl implements ConsumerService {
     @RabbitListener(queues = DOC_MESSAGE_UPDATE)
     public void consumeDocMessageUpdates(Update update) {
         log.debug("Получена новая DOC очередь update={}", update);
-        log.info("Получена новая DOC очередь doc={}", update.getMessage().getDocument());
+        log.info("Получена новая DOC очередь doc={}", update);
     }
 
     @Override
     @RabbitListener(queues = PHOTO_MESSAGE_UPDATE)
     public void consumePhotoMessageUpdates(Update update) {
         log.debug("Получена новая PHOTO очередь update={}", update);
-        log.info("Получена новая PHOTO очередь photo={}", update.getMessage().getPhoto());
+        log.info("Получена новая PHOTO очередь photo={}", update);
     }
 
     @Override
     @RabbitListener(queues = AUDIO_MESSAGE_UPDATE)
     public void consumeAudioMessageUpdates(Update update) {
         log.debug("Получена новая AUDIO очередь update={}", update);
-        log.info("Получена новая AUDIO очередь audio={}", update.getMessage().getAudio());
+        log.info("Получена новая AUDIO очередь audio={}", update);
     }
 }

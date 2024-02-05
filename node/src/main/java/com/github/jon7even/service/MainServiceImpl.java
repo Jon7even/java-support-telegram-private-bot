@@ -34,6 +34,7 @@ public class MainServiceImpl implements MainService {
     private final CompanyRepository companyRepository;
     private final UserDataCache userDataCache;
     private final ProducerService producerService;
+    private final ReplyMessageService replyMessageService;
 
     static final String HELP_TEXT = "\n" +
             "Данный виртуальный помощник создан для работников компании.\uD83D\uDE0E \n\n" +
@@ -153,7 +154,7 @@ public class MainServiceImpl implements MainService {
                 default:
                     if (botState.equals(BotState.MAIN_HELP) || botState.equals(BotState.MAIN_START) ||
                             botState.equals(BotState.MAIN_GIFTS)) {
-                        prepareAndSendMessage(chaId, "Такая команда еще не поддерживается нашим ботом \uD83D\uDE31");
+                        prepareAndSendMessage(chaId, replyMessageService.getReplyText("reply.nonsupport"));
                         userDataCache.setBotStateForCacheUser(chaId, BotState.MAIN_HELP);
                         log.warn("Эту команду мы еще не поддерживаем. Команда пользователя: " + resultMessage);
                     } else {
@@ -199,7 +200,7 @@ public class MainServiceImpl implements MainService {
                     processGetListCompanies(chaId);
                     break;
                 default:
-                    prepareAndSendMessage(chaId, "Такая команда еще не поддерживается нашим ботом \uD83D\uDE31");
+                    prepareAndSendMessage(chaId, replyMessageService.getReplyText("reply.nonsupport"));
                     log.warn("Эту команду мы еще не поддерживаем. Команда пользователя: " + result);
             }
         } else {
