@@ -1,6 +1,7 @@
 package com.github.jon7even.controller;
 
 import com.github.jon7even.service.AuthorizationService;
+import com.github.jon7even.service.MainQuickService;
 import com.github.jon7even.service.UpdateProducerService;
 import com.github.jon7even.utils.MessageUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -20,13 +21,16 @@ public class UpdateController {
     private final TelegramBot telegramBot;
     private final UpdateProducerService updateProducer;
     private final AuthorizationService authorizationService;
+    private final MainQuickService mainQuickService;
 
     public UpdateController(@Lazy TelegramBot telegramBot,
                             UpdateProducerService updateProducer,
-                            AuthorizationService authorizationService) {
+                            AuthorizationService authorizationService,
+                            MainQuickService mainQuickService) {
         this.telegramBot = telegramBot;
         this.updateProducer = updateProducer;
         this.authorizationService = authorizationService;
+        this.mainQuickService = mainQuickService;
     }
 
     public void processUpdate(Update update) {
@@ -35,10 +39,10 @@ public class UpdateController {
             return;
         }
 
-        if (update.hasCallbackQuery()) {
-            distributeCallbackByType(update);
-        } else if (update.hasMessage()) {
+        if (update.hasMessage()) {
             distributeMessagesByType(update);
+        } else if (update.hasCallbackQuery()) {
+            distributeCallbackByType(update);
         } else {
             log.error("Unsupported message type is received: update={}", update);
         }
@@ -72,7 +76,11 @@ public class UpdateController {
     }
 
     private void processTextMessage(Update update) {
-        updateProducer.produceText(TEXT_MESSAGE_UPDATE, update);
+        if (mainQuickService.existBaseCommand(update.getMessage().getText())) {
+            setView(mainQuickService.processQuickAnswer(update));
+        } else {
+            updateProducer.produceText(TEXT_MESSAGE_UPDATE, update);
+        }
     }
 
     private void processCallbackQuery(Update update) {

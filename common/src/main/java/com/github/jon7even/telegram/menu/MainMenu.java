@@ -7,6 +7,8 @@ public enum MainMenu {
     START("/start"),
     HELP("/help"),
     ITEMS("/items"),
+    TASKS("/tasks"),
+    COMPETITORS("/competitors"),
     GIFTS("/gifts");
     private final String command;
 

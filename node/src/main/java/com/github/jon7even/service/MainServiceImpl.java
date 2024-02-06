@@ -36,13 +36,6 @@ public class MainServiceImpl implements MainService {
     private final ProducerService producerService;
     private final ReplyMessageService replyMessageService;
 
-    static final String HELP_TEXT = "\n" +
-            "Данный виртуальный помощник создан для работников компании.\uD83D\uDE0E \n\n" +
-            "На данный момент доступны следующие команды: \uD83D\uDE0F \n\n" +
-            START + " - пройти регистрацию  \n\n" +
-            GIFTS + " - начать работать с подарками \n\n" +
-            HELP + " - доступные команды \n";
-
     static final String HELP_GIFTS = "\n" +
             "Начинаем работать с подарками, нажмите необходимый пункт меню. \uD83D\uDE0E \n\n" +
             "Помощь с командами: \uD83D\uDE0F \n\n" +
@@ -139,14 +132,6 @@ public class MainServiceImpl implements MainService {
             userDataCache.setCompanyForCacheUser(chaId, companyBuildingDto);
 
             switch (resultMessage) {
-                case "/start":
-                    startCommandReceived(chaId, update.getMessage().getChat().getFirstName());
-                    userDataCache.setBotStateForCacheUser(chaId, BotState.MAIN_START);
-                    break;
-                case "/help":
-                    prepareAndSendMessage(chaId, HELP_TEXT);
-                    userDataCache.setBotStateForCacheUser(chaId, BotState.MAIN_HELP);
-                    break;
                 case "/gifts":
                     giftsCommandReceived(chaId);
                     userDataCache.setBotStateForCacheUser(chaId, BotState.MAIN_GIFTS);
