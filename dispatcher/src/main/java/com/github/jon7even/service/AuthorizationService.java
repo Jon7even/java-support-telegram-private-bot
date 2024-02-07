@@ -4,4 +4,5 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 public interface AuthorizationService {
     boolean processAuthorization(Update update);
+    boolean processAuthorizationForCallBack(Update update);
 }

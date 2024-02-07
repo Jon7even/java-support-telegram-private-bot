@@ -22,7 +22,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 
     @Override
     public boolean processAuthorization(Update update) {
-        UserEntity userFromBD = registerUser(update.getMessage());
+        UserEntity userFromBD = registerOrGetUser(update.getMessage());
 
         if (userFromBD.getAuthorization()) {
             log.debug("Пользователь авторизован");
@@ -30,6 +30,21 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         } else {
             log.warn("Пользователь user={} еще не авторизован", userFromBD);
             return processInputPassword(userFromBD, update);
+        }
+    }
+
+    @Override
+    public boolean processAuthorizationForCallBack(Update update) {
+        UserEntity userFromBD = getUserByChatId(update.getCallbackQuery().getMessage().getChatId());
+
+        if (userFromBD.getAuthorization()) {
+            log.debug("Пользователь авторизован");
+            log.debug("Пользователь c tgId={} и userId={} уже есть в системе",
+                    userFromBD.getChatId(), userFromBD.getId());
+            return true;
+        } else {
+            log.error("Пользователь user={} странная попытка авторизоваться через CallbackQuery", userFromBD);
+            return false;
         }
     }
 
@@ -55,34 +70,38 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         }
     }
 
-    private UserEntity registerUser(Message message) {
+    private UserEntity registerOrGetUser(Message message) {
         var chatId = message.getChatId();
         UserEntity user;
 
         if (userRepository.existsByChatId(chatId)) {
-            user = userRepository.findByChatId(chatId);
+            user = getUserByChatId(chatId);
             log.debug("Пользователь c tgId={} и userId={} уже есть в системе", chatId, user.getId());
         } else {
             log.info("Начинаю регистрацию нового пользователя");
-            log.debug("Начинаю регистрацию нового пользователя с tgId={}", chatId);
-
-            var chat = message.getChat();
-            UserEntity userForSave = UserEntity.builder()
-                    .chatId(chatId)
-                    .firstName(chat.getFirstName())
-                    .lastName(chat.getLastName())
-                    .userName(chat.getUserName())
-                    .registeredOn(LocalDateTime.now())
-                    .authorization(false)
-                    .build();
-            log.debug("Новый пользователь собран user={}", userForSave);
-
-            user = userRepository.save(userForSave);
-            log.debug("Пользователь успешно сохранен в БД user={}", user);
-
+            user = registerNewUser(message, chatId);
             userAuthCache.setAttemptAuthForUserCache(chatId, 0);
         }
         return user;
+    }
+
+    private UserEntity registerNewUser(Message message, Long chatId) {
+        log.debug("Начинаю регистрацию нового пользователя с tgId={}", chatId);
+
+        var chat = message.getChat();
+        UserEntity userForSave = UserEntity.builder()
+                .chatId(chatId)
+                .firstName(chat.getFirstName())
+                .lastName(chat.getLastName())
+                .userName(chat.getUserName())
+                .registeredOn(LocalDateTime.now())
+                .authorization(false)
+                .build();
+        log.debug("Новый пользователь собран user={}", userForSave);
+
+        UserEntity userAfterSave = userRepository.save(userForSave);
+        log.debug("Пользователь успешно сохранен в БД user={}", userAfterSave);
+        return userAfterSave;
     }
 
     private boolean isUserBanned(Long userId) {
@@ -90,6 +109,11 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         currentAttemptsAuthUser++;
         userAuthCache.setAttemptAuthForUserCache(userId, currentAttemptsAuthUser);
         return securityConfig.getAttemptsAuth() >= currentAttemptsAuthUser;
+    }
+
+    private UserEntity getUserByChatId(Long chatId) {
+        log.debug("Получаю пользователя с chatId={} из базы", chatId);
+        return userRepository.findByChatId(chatId);
     }
 
 }

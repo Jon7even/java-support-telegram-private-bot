@@ -49,7 +49,14 @@ public class UpdateController {
     }
 
     private void distributeCallbackByType(Update update) {
+        if (authorizationService.processAuthorizationForCallBack(update)) {
             processCallbackQuery(update);
+        } else {
+            var sendMessage = MessageUtils.buildAnswerWithText(
+                    update.getMessage(), String.format("Такую команду %s", WE_NOT_SUPPORT)
+            );
+            setView(sendMessage);
+        }
     }
 
     private void distributeMessagesByType(Update update) {
