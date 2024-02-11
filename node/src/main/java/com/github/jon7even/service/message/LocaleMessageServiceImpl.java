@@ -1,6 +1,5 @@
-package com.github.jon7even.service;
+package com.github.jon7even.service.message;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;

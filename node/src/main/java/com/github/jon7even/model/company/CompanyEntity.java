@@ -69,6 +69,6 @@ public class CompanyEntity {
 
     @Override
     public String toString() {
-        return nameCompany + " подарок=" + type.toString() + ", выдан ли подарок?=" + isGiven +"\n\n";
+        return nameCompany + " подарок=" + type.toString() + ", выдан ли подарок?=" + isGiven + "\n\n";
     }
 }

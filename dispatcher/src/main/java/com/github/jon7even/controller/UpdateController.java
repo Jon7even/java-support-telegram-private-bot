@@ -52,7 +52,7 @@ public class UpdateController {
         if (authorizationService.processAuthorizationForCallBack(update)) {
             processCallbackQuery(update);
         } else {
-            var sendMessage = MessageUtils.buildAnswerWithText(
+            var sendMessage = MessageUtils.buildAnswerWithMessage(
                     update.getMessage(), String.format("Такую команду %s", WE_NOT_SUPPORT)
             );
             setView(sendMessage);
@@ -75,7 +75,7 @@ public class UpdateController {
                 setUnsupportedMessageTypeView(update);
             }
         } else {
-            var sendMessage = MessageUtils.buildAnswerWithText(
+            var sendMessage = MessageUtils.buildAnswerWithMessage(
                     update.getMessage(), String.format("Такую команду %s", WE_NOT_SUPPORT)
             );
             setView(sendMessage);
@@ -99,28 +99,28 @@ public class UpdateController {
     }
 
     private void processDocument(Update update) {
-        var sendMessage = MessageUtils.buildAnswerWithText(
+        var sendMessage = MessageUtils.buildAnswerWithMessage(
                 update.getMessage(), String.format("Получение документов %s", WE_NOT_SUPPORT)
         );
         setView(sendMessage);
     }
 
     private void processPhotoMessage(Update update) {
-        var sendMessage = MessageUtils.buildAnswerWithText(
+        var sendMessage = MessageUtils.buildAnswerWithMessage(
                 update.getMessage(), String.format("Получение фото %s", WE_NOT_SUPPORT)
         );
         setView(sendMessage);
     }
 
     private void processAudioMessage(Update update) {
-        var sendMessage = MessageUtils.buildAnswerWithText(
+        var sendMessage = MessageUtils.buildAnswerWithMessage(
                 update.getMessage(), String.format("Получение аудио %s", WE_NOT_SUPPORT)
         );
         setView(sendMessage);
     }
 
     private void setUnsupportedMessageTypeView(Update update) {
-        var sendMessage = MessageUtils.buildAnswerWithText(
+        var sendMessage = MessageUtils.buildAnswerWithMessage(
                 update.getMessage(), String.format("Получение данного типа сообщений %s", WE_NOT_SUPPORT)
         );
         setView(sendMessage);

@@ -6,14 +6,14 @@ import com.github.jon7even.model.company.CompanyEntity;
 import com.github.jon7even.model.user.UserEntity;
 import com.github.jon7even.repository.CompanyRepository;
 import com.github.jon7even.repository.UserRepository;
+import com.github.jon7even.service.message.ReplyMessageService;
+import com.github.jon7even.service.producer.SenderMessageService;
 import com.github.jon7even.telegram.BotState;
 import com.github.jon7even.telegram.menu.gift.TypeGift;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -22,9 +22,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.github.jon7even.telegram.menu.MainMenu.*;
 import static com.github.jon7even.telegram.menu.gift.MenuGift.*;
-import static com.github.jon7even.utils.Emoji.SMAIL;
 
 @Slf4j
 @Service
@@ -33,8 +31,8 @@ public class MainServiceImpl implements MainService {
     private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
     private final UserDataCache userDataCache;
-    private final ProducerService producerService;
     private final ReplyMessageService replyMessageService;
+    private final SenderMessageService senderMessageService;
 
     static final String HELP_GIFTS = "\n" +
             "Начинаем работать с подарками, нажмите необходимый пункт меню. \uD83D\uDE0E \n\n" +
@@ -61,7 +59,7 @@ public class MainServiceImpl implements MainService {
             if (botState.equals(BotState.COMPANY_NAME)) {
                 companyBuildingDto.setNameCompany(resultMessage);
                 userDataCache.setBotStateForCacheUser(chaId, BotState.COMPANY_SUM);
-                prepareAndSendMessage(chaId, "Отлично, а теперь укажите сумму за год");
+                senderMessageService.sendText(chaId, "Отлично, а теперь укажите сумму за год");
             }
 
             if (botState.equals(BotState.COMPANY_SUM)) {
@@ -70,13 +68,13 @@ public class MainServiceImpl implements MainService {
                 } catch (NumberFormatException e) {
                     log.warn("Пользователь шалит и передает в строку нечисловое значение. {}", e.getMessage());
                     companyBuildingDto.setTotalSum(50000);
-                    prepareAndSendMessage(
+                    senderMessageService.sendText(
                             chaId, "Вы указали не число, поэтому мы поставили дефолтное значение 50 000 руб."
                     );
                 }
 
                 userDataCache.setBotStateForCacheUser(chaId, BotState.COMPANY_TYPE_GIFT);
-                prepareAndSendMessage(chaId, "Укажите тип подарка - Стандарт или Премиум");
+                senderMessageService.sendText(chaId, "Укажите тип подарка - Стандарт или Премиум");
             }
 
             if (botState.equals(BotState.COMPANY_TYPE_GIFT)) {
@@ -85,11 +83,11 @@ public class MainServiceImpl implements MainService {
                 } else if (resultMessage.equals("Премиум")) {
                     companyBuildingDto.setType(TypeGift.PREMIUM);
                 } else {
-                    prepareAndSendMessage(chaId, "Что-то пошло не так, ставим, что подарок стандарт...");
+                    senderMessageService.sendText(chaId, "Что-то пошло не так, ставим, что подарок стандарт...");
                     companyBuildingDto.setType(TypeGift.LIGHT);
                 }
                 userDataCache.setBotStateForCacheUser(chaId, BotState.COMPANY_IS_GIVEN);
-                prepareAndSendMessage(chaId, "Подарок уже выдан? Отвечайте Да или Нет.");
+                senderMessageService.sendText(chaId, "Подарок уже выдан? Отвечайте Да или Нет.");
             }
 
             if (botState.equals(BotState.COMPANY_IS_GIVEN)) {
@@ -99,10 +97,10 @@ public class MainServiceImpl implements MainService {
                     companyBuildingDto.setIsGiven(false);
                 } else {
                     companyBuildingDto.setIsGiven(false);
-                    prepareAndSendMessage(chaId, "Вы что-то не то нажали. Считаем, что подарок не выдан.");
+                    senderMessageService.sendText(chaId, "Вы что-то не то нажали. Считаем, что подарок не выдан.");
                 }
                 userDataCache.setBotStateForCacheUser(chaId, BotState.COMPANY_IS_DONE);
-                prepareAndSendMessage(chaId, "Отлично! Сейчас будем сохранять в базу \uD83E\uDD73");
+                senderMessageService.sendText(chaId, "Отлично! Сейчас будем сохранять в базу \uD83E\uDD73");
 
                 UserEntity userCreator = userRepository.findByChatId(chaId);
                 log.debug("Проверяем, что пользователь есть в системе: {}", userCreator);
@@ -123,7 +121,7 @@ public class MainServiceImpl implements MainService {
                 log.trace("Пользователь с id={} добавил новую компанию: {}", userCreator.getChatId(), company);
 
                 userDataCache.setBotStateForCacheUser(chaId, BotState.MAIN_HELP);
-                prepareAndSendMessage(chaId, String.format("Вы успешно добавили компанию: \n\n" +
+                senderMessageService.sendText(chaId, String.format("Вы успешно добавили компанию: \n\n" +
                                 "%s с годовым оборотом: %d руб. выбранный подарок: %s",
                         createdCompany.getNameCompany(), createdCompany.getTotalSum(),
                         createdCompany.getType().toString()));
@@ -139,7 +137,7 @@ public class MainServiceImpl implements MainService {
                 default:
                     if (botState.equals(BotState.MAIN_HELP) || botState.equals(BotState.MAIN_START) ||
                             botState.equals(BotState.MAIN_GIFTS)) {
-                        prepareAndSendMessage(chaId, replyMessageService.getReplyText("reply.nonsupport"));
+                        senderMessageService.sendText(chaId, replyMessageService.getReplyText("reply.nonsupport"));
                         userDataCache.setBotStateForCacheUser(chaId, BotState.MAIN_HELP);
                         log.warn("Эту команду мы еще не поддерживаем. Команда пользователя: " + resultMessage);
                     } else {
@@ -161,31 +159,31 @@ public class MainServiceImpl implements MainService {
 
             switch (result) {
                 case "/newcompany":
-                    sendEditMessageText("Начинаем процесс добавления новой компании.\n\n " +
-                            "Давайте начнем с названия компании, введите его:\n\n", chaId, messageId);
+                    senderMessageService.sendEditText(chaId, "Начинаем процесс добавления новой компании.\n\n " +
+                            "Давайте начнем с названия компании, введите его:\n\n", messageId);
                     userDataCache.setBotStateForCacheUser(chaId, BotState.COMPANY_NAME);
                     break;
                 case "/givegift":
-                    sendEditMessageText("текст", chaId, messageId);
+                    senderMessageService.sendEditText(chaId, "текст", messageId);
                     break;
                 case "/calculation":
-                    sendEditMessageText("текст", chaId, messageId);
+                    senderMessageService.sendEditText(chaId, "текст", messageId);
                     break;
                 case "/givemanual":
-                    sendEditMessageText("текст", chaId, messageId);
+                    senderMessageService.sendEditText(chaId, "текст", messageId);
                     break;
                 case "/searchcompany":
-                    sendEditMessageText("текст", chaId, messageId);
+                    senderMessageService.sendEditText(chaId, "текст", messageId);
                     break;
                 case "/removecompany":
-                    sendEditMessageText("текст", chaId, messageId);
+                    senderMessageService.sendEditText(chaId, "текст", messageId);
                     break;
                 case "/checkgifts":
-                    sendEditMessageText("Общий список компаний: ", chaId, messageId);
+                    senderMessageService.sendEditText(chaId, "Общий список компаний: ", messageId);
                     processGetListCompanies(chaId);
                     break;
                 default:
-                    prepareAndSendMessage(chaId, replyMessageService.getReplyText("reply.nonsupport"));
+                    senderMessageService.sendText(chaId, replyMessageService.getReplyText("reply.nonsupport"));
                     log.warn("Эту команду мы еще не поддерживаем. Команда пользователя: " + result);
             }
         } else {
@@ -197,44 +195,10 @@ public class MainServiceImpl implements MainService {
         List<CompanyEntity> listCompanies = companyRepository.findAll();
         log.debug("Список компаний: {}", listCompanies);
         String answer = StringUtils.join(listCompanies);
-        prepareAndSendMessage(chaId, answer);
-    }
-
-    private void startCommandReceived(Long chatId, String name) {
-        String answer = "Приветствую тебя, " + name + SMAIL;
-        prepareAndSendMessage(chatId, answer);
-    }
-
-    private void prepareAndSendMessage(Long chatId, String textToSend) {
-        SendMessage message = SendMessage.builder()
-                .chatId(chatId)
-                .text(textToSend)
-                .build();
-
-        sendMessageText(message);
-    }
-
-    private void sendEditMessageText(String text, Long chatId, Integer messageId) {
-        EditMessageText messageToEdit = EditMessageText.builder()
-                .chatId(chatId)
-                .text(text)
-                .messageId(Math.toIntExact(messageId))
-                .build();
-
-        log.debug("Отвечаем на сообщение sendMessage={}", messageToEdit);
-        producerService.producerAnswerEditText(messageToEdit);
-    }
-
-    private void sendMessageText(SendMessage message) {
-        producerService.producerAnswerText(message);
+        senderMessageService.sendText(chaId, answer);
     }
 
     private void giftsCommandReceived(Long chatId) {
-        SendMessage message = SendMessage.builder()
-                .chatId(chatId)
-                .text(HELP_GIFTS)
-                .build();
-
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
         List<InlineKeyboardButton> rowInLineOne = new ArrayList<>();
@@ -282,9 +246,8 @@ public class MainServiceImpl implements MainService {
         rowsInLine.add(rowInLineThird);
         rowsInLine.add(rowInLineFourth);
         markup.setKeyboard(rowsInLine);
-        message.setReplyMarkup(markup);
 
-        sendMessageText(message);
+        senderMessageService.sendTextAndMarkup(chatId, HELP_GIFTS, markup);
     }
 
 }
