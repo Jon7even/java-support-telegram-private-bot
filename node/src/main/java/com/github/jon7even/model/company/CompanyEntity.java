@@ -1,7 +1,7 @@
 package com.github.jon7even.model.company;
 
+import com.github.jon7even.model.gift.GiftEntity;
 import com.github.jon7even.model.user.UserEntity;
-import com.github.jon7even.telegram.menu.gift.TypeGift;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,14 +22,15 @@ public class CompanyEntity {
     private Long id;
 
     @Column(name = "name_company", nullable = false)
-    private String nameCompany;
+    private String name;
 
     @Column(name = "total_sum", nullable = false)
     private Integer totalSum;
 
-    @Enumerated(value = EnumType.STRING)
-    @Column(name = "gift")
-    private TypeGift type;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "location_id", nullable = false)
+    @ToString.Exclude
+    private GiftEntity gift;
 
     @Column(name = "created_on", nullable = false)
     private LocalDateTime created;
@@ -43,7 +44,7 @@ public class CompanyEntity {
     @Column(name = "given_on")
     private LocalDateTime given;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "creator_id", nullable = false)
     @ToString.Exclude
     private UserEntity creator;
@@ -53,8 +54,8 @@ public class CompanyEntity {
         if (this == o) return true;
         if (!(o instanceof CompanyEntity)) return false;
         CompanyEntity company = (CompanyEntity) o;
-        return Objects.equals(id, company.id) && Objects.equals(nameCompany, company.nameCompany)
-                && Objects.equals(totalSum, company.totalSum) && type == company.type
+        return Objects.equals(id, company.id) && Objects.equals(name, company.name)
+                && Objects.equals(totalSum, company.totalSum) && gift == company.gift
                 && Objects.equals(created, company.created)
                 && Objects.equals(updated, company.updated)
                 && Objects.equals(isGiven, company.isGiven)
@@ -64,11 +65,11 @@ public class CompanyEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nameCompany, totalSum, type, created, updated, isGiven, given, creator);
+        return Objects.hash(id, name, totalSum, gift, created, updated, isGiven, given, creator);
     }
 
     @Override
     public String toString() {
-        return nameCompany + " подарок=" + type.toString() + ", выдан ли подарок?=" + isGiven + "\n\n";
+        return name + " подарок=" + gift.toString() + ", выдан ли подарок?=" + isGiven + "\n\n";
     }
 }
