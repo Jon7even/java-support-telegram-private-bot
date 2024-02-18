@@ -9,8 +9,7 @@ import org.springframework.context.annotation.PropertySource;
 @Getter
 @Setter
 @Configuration
-@ConfigurationProperties(prefix = "supportbot")
-@PropertySource("classpath:supportbot.properties")
+@ConfigurationProperties("supportbot")
 public class BotConfig {
     private String name;
     private String token;
