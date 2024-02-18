@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS companies (
     CONSTRAINT        PK_COMPANY           PRIMARY KEY(id)                      ,
     CONSTRAINT        UNQ_NAME_COMPANY     UNIQUE(name_company)                 ,
     CONSTRAINT        FK_COMPANY_TO_USER   FOREIGN KEY(creator_id) REFERENCES users(id)   ON DELETE CASCADE,
-    CONSTRAINT        FK_COMPANY_TO_GIFT   FOREIGN KEY(gift_id) REFERENCES users(id)   ON DELETE CASCADE
+    CONSTRAINT        FK_COMPANY_TO_GIFT   FOREIGN KEY(gift_id) REFERENCES gifts(id)   ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS gifts (

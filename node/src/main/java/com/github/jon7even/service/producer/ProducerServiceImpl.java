@@ -1,8 +1,8 @@
 package com.github.jon7even.service.producer;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
@@ -12,10 +12,15 @@ import static com.github.jon7even.constants.DefaultMessageError.ERROR_SEND_TEXT;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class ProducerServiceImpl implements ProducerService {
     private final RabbitTemplate rabbitTemplate;
     private final SenderMessageService senderMessageService;
+
+    public ProducerServiceImpl(RabbitTemplate rabbitTemplate, @Lazy SenderMessageService senderMessageService) {
+        this.rabbitTemplate = rabbitTemplate;
+        this.senderMessageService = senderMessageService;
+    }
+
 
     @Override
     public void producerAnswerText(SendMessage sendMessage) {
