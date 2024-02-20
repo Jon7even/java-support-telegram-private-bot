@@ -34,6 +34,9 @@ spring:
     activate:
       on-profile: ci
 
+  liquibase:
+    enabled: true
+
   main:
     banner-mode: off
 
@@ -76,6 +79,9 @@ spring:
   config:
     activate:
       on-profile: test
+
+  liquibase:
+    enabled: true
 
   jpa:
     hibernate:

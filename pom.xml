@@ -29,6 +29,7 @@
 		<emoji.version>5.1.1</emoji.version>
 		<posgres.version>42.5.4</posgres.version>
 		<h2.version>2.1.214</h2.version>
+		<liquibase.version>4.9.1</liquibase.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

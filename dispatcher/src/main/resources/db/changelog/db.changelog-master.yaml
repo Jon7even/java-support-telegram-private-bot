@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0
+      author: jon7even
+      context: dev
+      changes:
+        - tagDatabase:
+            tag: db_init
+        - sqlFile:
+            encoding: utf8
+            endDelimiter: \nGO
+            stripComments: false
+            dbms: h2, postgresql
+            splitStatements: false
+            relativeToChangeLogFile: true
+            path: v-1.0/data/create-user-table.sql
