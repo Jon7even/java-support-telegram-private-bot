@@ -1,4 +1,4 @@
-package com.github.jon7even.service;
+package com.github.jon7even.service.message;
 
 public interface ReplyMessageService {
     String getReplyText(String replyText);

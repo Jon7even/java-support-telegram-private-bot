@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 public enum MenuGift {
     NEW_COMPANY("/newcompany"),
     GIVE_GIFT("/givegift"),
-    CALC_GIFTS("/calculation"),
     ASSIGN_BY_FORCE("/givemanual"),
     SEARCH_COMPANY("/searchcompany"),
     REMOVE_COMPANY("/removecompany"),

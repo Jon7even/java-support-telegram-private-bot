@@ -1,4 +1,4 @@
-package com.github.jon7even.service;
+package com.github.jon7even.service.message;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

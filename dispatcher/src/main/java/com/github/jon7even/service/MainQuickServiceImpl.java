@@ -36,7 +36,7 @@ public class MainQuickServiceImpl implements MainQuickService {
             default:
                 log.error("Произошел сбой сервиса диспетчера первичной обработки!");
         }
-        return MessageUtils.buildAnswerWithText(update.getMessage(), answer);
+        return MessageUtils.buildAnswerWithMessage(update.getMessage(), answer);
     }
 
 }
