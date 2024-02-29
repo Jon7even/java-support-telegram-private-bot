@@ -64,7 +64,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
                 return false;
             }
         } else {
-            log.warn("Пользователь user={} ввел count={} раз пароль неправильно и был заблокирован",
+            log.warn("Пользователь user={} ввел attemptsAuth={} раз пароль неправильно и был заблокирован",
                     userFromBD, securityConfig.getAttemptsAuth());
             return false;
         }

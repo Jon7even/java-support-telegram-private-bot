@@ -1,6 +1,7 @@
 package com.github.jon7even.model.user;
 
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -36,6 +37,7 @@ public class UserEntity {
     private LocalDateTime registeredOn;
 
     @Column(name = "auth_on")
+    @ColumnDefault(value = "false")
     private Boolean authorization;
 
     @Override

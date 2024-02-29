@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS gifts (
-    id                INTEGER            NOT NULL GENERATED ALWAYS AS IDENTITY,
+    id                BIGINT            NOT NULL GENERATED ALWAYS AS IDENTITY,
     name_gift         VARCHAR(64)        NOT NULL                             ,
     creator_id        BIGINT             NOT NULL                             ,
     status            VARCHAR(16)        NOT NULL                             ,

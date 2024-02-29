@@ -25,10 +25,10 @@ public class CompanyEntity {
     private String name;
 
     @Column(name = "total_sum", nullable = false)
-    private Integer totalSum;
+    private Long totalSum;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "location_id", nullable = false)
+    @JoinColumn(name = "gift_id", nullable = false)
     @ToString.Exclude
     private GiftEntity gift;
 
