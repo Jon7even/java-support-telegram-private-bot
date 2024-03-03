@@ -1,5 +1,6 @@
 package com.github.jon7even.controller;
 
+import com.github.jon7even.mapper.UserMapper;
 import com.github.jon7even.service.AuthorizationService;
 import com.github.jon7even.service.MainQuickService;
 import com.github.jon7even.service.UpdateProducerService;
@@ -49,7 +50,7 @@ public class UpdateController {
     }
 
     private void distributeCallbackByType(Update update) {
-        if (authorizationService.processAuthorizationForCallBack(update)) {
+        if (authorizationService.processAuthorizationForCallBack(update.getCallbackQuery().getMessage().getChatId())) {
             processCallbackQuery(update);
         } else {
             var sendMessage = MessageUtils.buildAnswerWithMessage(
@@ -60,7 +61,8 @@ public class UpdateController {
     }
 
     private void distributeMessagesByType(Update update) {
-        if (authorizationService.processAuthorization(update)) {
+        if (authorizationService.processAuthorization(
+                UserMapper.INSTANCE.toDtoFromMessage(update.getMessage().getChat(),update.getMessage().getText()))) {
             Message message = update.getMessage();
 
             if (message.hasText()) {
