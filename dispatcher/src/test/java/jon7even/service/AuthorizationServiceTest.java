@@ -1,6 +1,7 @@
 package jon7even.service;
 
 import com.github.jon7even.cache.UserAuthCache;
+import com.github.jon7even.cache.UserAuthCacheImpl;
 import com.github.jon7even.configuration.SecurityConfig;
 import com.github.jon7even.dto.UserShortDto;
 import com.github.jon7even.mapper.UserMapper;
@@ -16,12 +17,17 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.anyLong;
 
 @ExtendWith(MockitoExtension.class)
 public class AuthorizationServiceTest {
@@ -33,7 +39,6 @@ public class AuthorizationServiceTest {
 
     private SecurityConfig securityConfig;
 
-    @Mock
     private UserAuthCache userAuthCache;
 
     private UserShortDto correctUserShortTO;
@@ -43,7 +48,8 @@ public class AuthorizationServiceTest {
     @BeforeEach
     void setUp() {
         securityConfig = new SecurityConfig();
-        securityConfig.setAttemptsAuth(3);
+        userAuthCache = new UserAuthCacheImpl(new HashMap<>());
+        securityConfig.setAttemptsAuth(2);
         securityConfig.setKeyPass("777");
         authorizationService = new AuthorizationServiceImpl(userRepository, securityConfig, userAuthCache);
 
@@ -149,6 +155,35 @@ public class AuthorizationServiceTest {
 
         verify(userRepository, times(1)).existsByChatId(anyLong());
         verify(userRepository, times(1)).findByChatId(anyLong());
+        verify(userRepository, never()).save(any(UserEntity.class));
+    }
+
+    @Test
+    @DisplayName("Зарегистрированный пользователь вводил пароль неправильно и должен быть заблокирован")
+    void notAuthUser_whenOldUserSetNotValidPassOverLimits() {
+        UserEntity userEntityFromDB = UserMapper.INSTANCE.toEntityFromShortDto(
+                incorrectUserShortTO, LocalDateTime.now()
+        );
+        userEntityFromDB.setId(1L);
+        when(userRepository.findByChatId(any())).thenReturn(userEntityFromDB);
+        when(userRepository.existsByChatId(any())).thenReturn(true);
+
+        boolean resultAuthOne = authorizationService.processAuthorization(incorrectUserShortTO);
+        assertThat(resultAuthOne, notNullValue());
+        assertThat(resultAuthOne, equalTo(false));
+
+        incorrectUserShortTO.setTextMessage("1");
+        boolean resultAuthSecond = authorizationService.processAuthorization(incorrectUserShortTO);
+        assertThat(resultAuthSecond, notNullValue());
+        assertThat(resultAuthSecond, equalTo(false));
+
+        incorrectUserShortTO.setTextMessage("77");
+        boolean resultAuthThird = authorizationService.processAuthorization(incorrectUserShortTO);
+        assertThat(resultAuthThird, notNullValue());
+        assertThat(resultAuthThird, equalTo(false));
+
+        verify(userRepository, times(3)).existsByChatId(anyLong());
+        verify(userRepository, times(3)).findByChatId(anyLong());
         verify(userRepository, never()).save(any(UserEntity.class));
     }
 
