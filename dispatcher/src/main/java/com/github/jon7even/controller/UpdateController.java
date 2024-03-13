@@ -1,5 +1,6 @@
 package com.github.jon7even.controller;
 
+import com.github.jon7even.mapper.UserMapper;
 import com.github.jon7even.service.AuthorizationService;
 import com.github.jon7even.service.MainQuickService;
 import com.github.jon7even.service.UpdateProducerService;
@@ -49,7 +50,7 @@ public class UpdateController {
     }
 
     private void distributeCallbackByType(Update update) {
-        if (authorizationService.processAuthorizationForCallBack(update)) {
+        if (authorizationService.processAuthorizationForCallBack(update.getCallbackQuery().getMessage().getChatId())) {
             processCallbackQuery(update);
         } else {
             var sendMessage = MessageUtils.buildAnswerWithMessage(
@@ -60,9 +61,10 @@ public class UpdateController {
     }
 
     private void distributeMessagesByType(Update update) {
-        if (authorizationService.processAuthorization(update)) {
-            Message message = update.getMessage();
+        Message message = update.getMessage();
 
+        if (authorizationService.processAuthorization(UserMapper.INSTANCE.toDtoFromMessage(message.getChat(),
+                message.getText()))) {
             if (message.hasText()) {
                 processTextMessage(update);
             } else if (message.hasAudio()) {
@@ -76,7 +78,7 @@ public class UpdateController {
             }
         } else {
             var sendMessage = MessageUtils.buildAnswerWithMessage(
-                    update.getMessage(), String.format("Такую команду %s", WE_NOT_SUPPORT)
+                    message, String.format("Такую команду %s", WE_NOT_SUPPORT)
             );
             setView(sendMessage);
         }

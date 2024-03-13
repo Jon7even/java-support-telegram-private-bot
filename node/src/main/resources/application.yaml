@@ -59,6 +59,28 @@ spring:
 
 ---
 # Configuration for the 'test' profile
+server:
+  port: ${SERVER_TEST_PORT_NODE}
+
+localeTag: ${LOCALE_TAG}
+
+logging:
+  level:
+    com:
+      github:
+        jon7even: DEBUG
+    org:
+      springframework:
+        orm:
+          jpa: DEBUG
+          JpaTransactionManager: DEBUG
+        transaction: DEBUG
+      hibernate:
+        SQL: DEBUG
+        type.descriptor:
+          sql:
+            BasicBinder: DEBUG
+
 spring:
   config:
     activate:
@@ -69,15 +91,23 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate
+      database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQL10Dialect
+        use_sql_comments: true
         format_sql: true
-    open-in-view: false
+  h2:
+    console:
+      enabled: true
+      path: /console
 
-  main:
-    banner-mode: off
+  rabbitmq:
+    host: ${RABBIT_IP}
+    port: ${RABBIT_PORT}
+    username: ${RABBIT_USER}
+    password: ${RABBIT_PASS}
 
   datasource:
     driverClassName: org.h2.Driver

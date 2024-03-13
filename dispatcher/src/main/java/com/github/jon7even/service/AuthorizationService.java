@@ -1,8 +1,9 @@
 package com.github.jon7even.service;
 
-import org.telegram.telegrambots.meta.api.objects.Update;
+import com.github.jon7even.dto.UserShortDto;
 
 public interface AuthorizationService {
-    boolean processAuthorization(Update update);
-    boolean processAuthorizationForCallBack(Update update);
+    boolean processAuthorization(UserShortDto userShortDto);
+
+    boolean processAuthorizationForCallBack(Long userId);
 }
