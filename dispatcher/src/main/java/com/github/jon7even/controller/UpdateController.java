@@ -61,10 +61,10 @@ public class UpdateController {
     }
 
     private void distributeMessagesByType(Update update) {
-        if (authorizationService.processAuthorization(
-                UserMapper.INSTANCE.toDtoFromMessage(update.getMessage().getChat(),update.getMessage().getText()))) {
-            Message message = update.getMessage();
+        Message message = update.getMessage();
 
+        if (authorizationService.processAuthorization(UserMapper.INSTANCE.toDtoFromMessage(message.getChat(),
+                message.getText()))) {
             if (message.hasText()) {
                 processTextMessage(update);
             } else if (message.hasAudio()) {
@@ -78,7 +78,7 @@ public class UpdateController {
             }
         } else {
             var sendMessage = MessageUtils.buildAnswerWithMessage(
-                    update.getMessage(), String.format("Такую команду %s", WE_NOT_SUPPORT)
+                    message, String.format("Такую команду %s", WE_NOT_SUPPORT)
             );
             setView(sendMessage);
         }
