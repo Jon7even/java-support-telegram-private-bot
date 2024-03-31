@@ -44,7 +44,7 @@ public class CompanyEntity {
     @Column(name = "given_on")
     private LocalDateTime given;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "creator_id", nullable = false)
     @ToString.Exclude
     private UserEntity creator;

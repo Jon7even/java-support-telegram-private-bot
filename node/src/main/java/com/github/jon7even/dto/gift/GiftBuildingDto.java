@@ -1,5 +1,6 @@
-package com.github.jon7even.model.company;
+package com.github.jon7even.dto.gift;
 
+import com.github.jon7even.model.gift.GiftStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,9 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CompanyBuildingDto {
+public class GiftBuildingDto {
     private String name;
-    private Integer totalSum;
-    private Integer giftId;
-    private Boolean isGiven;
+    private GiftStatus status;
 }
