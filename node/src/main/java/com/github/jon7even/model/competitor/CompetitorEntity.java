@@ -25,7 +25,7 @@ public class CompetitorEntity {
     @Column(name = "created_on", nullable = false)
     private LocalDateTime created;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "creator_id", nullable = false)
     @ToString.Exclude
     private UserEntity creator;

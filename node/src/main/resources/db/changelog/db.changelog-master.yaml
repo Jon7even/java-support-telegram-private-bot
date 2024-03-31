@@ -44,3 +44,18 @@ databaseChangeLog:
             splitStatements: false
             relativeToChangeLogFile: true
             path: v-1.0/data/003-create-companies-table.sql
+  - changeSet:
+      id: 4
+      author: jon7even
+      context: dev
+      changes:
+        - tagDatabase:
+            tag: db_init_competitors
+        - sqlFile:
+            encoding: utf8
+            endDelimiter: \nGO
+            stripComments: false
+            dbms: postgresql, h2
+            splitStatements: false
+            relativeToChangeLogFile: true
+            path: v-1.0/data/004-create-competitors-table.sql

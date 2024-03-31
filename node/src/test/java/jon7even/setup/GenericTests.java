@@ -5,35 +5,38 @@ import com.github.jon7even.model.user.UserEntity;
 import java.time.LocalDateTime;
 
 public class GenericTests {
-    protected UserEntity userOneFull;
-    protected UserEntity userSecondMaxNull;
-    protected UserEntity userThirdAuth;
+    protected UserEntity userEntityOne;
+    protected UserEntity userEntitySecond;
+    protected UserEntity userEntityThird;
 
-    protected Long firstUserId = 1L;
-    protected Long secondUserId = 2L;
-    protected Long thirdUserId = 3L;
+    protected Long firstId = 1L;
+    protected Long secondId = 2L;
+    protected Long thirdId = 3L;
 
     protected void initUsers() {
-        userOneFull = UserEntity.builder()
+        userEntityOne = UserEntity.builder()
                 .chatId(1111111L)
                 .firstName("FirstName")
                 .lastName("FirstLastName")
                 .userName("FirstUserName")
+                .authorization(true)
                 .registeredOn(LocalDateTime.now())
                 .build();
 
-        userSecondMaxNull = UserEntity.builder()
+        userEntitySecond = UserEntity.builder()
                 .chatId(2222222L)
+                .firstName("SecondName")
+                .userName("SecondUserName")
+                .authorization(true)
                 .registeredOn(LocalDateTime.now())
                 .build();
 
-        userThirdAuth = UserEntity.builder()
+        userEntityThird = UserEntity.builder()
                 .chatId(3333333L)
                 .firstName("ThirdName")
                 .lastName("ThirdLastName")
-                .userName("ThirdUserName")
-                .registeredOn(LocalDateTime.now())
                 .authorization(true)
+                .registeredOn(LocalDateTime.now())
                 .build();
     }
 

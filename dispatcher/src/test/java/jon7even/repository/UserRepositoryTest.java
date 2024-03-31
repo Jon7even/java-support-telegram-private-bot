@@ -62,7 +62,6 @@ public class UserRepositoryTest extends GenericTests {
         assertEquals(userThirdAuth.getAuthorization(), userThirdAuthOn.getAuthorization());
         assertEquals(userThirdAuth.getRegisteredOn(), userThirdAuthOn.getRegisteredOn());
 
-        System.out.println(userRepository.findAll());
         assertEquals(userRepository.findAll().size(), 3);
     }
 

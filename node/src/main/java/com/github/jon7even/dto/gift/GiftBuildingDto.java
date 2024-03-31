@@ -1,5 +1,6 @@
-package com.github.jon7even.model.gift;
+package com.github.jon7even.dto.gift;
 
+import com.github.jon7even.model.gift.GiftStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

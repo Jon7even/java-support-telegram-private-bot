@@ -1,4 +1,4 @@
-package com.github.jon7even.model.company;
+package com.github.jon7even.dto.company;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

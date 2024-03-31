@@ -1,6 +1,6 @@
 package com.github.jon7even.cache;
 
-import com.github.jon7even.model.company.CompanyBuildingDto;
+import com.github.jon7even.dto.company.CompanyBuildingDto;
 import com.github.jon7even.telegram.BotState;
 
 public interface UserDataCache {
