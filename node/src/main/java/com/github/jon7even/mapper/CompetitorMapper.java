@@ -21,7 +21,7 @@ public interface CompetitorMapper {
     @Mapping(source = "competitorBuildingDto.name", target = "name")
     @Mapping(source = "now", target = "created")
     @Mapping(source = "userEntity", target = "creator")
-    CompetitorEntity toEntityFromShortDto(CompetitorBuildingDto competitorBuildingDto,
-                                          LocalDateTime now,
-                                          UserEntity userEntity);
+    CompetitorEntity toEntityFromBuildingDto(CompetitorBuildingDto competitorBuildingDto,
+                                             LocalDateTime now,
+                                             UserEntity userEntity);
 }
