@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS companies (
     id                BIGINT               NOT NULL GENERATED ALWAYS AS IDENTITY,
     name_company      VARCHAR(64)          NOT NULL                             ,
-    total_sum         BIGINT              NOT NULL                             ,
-    gift_id           BIGINT              NOT NULL                             ,
+    total_sum         BIGINT               NOT NULL                             ,
+    gift_id           BIGINT               NOT NULL                             ,
     created_on        TIMESTAMP            WITHOUT TIME ZONE     NOT NULL       ,
     updated_on        TIMESTAMP            WITHOUT TIME ZONE                    ,
     is_given          BOOLEAN              NOT NULL                             ,

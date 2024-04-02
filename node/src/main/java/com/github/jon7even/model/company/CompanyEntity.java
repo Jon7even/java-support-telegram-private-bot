@@ -27,7 +27,7 @@ public class CompanyEntity {
     @Column(name = "total_sum", nullable = false)
     private Long totalSum;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "gift_id", nullable = false)
     @ToString.Exclude
     private GiftEntity gift;
