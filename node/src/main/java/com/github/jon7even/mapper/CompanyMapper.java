@@ -15,10 +15,6 @@ import java.time.LocalDateTime;
 public interface CompanyMapper {
     CompanyMapper INSTANCE = Mappers.getMapper(CompanyMapper.class);
 
-    @Mapping(source = "company.name", target = "name")
-    @Mapping(source = "company.gifts", target = "gifts")
-    CompanyShortDto toDtoFromEntity(CompanyEntity company);
-
     @Mapping(target = "id", ignore = true)
     @Mapping(source = "companyBuildingDto.name", target = "name")
     @Mapping(source = "companyBuildingDto.totalSum", target = "totalSum")

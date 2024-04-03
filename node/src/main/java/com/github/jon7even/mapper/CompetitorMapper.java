@@ -15,7 +15,7 @@ public interface CompetitorMapper {
     CompetitorMapper INSTANCE = Mappers.getMapper(CompetitorMapper.class);
 
     @Mapping(source = "competitorEntity.name", target = "name")
-    CompetitorShortDto toDtoFromEntity(CompetitorEntity competitorEntity);
+    CompetitorShortDto toShortDtoFromEntity(CompetitorEntity competitorEntity);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(source = "competitorBuildingDto.name", target = "name")

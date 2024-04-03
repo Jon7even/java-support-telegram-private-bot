@@ -59,3 +59,18 @@ databaseChangeLog:
             splitStatements: false
             relativeToChangeLogFile: true
             path: v-1.0/data/004-create-competitors-table.sql
+  - changeSet:
+      id: 5
+      author: jon7even
+      context: dev
+      changes:
+        - tagDatabase:
+            tag: db_init_events
+        - sqlFile:
+            encoding: utf8
+            endDelimiter: \nGO
+            stripComments: false
+            dbms: postgresql, h2
+            splitStatements: false
+            relativeToChangeLogFile: true
+            path: v-1.0/data/005-create-events-table.sql

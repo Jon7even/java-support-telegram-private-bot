@@ -14,7 +14,7 @@ public interface GiftMapper {
 
     @Mapping(source = "giftEntity.name", target = "name")
     @Mapping(source = "giftEntity.status", target = "status")
-    GiftShortDto toDtoFromEntity(GiftEntity giftEntity);
+    GiftShortDto toShortDtoFromEntity(GiftEntity giftEntity);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(source = "giftBuildingDto.name", target = "name")

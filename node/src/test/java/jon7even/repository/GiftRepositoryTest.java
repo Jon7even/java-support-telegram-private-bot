@@ -32,7 +32,7 @@ public class GiftRepositoryTest extends GenericRepositoryTest {
     }
 
     @BeforeEach
-    void addGift() {
+    void addGiftInRepository() {
         giftBuildDtoOne = GiftBuildingDto.builder().name("GiftOneACTIV").status(GiftStatus.ACTIVATED).build();
         giftBuildDtoSecond = GiftBuildingDto.builder().name("GiftSecondACTIV").status(GiftStatus.ACTIVATED).build();
         giftBuildDtoThird = GiftBuildingDto.builder().name("GiftThirdDEACTIV").status(GiftStatus.DEACTIVATED).build();

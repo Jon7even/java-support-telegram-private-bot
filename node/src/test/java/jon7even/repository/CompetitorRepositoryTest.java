@@ -33,7 +33,7 @@ public class CompetitorRepositoryTest extends GenericRepositoryTest {
     }
 
     @BeforeEach
-    void addCompetitor() {
+    void addCompetitorInRepository() {
         competitorBuildOne = CompetitorBuildingDto.builder().name("CompetitorOne").build();
         competitorBuildSecond = CompetitorBuildingDto.builder().name("CompetitorSecond").build();
         competitorBuildThird = CompetitorBuildingDto.builder().name("CompetitorThird").build();
