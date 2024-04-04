@@ -6,7 +6,9 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Builder
@@ -48,6 +50,9 @@ public class CompanyEntity {
     @JoinColumn(name = "creator_id", nullable = false)
     @ToString.Exclude
     private UserEntity creator;
+
+    @OneToMany(mappedBy = "employees", fetch = FetchType.EAGER)
+    private Set<EmployeeEntity> employees = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
