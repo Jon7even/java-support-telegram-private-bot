@@ -1,4 +1,4 @@
-package com.github.jon7even.service;
+package com.github.jon7even.service.in;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.github.jon7even.service.producer;
+package com.github.jon7even.service.out.producer;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;

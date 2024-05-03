@@ -1,4 +1,4 @@
-package com.github.jon7even.service;
+package com.github.jon7even.service.out;
 
 import com.github.jon7even.controller.UpdateController;
 import lombok.RequiredArgsConstructor;

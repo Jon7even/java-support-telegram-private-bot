@@ -1,9 +1,9 @@
 package com.github.jon7even.controller;
 
 import com.github.jon7even.mapper.UserMapper;
-import com.github.jon7even.service.AuthorizationService;
-import com.github.jon7even.service.MainQuickService;
-import com.github.jon7even.service.UpdateProducerService;
+import com.github.jon7even.service.in.AuthorizationService;
+import com.github.jon7even.service.in.MainQuickService;
+import com.github.jon7even.service.in.UpdateProducerService;
 import com.github.jon7even.utils.MessageUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;

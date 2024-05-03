@@ -1,4 +1,4 @@
-package com.github.jon7even.service.producer;
+package com.github.jon7even.service.out.producer;
 
 import com.github.jon7even.utils.MessageUtils;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.github.jon7even.service;
+package com.github.jon7even.service.in;
 
 import com.github.jon7even.telegram.menu.MainMenu;
 import com.github.jon7even.utils.MessageUtils;

@@ -1,4 +1,4 @@
-package com.github.jon7even.service;
+package com.github.jon7even.service.in;
 
 import com.github.jon7even.cache.UserAuthCache;
 import com.github.jon7even.configuration.SecurityConfig;

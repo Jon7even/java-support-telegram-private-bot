@@ -1,4 +1,4 @@
-package com.github.jon7even.service.message;
+package com.github.jon7even.service.in.message;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
