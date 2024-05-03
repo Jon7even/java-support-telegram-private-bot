@@ -1,9 +1,8 @@
 package com.github.jon7even.model.gift;
 
 import com.github.jon7even.model.user.UserEntity;
+import jakarta.persistence.*;
 import lombok.*;
-
-import javax.persistence.*;
 
 @Entity
 @Builder

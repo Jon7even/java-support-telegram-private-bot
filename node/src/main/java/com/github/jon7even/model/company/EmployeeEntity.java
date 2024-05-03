@@ -1,9 +1,9 @@
 package com.github.jon7even.model.company;
 
 import com.github.jon7even.model.user.UserEntity;
+import jakarta.persistence.*;
 import lombok.*;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -25,7 +25,7 @@ public class EmployeeEntity {
     @Column(name = "added_on", nullable = false)
     private LocalDateTime registeredOn;
 
-    @OneToMany(mappedBy = "companies", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "companies", fetch = FetchType.LAZY)
     private CompanyEntity company;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)

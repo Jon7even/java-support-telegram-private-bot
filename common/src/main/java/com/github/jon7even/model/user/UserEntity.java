@@ -1,9 +1,9 @@
 package com.github.jon7even.model.user;
 
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 import static com.github.jon7even.constants.DataTimePattern.DATE_TIME_FORMATTER;

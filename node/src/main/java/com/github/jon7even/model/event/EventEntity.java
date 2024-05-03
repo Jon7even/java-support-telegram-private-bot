@@ -1,9 +1,9 @@
 package com.github.jon7even.model.event;
 
 import com.github.jon7even.model.user.UserEntity;
+import jakarta.persistence.*;
 import lombok.*;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
