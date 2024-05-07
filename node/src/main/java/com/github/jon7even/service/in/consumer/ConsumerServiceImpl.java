@@ -1,7 +1,7 @@
-package com.github.jon7even.service.consumer;
+package com.github.jon7even.service.in.consumer;
 
 import com.github.jon7even.service.MainService;
-import com.github.jon7even.service.producer.SenderMessageService;
+import com.github.jon7even.service.out.producer.SenderMessageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;

@@ -1,4 +1,4 @@
-package com.github.jon7even.service.producer;
+package com.github.jon7even.service.out.producer;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;

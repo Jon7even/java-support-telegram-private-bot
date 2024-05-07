@@ -1,4 +1,4 @@
-package com.github.jon7even.service;
+package com.github.jon7even.service.out;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 

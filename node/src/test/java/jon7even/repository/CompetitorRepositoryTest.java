@@ -33,18 +33,18 @@ public class CompetitorRepositoryTest extends GenericRepositoryTest {
     }
 
     @BeforeEach
-    void addCompetitor() {
+    void addCompetitorInRepository() {
         competitorBuildOne = CompetitorBuildingDto.builder().name("CompetitorOne").build();
         competitorBuildSecond = CompetitorBuildingDto.builder().name("CompetitorSecond").build();
         competitorBuildThird = CompetitorBuildingDto.builder().name("CompetitorThird").build();
 
-        CompetitorEntity competitorEntityForSaveOne = CompetitorMapper.INSTANCE.toEntityFromShortDto(
+        CompetitorEntity competitorEntityForSaveOne = CompetitorMapper.INSTANCE.toEntityFromBuildingDto(
                 competitorBuildOne, LocalDateTime.now(), userEntityOne
         );
-        CompetitorEntity competitorEntityForSaveSecond = CompetitorMapper.INSTANCE.toEntityFromShortDto(
+        CompetitorEntity competitorEntityForSaveSecond = CompetitorMapper.INSTANCE.toEntityFromBuildingDto(
                 competitorBuildSecond, LocalDateTime.now(), userEntitySecond
         );
-        CompetitorEntity competitorEntityForSaveThird = CompetitorMapper.INSTANCE.toEntityFromShortDto(
+        CompetitorEntity competitorEntityForSaveThird = CompetitorMapper.INSTANCE.toEntityFromBuildingDto(
                 competitorBuildThird, LocalDateTime.now(), userEntityThird
         );
 

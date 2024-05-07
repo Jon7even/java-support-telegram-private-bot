@@ -1,4 +1,4 @@
-package com.github.jon7even.model.competitor;
+package com.github.jon7even.model.company;
 
 import com.github.jon7even.model.user.UserEntity;
 import jakarta.persistence.*;
@@ -12,18 +12,21 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "competitors", schema = "public")
-public class CompetitorEntity {
+@Table(name = "employees", schema = "public")
+public class EmployeeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name_competitor", nullable = false)
+    @Column(name = "full_name", nullable = false)
     private String name;
 
-    @Column(name = "created_on", nullable = false)
-    private LocalDateTime created;
+    @Column(name = "added_on", nullable = false)
+    private LocalDateTime registeredOn;
+
+    @OneToMany(mappedBy = "companies", fetch = FetchType.LAZY)
+    private CompanyEntity company;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "creator_id", nullable = false)

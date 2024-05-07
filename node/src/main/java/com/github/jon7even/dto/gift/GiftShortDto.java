@@ -1,5 +1,6 @@
-package com.github.jon7even.dto.competitor;
+package com.github.jon7even.dto.gift;
 
+import com.github.jon7even.model.gift.GiftStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CompetitorShortDto {
+public class GiftShortDto {
     private String name;
+    private GiftStatus status;
 }

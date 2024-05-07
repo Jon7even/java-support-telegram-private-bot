@@ -1,4 +1,4 @@
-package com.github.jon7even.service.consumer;
+package com.github.jon7even.service.in.consumer;
 
 import org.telegram.telegrambots.meta.api.objects.Update;
 

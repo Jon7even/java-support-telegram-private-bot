@@ -15,13 +15,13 @@ public interface CompetitorMapper {
     CompetitorMapper INSTANCE = Mappers.getMapper(CompetitorMapper.class);
 
     @Mapping(source = "competitorEntity.name", target = "name")
-    CompetitorShortDto toDtoFromEntity(CompetitorEntity competitorEntity);
+    CompetitorShortDto toShortDtoFromEntity(CompetitorEntity competitorEntity);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(source = "competitorBuildingDto.name", target = "name")
     @Mapping(source = "now", target = "created")
     @Mapping(source = "userEntity", target = "creator")
-    CompetitorEntity toEntityFromShortDto(CompetitorBuildingDto competitorBuildingDto,
-                                          LocalDateTime now,
-                                          UserEntity userEntity);
+    CompetitorEntity toEntityFromBuildingDto(CompetitorBuildingDto competitorBuildingDto,
+                                             LocalDateTime now,
+                                             UserEntity userEntity);
 }

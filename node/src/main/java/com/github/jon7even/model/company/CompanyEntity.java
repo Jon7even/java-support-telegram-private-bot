@@ -6,7 +6,9 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Builder
@@ -27,7 +29,7 @@ public class CompanyEntity {
     @Column(name = "total_sum", nullable = false)
     private Long totalSum;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "gift_id", nullable = false)
     @ToString.Exclude
     private GiftEntity gift;
@@ -48,6 +50,9 @@ public class CompanyEntity {
     @JoinColumn(name = "creator_id", nullable = false)
     @ToString.Exclude
     private UserEntity creator;
+
+    @OneToMany(mappedBy = "employees", fetch = FetchType.EAGER)
+    private Set<EmployeeEntity> employees = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
