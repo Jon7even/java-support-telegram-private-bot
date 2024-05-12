@@ -1,6 +1,6 @@
 package com.github.jon7even.service.out;
 
-import com.github.jon7even.controller.UpdateController;
+import com.github.jon7even.controller.out.SenderBotClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -13,12 +13,12 @@ import static com.github.jon7even.configuration.RabbitQueue.ANSWER_MESSAGE;
 @Service
 @RequiredArgsConstructor
 public class AnswerConsumerServiceImpl implements AnswerConsumerService {
-    private final UpdateController updateController;
+    private final SenderBotClient senderBotClient;
 
     @Override
     @RabbitListener(queues = ANSWER_MESSAGE)
     public void consume(SendMessage sendMessage) {
         log.debug("Начинаем отправлять ответ text={}", sendMessage.getText());
-        updateController.setView(sendMessage);
+        senderBotClient.sendAnswerMessage(sendMessage);
     }
 }

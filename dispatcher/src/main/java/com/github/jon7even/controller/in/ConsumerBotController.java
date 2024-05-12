@@ -1,16 +1,16 @@
-package com.github.jon7even.controller;
+package com.github.jon7even.controller.in;
 
+import com.github.jon7even.controller.out.SenderBotClient;
 import com.github.jon7even.mapper.UserMapper;
 import com.github.jon7even.service.in.AuthorizationService;
 import com.github.jon7even.service.in.MainQuickService;
 import com.github.jon7even.service.in.UpdateProducerService;
 import com.github.jon7even.utils.MessageUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.message.Message;
 
 import static com.github.jon7even.configuration.RabbitQueue.CALLBACK_QUERY_UPDATE;
 import static com.github.jon7even.configuration.RabbitQueue.TEXT_MESSAGE_UPDATE;
@@ -18,17 +18,17 @@ import static com.github.jon7even.constants.DefaultMessagesLogs.WE_NOT_SUPPORT;
 
 @Slf4j
 @Component
-public class UpdateController {
-    private final TelegramBot telegramBot;
+public class ConsumerBotController {
+    private final SenderBotClient senderBotClient;
     private final UpdateProducerService updateProducer;
     private final AuthorizationService authorizationService;
     private final MainQuickService mainQuickService;
 
-    public UpdateController(@Lazy TelegramBot telegramBot,
-                            UpdateProducerService updateProducer,
-                            AuthorizationService authorizationService,
-                            MainQuickService mainQuickService) {
-        this.telegramBot = telegramBot;
+    public ConsumerBotController(
+            SenderBotClient senderBotClient, UpdateProducerService updateProducer,
+            AuthorizationService authorizationService,
+            MainQuickService mainQuickService) {
+        this.senderBotClient = senderBotClient;
         this.updateProducer = updateProducer;
         this.authorizationService = authorizationService;
         this.mainQuickService = mainQuickService;
@@ -96,10 +96,6 @@ public class UpdateController {
         updateProducer.produceCallBackQuery(CALLBACK_QUERY_UPDATE, update);
     }
 
-    public void setView(SendMessage sendMessage) {
-        telegramBot.sendAnswerMessage(sendMessage);
-    }
-
     private void processDocument(Update update) {
         var sendMessage = MessageUtils.buildAnswerWithMessage(
                 update.getMessage(), String.format("Получение документов %s", WE_NOT_SUPPORT)
@@ -126,6 +122,10 @@ public class UpdateController {
                 update.getMessage(), String.format("Получение данного типа сообщений %s", WE_NOT_SUPPORT)
         );
         setView(sendMessage);
+    }
+
+    private void setView(SendMessage sendMessage) {
+        senderBotClient.sendAnswerMessage(sendMessage);
     }
 
 }

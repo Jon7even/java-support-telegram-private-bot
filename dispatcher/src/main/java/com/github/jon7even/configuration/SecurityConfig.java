@@ -9,7 +9,7 @@ import org.springframework.context.annotation.PropertySource;
 @Getter
 @Setter
 @Configuration
-@ConfigurationProperties("securitybot")
+@ConfigurationProperties("bot.security")
 public class SecurityConfig {
     private String keyPass;
     private Integer attemptsAuth;
