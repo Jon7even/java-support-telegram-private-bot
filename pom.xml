@@ -24,7 +24,7 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.sourceEncoding>UTF-8</maven.compiler.sourceEncoding>
-        <telegram.version>6.5.0</telegram.version>
+        <telegram.version>7.0.0</telegram.version>
         <emoji.version>5.1.1</emoji.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
@@ -40,7 +40,13 @@
 
             <dependency>
                 <groupId>org.telegram</groupId>
-                <artifactId>telegrambots-spring-boot-starter</artifactId>
+                <artifactId>telegrambots-longpolling</artifactId>
+                <version>${telegram.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.telegram</groupId>
+                <artifactId>telegrambots-client</artifactId>
                 <version>${telegram.version}</version>
             </dependency>
 
@@ -61,9 +67,20 @@
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok-mapstruct-binding</artifactId>
                 <version>${lombok-mapstruct.version}</version>
+                <scope>provided</scope>
             </dependency>
 
         </dependencies>
     </dependencyManagement>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+    </dependencies>
 
 </project>
