@@ -14,7 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.message.Message;
 
 import static com.github.jon7even.configuration.RabbitQueue.CALLBACK_QUERY_UPDATE;
 import static com.github.jon7even.configuration.RabbitQueue.TEXT_MESSAGE_UPDATE;
-import static com.github.jon7even.constants.DefaultMessagesLogs.WE_NOT_SUPPORT;
+import static com.github.jon7even.constants.DefaultSystemMessagesToSend.WE_NOT_SUPPORT;
 
 @Slf4j
 @Component

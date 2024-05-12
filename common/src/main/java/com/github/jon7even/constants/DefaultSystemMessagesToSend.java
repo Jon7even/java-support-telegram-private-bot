@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
  * @version 1.0
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class DefaultMessagesLogs {
+public final class DefaultSystemMessagesToSend {
     public static final String WE_NOT_SUPPORT = "мы еще не поддерживаем";
 }

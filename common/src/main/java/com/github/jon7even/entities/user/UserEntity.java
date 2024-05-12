@@ -1,4 +1,4 @@
-package com.github.jon7even.model.user;
+package com.github.jon7even.entities.user;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,6 +8,12 @@ import java.time.LocalDateTime;
 
 import static com.github.jon7even.constants.DataTimePattern.DATE_TIME_FORMATTER;
 
+/**
+ * Класс описывающий сущность пользователя
+ *
+ * @author Jon7even
+ * @version 1.0
+ */
 @Entity
 @Builder
 @Setter

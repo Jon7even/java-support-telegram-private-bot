@@ -5,7 +5,7 @@ import com.github.jon7even.cache.UserAuthCacheImpl;
 import com.github.jon7even.configuration.SecurityConfig;
 import com.github.jon7even.dto.UserShortDto;
 import com.github.jon7even.mapper.UserMapper;
-import com.github.jon7even.model.user.UserEntity;
+import com.github.jon7even.entities.user.UserEntity;
 import com.github.jon7even.repository.UserRepository;
 import com.github.jon7even.service.in.AuthorizationService;
 import com.github.jon7even.service.in.AuthorizationServiceImpl;

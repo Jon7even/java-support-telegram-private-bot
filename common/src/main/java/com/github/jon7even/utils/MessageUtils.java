@@ -6,6 +6,12 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageTe
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
+/**
+ * Утилитарный класс для сборки ответа в Telegram для дальнейшей отправки
+ *
+ * @author Jon7even
+ * @version 1.0
+ */
 @UtilityClass
 public class MessageUtils {
     public SendMessage buildAnswerWithMessage(Message message,

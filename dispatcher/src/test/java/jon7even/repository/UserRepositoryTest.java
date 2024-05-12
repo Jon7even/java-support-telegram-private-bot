@@ -1,7 +1,7 @@
 package jon7even.repository;
 
 import com.github.jon7even.DispatcherApp;
-import com.github.jon7even.model.user.UserEntity;
+import com.github.jon7even.entities.user.UserEntity;
 import com.github.jon7even.repository.UserRepository;
 import jon7even.setup.GenericTests;
 import org.junit.jupiter.api.AfterEach;

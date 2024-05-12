@@ -4,7 +4,7 @@ import com.github.jon7even.cache.UserAuthCache;
 import com.github.jon7even.configuration.SecurityConfig;
 import com.github.jon7even.dto.UserShortDto;
 import com.github.jon7even.mapper.UserMapper;
-import com.github.jon7even.model.user.UserEntity;
+import com.github.jon7even.entities.user.UserEntity;
 import com.github.jon7even.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
