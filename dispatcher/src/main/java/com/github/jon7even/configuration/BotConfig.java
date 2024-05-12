@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Getter
 @Setter
 @Configuration
-@ConfigurationProperties("supportbot")
+@ConfigurationProperties("bot.token")
 public class BotConfig {
     private String name;
     private String token;
