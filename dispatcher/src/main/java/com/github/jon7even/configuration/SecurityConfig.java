@@ -4,8 +4,13 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 
+/**
+ * Утилитарный класс загружающий настройки для сервиса безопасности из переменных окружения
+ *
+ * @author Jon7even
+ * @version 1.0
+ */
 @Getter
 @Setter
 @Configuration

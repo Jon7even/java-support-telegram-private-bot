@@ -1,17 +1,23 @@
-package com.github.jon7even.service.in;
+package com.github.jon7even.service.in.auth;
 
-import com.github.jon7even.cache.UserAuthCache;
 import com.github.jon7even.configuration.SecurityConfig;
 import com.github.jon7even.dto.UserShortDto;
-import com.github.jon7even.mapper.UserMapper;
 import com.github.jon7even.entities.user.UserEntity;
+import com.github.jon7even.mapper.UserMapper;
 import com.github.jon7even.repository.UserRepository;
+import com.github.jon7even.service.in.auth.cache.UserAuthCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+/**
+ * Реализация сервиса авторизации пользователей
+ *
+ * @author Jon7even
+ * @version 1.0
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -105,5 +111,4 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         log.debug("Получаю пользователя с chatId={} из базы", chatId);
         return userRepository.findByChatId(chatId);
     }
-
 }

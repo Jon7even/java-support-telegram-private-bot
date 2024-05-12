@@ -1,4 +1,4 @@
-package com.github.jon7even.cache;
+package com.github.jon7even.service.in.auth.cache;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -6,6 +6,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 
+/**
+ * Реализация сервиса хранения пользователей в кеше для сервиса авторизации
+ *
+ * @author Jon7even
+ * @version 1.0
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor

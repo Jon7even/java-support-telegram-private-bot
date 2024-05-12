@@ -1,4 +1,4 @@
-package com.github.jon7even.constants;
+package com.github.jon7even.telegram.constants;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

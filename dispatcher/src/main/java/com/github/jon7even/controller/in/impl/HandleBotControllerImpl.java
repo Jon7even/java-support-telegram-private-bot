@@ -1,10 +1,11 @@
-package com.github.jon7even.controller.in;
+package com.github.jon7even.controller.in.impl;
 
+import com.github.jon7even.controller.in.HandleBotController;
 import com.github.jon7even.controller.out.SenderBotClient;
 import com.github.jon7even.mapper.UserMapper;
-import com.github.jon7even.service.in.AuthorizationService;
+import com.github.jon7even.service.in.auth.AuthorizationService;
 import com.github.jon7even.service.in.MainQuickService;
-import com.github.jon7even.service.in.UpdateProducerService;
+import com.github.jon7even.service.out.UpdateProducerService;
 import com.github.jon7even.utils.MessageUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -14,17 +15,23 @@ import org.telegram.telegrambots.meta.api.objects.message.Message;
 
 import static com.github.jon7even.configuration.RabbitQueue.CALLBACK_QUERY_UPDATE;
 import static com.github.jon7even.configuration.RabbitQueue.TEXT_MESSAGE_UPDATE;
-import static com.github.jon7even.constants.DefaultSystemMessagesToSend.WE_NOT_SUPPORT;
+import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend.WE_NOT_SUPPORT;
 
+/**
+ * Реализация обработчика входящих сообщений от зарегистрированного Telegram бота
+ *
+ * @author Jon7even
+ * @version 1.0
+ */
 @Slf4j
 @Component
-public class ConsumerBotController {
+public class HandleBotControllerImpl implements HandleBotController {
     private final SenderBotClient senderBotClient;
     private final UpdateProducerService updateProducer;
     private final AuthorizationService authorizationService;
     private final MainQuickService mainQuickService;
 
-    public ConsumerBotController(
+    public HandleBotControllerImpl(
             SenderBotClient senderBotClient, UpdateProducerService updateProducer,
             AuthorizationService authorizationService,
             MainQuickService mainQuickService) {
@@ -34,6 +41,9 @@ public class ConsumerBotController {
         this.mainQuickService = mainQuickService;
     }
 
+    /**
+     * Реализация метода обработки входящих сообщений
+     */
     public void processUpdate(Update update) {
         if (update == null) {
             log.error("Received update is null!");
@@ -127,5 +137,4 @@ public class ConsumerBotController {
     private void setView(SendMessage sendMessage) {
         senderBotClient.sendAnswerMessage(sendMessage);
     }
-
 }

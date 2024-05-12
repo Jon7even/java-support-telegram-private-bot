@@ -1,14 +1,14 @@
 package jon7even.service;
 
-import com.github.jon7even.cache.UserAuthCache;
-import com.github.jon7even.cache.UserAuthCacheImpl;
+import com.github.jon7even.service.in.auth.cache.UserAuthCache;
+import com.github.jon7even.service.in.auth.cache.UserAuthCacheImpl;
 import com.github.jon7even.configuration.SecurityConfig;
 import com.github.jon7even.dto.UserShortDto;
 import com.github.jon7even.mapper.UserMapper;
 import com.github.jon7even.entities.user.UserEntity;
 import com.github.jon7even.repository.UserRepository;
-import com.github.jon7even.service.in.AuthorizationService;
-import com.github.jon7even.service.in.AuthorizationServiceImpl;
+import com.github.jon7even.service.in.auth.AuthorizationService;
+import com.github.jon7even.service.in.auth.AuthorizationServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

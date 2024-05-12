@@ -1,11 +1,18 @@
 package com.github.jon7even.telegram.constants;
 
-import lombok.experimental.UtilityClass;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import static com.github.jon7even.telegram.menu.MainMenu.*;
 
-@UtilityClass
-public class BaseMessages {
+/**
+ * Утилитарный класс хранящий текст для ответов на основные команды (/start и /help)
+ *
+ * @author Jon7even
+ * @version 1.0
+ */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class DefaultBaseMessagesToSend {
     public static final String START_TEXT = "\n" +
             "Добро пожаловать в нашу команду! \uD83E\uDD73 \n\n" +
             "Данный виртуальный помощник создан для работников нашей компании.\uD83D\uDE0E \n\n" +
@@ -19,5 +26,4 @@ public class BaseMessages {
             TASKS + " - работа с задачами \n\n" +
             COMPETITORS + " - работа с конкурентами \n\n" +
             GIFTS + " - работа с подарками \n\n";
-
 }

@@ -9,6 +9,12 @@ import org.telegram.telegrambots.meta.api.objects.Chat;
 
 import java.time.LocalDateTime;
 
+/**
+ * Интерфейс для маппинга DTO и сущностей пользователя
+ *
+ * @author Jon7even
+ * @version 1.0
+ */
 @Mapper(componentModel = "spring")
 public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
