@@ -1,6 +1,6 @@
-package com.github.jon7even.model.gift;
+package com.github.jon7even.entity.gift;
 
-import com.github.jon7even.model.user.UserEntity;
+import com.github.jon7even.entity.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -1,6 +1,6 @@
 package com.github.jon7even.dto.event;
 
-import com.github.jon7even.model.event.EventStatus;
+import com.github.jon7even.entity.event.EventStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

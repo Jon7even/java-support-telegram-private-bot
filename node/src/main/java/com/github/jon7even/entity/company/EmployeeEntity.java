@@ -1,6 +1,6 @@
-package com.github.jon7even.model.company;
+package com.github.jon7even.entity.company;
 
-import com.github.jon7even.model.user.UserEntity;
+import com.github.jon7even.entity.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,9 +24,6 @@ public class EmployeeEntity {
 
     @Column(name = "added_on", nullable = false)
     private LocalDateTime registeredOn;
-
-    @OneToMany(mappedBy = "companies", fetch = FetchType.LAZY)
-    private CompanyEntity company;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "creator_id", nullable = false)

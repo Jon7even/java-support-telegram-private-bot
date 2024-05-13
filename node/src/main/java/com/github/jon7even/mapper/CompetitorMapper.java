@@ -2,8 +2,8 @@ package com.github.jon7even.mapper;
 
 import com.github.jon7even.dto.competitor.CompetitorBuildingDto;
 import com.github.jon7even.dto.competitor.CompetitorShortDto;
-import com.github.jon7even.model.competitor.CompetitorEntity;
-import com.github.jon7even.model.user.UserEntity;
+import com.github.jon7even.entity.user.UserEntity;
+import com.github.jon7even.entity.competitor.CompetitorEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

@@ -1,4 +1,4 @@
-package com.github.jon7even.model.event;
+package com.github.jon7even.entity.event;
 
 public enum EventStatus {
     ACTIVATED,

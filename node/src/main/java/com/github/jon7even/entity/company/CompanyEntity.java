@@ -1,14 +1,12 @@
-package com.github.jon7even.model.company;
+package com.github.jon7even.entity.company;
 
-import com.github.jon7even.model.gift.GiftEntity;
-import com.github.jon7even.model.user.UserEntity;
+import com.github.jon7even.entity.user.UserEntity;
+import com.github.jon7even.entity.gift.GiftEntity;
+import jakarta.persistence.*;
 import lombok.*;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Builder
@@ -51,14 +49,10 @@ public class CompanyEntity {
     @ToString.Exclude
     private UserEntity creator;
 
-    @OneToMany(mappedBy = "employees", fetch = FetchType.EAGER)
-    private Set<EmployeeEntity> employees = new HashSet<>();
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CompanyEntity)) return false;
-        CompanyEntity company = (CompanyEntity) o;
+        if (!(o instanceof CompanyEntity company)) return false;
         return Objects.equals(id, company.id) && Objects.equals(name, company.name)
                 && Objects.equals(totalSum, company.totalSum) && gift == company.gift
                 && Objects.equals(created, company.created)

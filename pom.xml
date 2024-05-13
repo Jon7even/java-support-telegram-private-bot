@@ -33,6 +33,7 @@
     <modules>
         <module>common</module>
         <module>dispatcher</module>
+        <module>node</module>
     </modules>
 
     <dependencyManagement>
@@ -68,6 +69,12 @@
                 <artifactId>lombok-mapstruct-binding</artifactId>
                 <version>${lombok-mapstruct.version}</version>
                 <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.vdurmont</groupId>
+                <artifactId>emoji-java</artifactId>
+                <version>${emoji.version}</version>
             </dependency>
 
         </dependencies>

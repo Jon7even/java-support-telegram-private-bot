@@ -1,7 +1,7 @@
 package com.github.jon7even.mapper;
 
 import com.github.jon7even.dto.UserShortDto;
-import com.github.jon7even.entities.user.UserEntity;
+import com.github.jon7even.entity.user.UserEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

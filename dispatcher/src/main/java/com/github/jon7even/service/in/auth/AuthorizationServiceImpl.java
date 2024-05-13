@@ -2,7 +2,7 @@ package com.github.jon7even.service.in.auth;
 
 import com.github.jon7even.configuration.SecurityConfig;
 import com.github.jon7even.dto.UserShortDto;
-import com.github.jon7even.entities.user.UserEntity;
+import com.github.jon7even.entity.user.UserEntity;
 import com.github.jon7even.mapper.UserMapper;
 import com.github.jon7even.repository.UserRepository;
 import com.github.jon7even.service.in.auth.cache.UserAuthCache;

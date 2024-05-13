@@ -1,6 +1,6 @@
 package com.github.jon7even.repository;
 
-import com.github.jon7even.model.event.EventEntity;
+import com.github.jon7even.entity.event.EventEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

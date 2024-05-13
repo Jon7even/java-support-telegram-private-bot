@@ -2,8 +2,8 @@ package com.github.jon7even.mapper;
 
 import com.github.jon7even.dto.gift.GiftBuildingDto;
 import com.github.jon7even.dto.gift.GiftShortDto;
-import com.github.jon7even.model.gift.GiftEntity;
-import com.github.jon7even.model.user.UserEntity;
+import com.github.jon7even.entity.user.UserEntity;
+import com.github.jon7even.entity.gift.GiftEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

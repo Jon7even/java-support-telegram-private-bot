@@ -10,7 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import static com.github.jon7even.configuration.RabbitQueue.*;
 import static com.github.jon7even.constants.DefaultMessageError.ERROR_RECEIVE;
-import static com.github.jon7even.constants.DefaultMessagesLogs.WE_NOT_SUPPORT;
+import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend.WE_NOT_SUPPORT;
 
 @Slf4j
 @Service

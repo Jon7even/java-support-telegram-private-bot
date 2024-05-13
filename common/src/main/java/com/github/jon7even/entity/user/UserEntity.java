@@ -1,4 +1,4 @@
-package com.github.jon7even.entities.user;
+package com.github.jon7even.entity.user;
 
 import jakarta.persistence.*;
 import lombok.*;

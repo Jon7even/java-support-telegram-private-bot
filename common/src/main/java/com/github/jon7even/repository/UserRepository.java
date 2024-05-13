@@ -1,6 +1,6 @@
 package com.github.jon7even.repository;
 
-import com.github.jon7even.entities.user.UserEntity;
+import com.github.jon7even.entity.user.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;

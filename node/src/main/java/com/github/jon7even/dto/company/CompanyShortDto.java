@@ -1,6 +1,6 @@
 package com.github.jon7even.dto.company;
 
-import com.github.jon7even.model.gift.GiftEntity;
+import com.github.jon7even.entity.gift.GiftEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
