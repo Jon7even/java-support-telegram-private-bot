@@ -36,6 +36,7 @@ spring:
 
   liquibase:
     enabled: true
+    default-schema: ${SCHEMA_APP}
 
   main:
     banner-mode: off
@@ -48,7 +49,9 @@ spring:
     hibernate:
       ddl-auto: validate
     properties:
-      hibernate.format_sql: true
+      hibernate:
+        format_sql: true
+        default-schema: ${SCHEMA_APP}
     open-in-view: false
 
   rabbitmq:
