@@ -20,14 +20,15 @@ import static com.github.jon7even.constants.DataTimePattern.DATE_TIME_FORMATTER;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "users", schema = "public")
+@Table(name = "user", schema = "bot")
 public class UserEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "UserGenId", sequenceName = "user_seq", allocationSize = 7)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "UserGenId")
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "chat_id", nullable = false)
+    @Column(name = "chat_id", nullable = false, unique = true)
     private Long chatId;
 
     @Column(name = "first_name")

@@ -37,6 +37,7 @@ spring:
   liquibase:
     enabled: true
     default-schema: ${SCHEMA_APP}
+    change-log: classpath:db/changelog/db.changelog-master.xml
 
   main:
     banner-mode: off
