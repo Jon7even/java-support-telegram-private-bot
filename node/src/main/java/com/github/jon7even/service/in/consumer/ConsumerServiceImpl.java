@@ -9,9 +9,15 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import static com.github.jon7even.configuration.RabbitQueue.*;
-import static com.github.jon7even.constants.DefaultMessageError.ERROR_RECEIVE;
+import static com.github.jon7even.telegram.constants.DefaultMessageError.ERROR_RECEIVE;
 import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend.WE_NOT_SUPPORT;
 
+/**
+ * Реализация сервиса слушателя входящих сообщений от Telegram
+ *
+ * @author Jon7even
+ * @version 1.0
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor

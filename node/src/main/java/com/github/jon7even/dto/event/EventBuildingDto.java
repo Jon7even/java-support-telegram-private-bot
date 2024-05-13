@@ -8,6 +8,12 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * Класс DTO для создания нового предстоящего события
+ *
+ * @author Jon7even
+ * @version 1.0
+ */
 @Data
 @Builder
 @AllArgsConstructor

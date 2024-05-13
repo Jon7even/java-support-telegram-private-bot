@@ -4,6 +4,12 @@ import com.github.jon7even.entity.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+/**
+ * Класс описывающий сущность подарков
+ *
+ * @author Jon7even
+ * @version 1.0
+ */
 @Entity
 @Builder
 @Setter

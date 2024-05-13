@@ -6,6 +6,12 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+/**
+ * Класс описывающий сущность представителя компании
+ *
+ * @author Jon7even
+ * @version 1.0
+ */
 @Entity
 @Builder
 @Setter

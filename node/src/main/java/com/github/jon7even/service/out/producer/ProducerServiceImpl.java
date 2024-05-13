@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 
 import static com.github.jon7even.configuration.RabbitQueue.ANSWER_MESSAGE;
-import static com.github.jon7even.constants.DefaultMessageError.ERROR_SEND_TEXT;
+import static com.github.jon7even.telegram.constants.DefaultMessageError.ERROR_SEND_TEXT;
 
 @Slf4j
 @Service

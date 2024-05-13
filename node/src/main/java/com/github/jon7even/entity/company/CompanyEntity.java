@@ -8,6 +8,12 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+/**
+ * Класс описывающий сущность компании
+ *
+ * @author Jon7even
+ * @version 1.0
+ */
 @Entity
 @Builder
 @Setter

@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * Основной класс запуска Диспетчера, управляется фреймворком SpringBoot
+ * Основной класс запуска сервиса "Диспетчер", управляется фреймворком SpringBoot
  *
  * @author Jon7even
  * @version 1.0

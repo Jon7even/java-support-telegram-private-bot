@@ -8,6 +8,12 @@ import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
+/**
+ * Класс DTO для краткого представления компании
+ *
+ * @author Jon7even
+ * @version 1.0
+ */
 @Data
 @Builder
 @AllArgsConstructor
