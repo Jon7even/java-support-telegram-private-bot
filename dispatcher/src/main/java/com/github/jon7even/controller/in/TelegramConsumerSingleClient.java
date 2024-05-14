@@ -1,6 +1,7 @@
 package com.github.jon7even.controller.in;
 
 import com.github.jon7even.configuration.BotConfig;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.longpolling.BotSession;
@@ -21,14 +22,10 @@ import org.telegram.telegrambots.meta.api.objects.Update;
  */
 @Slf4j
 @Component
-public class TelegramConsumerSingle implements SpringLongPollingBot, LongPollingSingleThreadUpdateConsumer {
+@RequiredArgsConstructor
+public class TelegramConsumerSingleClient implements SpringLongPollingBot, LongPollingSingleThreadUpdateConsumer {
     private final BotConfig botConfig;
-    private final HandleBotController handleBotController;
-
-    public TelegramConsumerSingle(HandleBotController handleBotController, BotConfig botConfig) {
-        this.botConfig = botConfig;
-        this.handleBotController = handleBotController;
-    }
+    private final HandleUpdateBot handleUpdateBot;
 
     /**
      * Переопределение метода получения секретного токена для регистрации Бота в Api Telegram
@@ -43,7 +40,7 @@ public class TelegramConsumerSingle implements SpringLongPollingBot, LongPolling
      */
     @Override
     public void consume(Update update) {
-        handleBotController.processUpdate(update);
+        handleUpdateBot.processUpdate(update);
     }
 
     @Override

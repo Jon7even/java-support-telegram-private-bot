@@ -4,7 +4,6 @@ import com.github.jon7even.DispatcherApp;
 import com.github.jon7even.entity.user.UserEntity;
 import com.github.jon7even.repository.UserRepository;
 import jon7even.setup.ContainersSetup;
-import jon7even.setup.PreparationForTests;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,36 +31,36 @@ public class UserRepositoryTest extends ContainersSetup {
     @Test
     @DisplayName("Корректное сохранение сущности пользователя")
     void saveCorrectUserEntity() {
-        initUsers();
-        UserEntity userOneFullName = userRepository.save(userOneFull);
-        UserEntity userSecondNull = userRepository.save(userSecondMaxNull);
-        UserEntity userThirdAuthOn = userRepository.save(userThirdAuth);
+        initUserEntity();
+        UserEntity userOneFullName = userRepository.save(userEntityFirst);
+        UserEntity userSecondNull = userRepository.save(userEntitySecond);
+        UserEntity userThirdAuthOn = userRepository.save(userEntityThird);
 
         assertNotNull(userOneFullName);
         assertEquals(firstUserId, userOneFullName.getId());
-        assertEquals(userOneFull.getChatId(), userOneFullName.getChatId());
-        assertEquals(userOneFull.getFirstName(), userOneFullName.getFirstName());
-        assertEquals(userOneFull.getLastName(), userOneFullName.getLastName());
-        assertEquals(userOneFull.getUserName(), userOneFullName.getUserName());
-        assertEquals(userOneFull.getRegisteredOn(), userOneFullName.getRegisteredOn());
+        assertEquals(userEntityFirst.getChatId(), userOneFullName.getChatId());
+        assertEquals(userEntityFirst.getFirstName(), userOneFullName.getFirstName());
+        assertEquals(userEntityFirst.getLastName(), userOneFullName.getLastName());
+        assertEquals(userEntityFirst.getUserName(), userOneFullName.getUserName());
+        assertEquals(userEntityFirst.getRegisteredOn(), userOneFullName.getRegisteredOn());
 
         assertNotNull(userSecondNull);
         assertEquals(secondUserId, userSecondNull.getId());
-        assertEquals(userSecondMaxNull.getChatId(), userSecondNull.getChatId());
-        assertEquals(userSecondMaxNull.getFirstName(), userSecondNull.getFirstName());
-        assertEquals(userSecondMaxNull.getLastName(), userSecondNull.getLastName());
-        assertEquals(userSecondMaxNull.getUserName(), userSecondNull.getUserName());
-        assertEquals(userSecondMaxNull.getRegisteredOn(), userSecondNull.getRegisteredOn());
+        assertEquals(userEntitySecond.getChatId(), userSecondNull.getChatId());
+        assertEquals(userEntitySecond.getFirstName(), userSecondNull.getFirstName());
+        assertEquals(userEntitySecond.getLastName(), userSecondNull.getLastName());
+        assertEquals(userEntitySecond.getUserName(), userSecondNull.getUserName());
+        assertEquals(userEntitySecond.getRegisteredOn(), userSecondNull.getRegisteredOn());
 
         assertNotNull(userThirdAuthOn);
         assertEquals(thirdUserId, userThirdAuthOn.getId());
-        assertEquals(userThirdAuth.getChatId(), userThirdAuthOn.getChatId());
-        assertEquals(userThirdAuth.getFirstName(), userThirdAuthOn.getFirstName());
-        assertEquals(userThirdAuth.getLastName(), userThirdAuthOn.getLastName());
-        assertEquals(userThirdAuth.getUserName(), userThirdAuthOn.getUserName());
+        assertEquals(userEntityThird.getChatId(), userThirdAuthOn.getChatId());
+        assertEquals(userEntityThird.getFirstName(), userThirdAuthOn.getFirstName());
+        assertEquals(userEntityThird.getLastName(), userThirdAuthOn.getLastName());
+        assertEquals(userEntityThird.getUserName(), userThirdAuthOn.getUserName());
         assertNotNull(userThirdAuthOn.getAuthorization());
-        assertEquals(userThirdAuth.getAuthorization(), userThirdAuthOn.getAuthorization());
-        assertEquals(userThirdAuth.getRegisteredOn(), userThirdAuthOn.getRegisteredOn());
+        assertEquals(userEntityThird.getAuthorization(), userThirdAuthOn.getAuthorization());
+        assertEquals(userEntityThird.getRegisteredOn(), userThirdAuthOn.getRegisteredOn());
 
         assertEquals(userRepository.findAll().size(), 3);
     }

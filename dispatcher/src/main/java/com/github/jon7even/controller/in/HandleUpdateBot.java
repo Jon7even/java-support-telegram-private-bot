@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
  * @author Jon7even
  * @version 1.0
  */
-public interface HandleBotController {
+public interface HandleUpdateBot {
     /**
      * Метод для обработки сообщений
      *

@@ -1,6 +1,6 @@
 package com.github.jon7even.controller.in.impl;
 
-import com.github.jon7even.controller.in.HandleBotController;
+import com.github.jon7even.controller.in.HandleUpdateBot;
 import com.github.jon7even.controller.out.SenderBotClient;
 import com.github.jon7even.mapper.UserMapper;
 import com.github.jon7even.service.in.MainQuickService;
@@ -27,7 +27,7 @@ import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class HandleBotControllerImpl implements HandleBotController {
+public class HandleUpdateBotImpl implements HandleUpdateBot {
     private final SenderBotClient senderBotClient;
     private final UpdateProducerService updateProducer;
     private final AuthorizationService authorizationService;

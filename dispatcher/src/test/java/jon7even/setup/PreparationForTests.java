@@ -1,20 +1,25 @@
 package jon7even.setup;
 
+import com.github.jon7even.dto.UserShortDto;
 import com.github.jon7even.entity.user.UserEntity;
 
 import java.time.LocalDateTime;
 
 public class PreparationForTests {
-    protected UserEntity userOneFull;
-    protected UserEntity userSecondMaxNull;
-    protected UserEntity userThirdAuth;
+    protected UserEntity userEntityFirst;
+    protected UserEntity userEntitySecond;
+    protected UserEntity userEntityThird;
+
+    protected UserShortDto userCreateDtoFirst;
+    protected UserShortDto userCreateDtoSecond;
+    protected UserShortDto userCreateDtoThird;
 
     protected Long firstUserId = 1L;
     protected Long secondUserId = 2L;
     protected Long thirdUserId = 3L;
 
-    protected void initUsers() {
-        userOneFull = UserEntity.builder()
+    protected void initUserEntity() {
+        userEntityFirst = UserEntity.builder()
                 .chatId(1111111L)
                 .firstName("FirstName")
                 .lastName("FirstLastName")
@@ -22,12 +27,12 @@ public class PreparationForTests {
                 .registeredOn(LocalDateTime.now())
                 .build();
 
-        userSecondMaxNull = UserEntity.builder()
+        userEntitySecond = UserEntity.builder()
                 .chatId(2222222L)
                 .registeredOn(LocalDateTime.now())
                 .build();
 
-        userThirdAuth = UserEntity.builder()
+        userEntityThird = UserEntity.builder()
                 .chatId(3333333L)
                 .firstName("ThirdName")
                 .lastName("ThirdLastName")
@@ -37,4 +42,26 @@ public class PreparationForTests {
                 .build();
     }
 
+    protected void initUserDto() {
+        userCreateDtoFirst = UserShortDto.builder()
+                .chatId(1111111L)
+                .firstName("FirstName")
+                .lastName("FirstLastName")
+                .userName("FirstUserName")
+                .build();
+
+        userCreateDtoSecond = UserShortDto.builder()
+                .chatId(2222222L)
+                .firstName("SecondName")
+                .lastName("SecondLastName")
+                .userName("SecondUserName")
+                .build();
+
+        userCreateDtoThird = UserShortDto.builder()
+                .chatId(3333333L)
+                .firstName("ThirdName")
+                .lastName("ThirdLastName")
+                .userName("ThirdUserName")
+                .build();
+    }
 }
