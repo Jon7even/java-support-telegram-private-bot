@@ -72,13 +72,13 @@ spring:
 server:
   port: ${SERVER_TEST_PORT_DISPATCHER}
 
-supportbot:
-  name: ${TELEGRAM_BOT_NAME_TEST}
-  token: ${TELEGRAM_BOT_PASS_TEST}
-
-securitybot:
-  keyPass: ${SECURITY_KEY_PASS_BOT_TEST}
-  attemptsAuth: ${SECURITY_ATTEMPTS_AUTH_TEST}
+bot:
+  token:
+    name: ${TELEGRAM_BOT_NAME_TEST}
+    token: ${TELEGRAM_BOT_PASS_TEST}
+  security:
+    keyPass: ${SECURITY_KEY_PASS_BOT_TEST}
+    attemptsAuth: ${SECURITY_ATTEMPTS_AUTH_TEST}
 
 logging:
   level:
@@ -104,29 +104,21 @@ spring:
 
   liquibase:
     enabled: true
+    default-schema: ${SCHEMA_APP}
+    change-log: classpath:db/changelog/db.changelog-master.xml
 
   jpa:
     hibernate:
       ddl-auto: validate
-      database-platform: org.hibernate.dialect.H2Dialect
-    show-sql: true
     properties:
       hibernate:
         use_sql_comments: true
         format_sql: true
-  h2:
-    console:
-      enabled: true
-      path: /console
+        default-schema: ${SCHEMA_APP}
+    open-in-view: false
 
   rabbitmq:
     host: ${RABBIT_IP}
     port: ${RABBIT_PORT}
     username: ${RABBIT_USER}
     password: ${RABBIT_PASS}
-
-  datasource:
-    driverClassName: org.h2.Driver
-    url: jdbc:h2:mem:mainserver
-    username: test
-    password: test

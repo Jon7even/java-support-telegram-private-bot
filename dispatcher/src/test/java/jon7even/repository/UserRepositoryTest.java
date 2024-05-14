@@ -3,7 +3,8 @@ package jon7even.repository;
 import com.github.jon7even.DispatcherApp;
 import com.github.jon7even.entity.user.UserEntity;
 import com.github.jon7even.repository.UserRepository;
-import jon7even.setup.GenericTests;
+import jon7even.setup.ContainersSetup;
+import jon7even.setup.PreparationForTests;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @ActiveProfiles(value = "test")
 @SpringBootTest(classes = DispatcherApp.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class UserRepositoryTest extends GenericTests {
+public class UserRepositoryTest extends ContainersSetup {
     @Autowired
     private UserRepository userRepository;
 

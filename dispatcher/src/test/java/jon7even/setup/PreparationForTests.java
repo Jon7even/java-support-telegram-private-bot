@@ -4,7 +4,7 @@ import com.github.jon7even.entity.user.UserEntity;
 
 import java.time.LocalDateTime;
 
-public class GenericTests {
+public class PreparationForTests {
     protected UserEntity userOneFull;
     protected UserEntity userSecondMaxNull;
     protected UserEntity userThirdAuth;

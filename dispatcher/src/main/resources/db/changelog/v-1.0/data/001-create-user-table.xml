@@ -33,14 +33,14 @@
                 <constraints nullable="false"/>
             </column>
             <column name="auth_on" type="BOOLEAN" defaultValueBoolean="false">
-                <constraints nullable="false"/>
             </column>
         </createTable>
 
         <rollback>
             <delete tableName="user" schemaName="bot"/>
-            <dropTable tableName="user" schemaName="bot"/>
+            <dropAllForeignKeyConstraints baseTableName="user" baseTableSchemaName="bot"/>
             <dropSequence sequenceName="user_seq" schemaName="bot"/>
+            <dropTable tableName="user" schemaName="bot"/>
         </rollback>
 
     </changeSet>
