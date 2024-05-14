@@ -25,6 +25,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     private final UserRepository userRepository;
     private final SecurityConfig securityConfig;
     private final UserAuthCache userAuthCache;
+    private final UserMapper userMapper;
 
     @Override
     public boolean processAuthorization(UserShortDto userShortDto) {
@@ -92,7 +93,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 
     private UserEntity registerNewUser(UserShortDto userShortDto, Long chatId) {
         log.debug("Начинаю регистрацию нового пользователя с tgId={}", chatId);
-        UserEntity userForSave = UserMapper.INSTANCE.toEntityFromShortDto(userShortDto, LocalDateTime.now());
+        UserEntity userForSave = userMapper.toEntityFromShortDto(userShortDto, LocalDateTime.now());
         log.debug("Новый пользователь собран user={}", userForSave);
 
         UserEntity userAfterSave = userRepository.save(userForSave);

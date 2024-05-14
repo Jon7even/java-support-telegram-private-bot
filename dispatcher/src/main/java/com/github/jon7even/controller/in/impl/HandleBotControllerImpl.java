@@ -3,10 +3,11 @@ package com.github.jon7even.controller.in.impl;
 import com.github.jon7even.controller.in.HandleBotController;
 import com.github.jon7even.controller.out.SenderBotClient;
 import com.github.jon7even.mapper.UserMapper;
-import com.github.jon7even.service.in.auth.AuthorizationService;
 import com.github.jon7even.service.in.MainQuickService;
+import com.github.jon7even.service.in.auth.AuthorizationService;
 import com.github.jon7even.service.out.UpdateProducerService;
 import com.github.jon7even.utils.MessageUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -25,21 +26,13 @@ import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend
  */
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class HandleBotControllerImpl implements HandleBotController {
     private final SenderBotClient senderBotClient;
     private final UpdateProducerService updateProducer;
     private final AuthorizationService authorizationService;
     private final MainQuickService mainQuickService;
-
-    public HandleBotControllerImpl(
-            SenderBotClient senderBotClient, UpdateProducerService updateProducer,
-            AuthorizationService authorizationService,
-            MainQuickService mainQuickService) {
-        this.senderBotClient = senderBotClient;
-        this.updateProducer = updateProducer;
-        this.authorizationService = authorizationService;
-        this.mainQuickService = mainQuickService;
-    }
+    private final UserMapper userMapper;
 
     /**
      * Реализация метода обработки входящих сообщений
@@ -73,7 +66,7 @@ public class HandleBotControllerImpl implements HandleBotController {
     private void distributeMessagesByType(Update update) {
         Message message = update.getMessage();
 
-        if (authorizationService.processAuthorization(UserMapper.INSTANCE.toDtoFromMessage(message.getChat(),
+        if (authorizationService.processAuthorization(userMapper.toDtoFromMessage(message.getChat(),
                 message.getText()))) {
             if (message.hasText()) {
                 processTextMessage(update);

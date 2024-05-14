@@ -4,7 +4,6 @@ import com.github.jon7even.dto.UserShortDto;
 import com.github.jon7even.entity.user.UserEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 
 import java.time.LocalDateTime;
@@ -17,8 +16,6 @@ import java.time.LocalDateTime;
  */
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
-
     @Mapping(source = "chatUser.id", target = "chatId")
     @Mapping(source = "chatUser.firstName", target = "firstName")
     @Mapping(source = "chatUser.lastName", target = "lastName")
