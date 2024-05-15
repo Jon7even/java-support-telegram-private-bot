@@ -1,6 +1,6 @@
 package com.github.jon7even.service.in.auth;
 
-import com.github.jon7even.dto.UserShortDto;
+import org.telegram.telegrambots.meta.api.objects.Update;
 
 /**
  * Интерфейс сервиса авторизации пользователей
@@ -10,18 +10,10 @@ import com.github.jon7even.dto.UserShortDto;
  */
 public interface AuthorizationService {
     /**
-     * Метод для авторизации пользователей при простых сообщений
+     * Метод для авторизации пользователей
      *
-     * @param userShortDto из системы для проверки пользователя
+     * @param update из системы для проверки пользователя
      * @return boolean с ответом - авторизован ли пользователь
      */
-    boolean processAuthorization(UserShortDto userShortDto);
-
-    /**
-     * Метод для авторизации пользователей при простых сообщений
-     *
-     * @param userId ID пользователя из системы
-     * @return boolean с ответом - авторизован ли пользователь
-     */
-    boolean processAuthorizationForCallBack(Long userId);
+    boolean processAuthorization(Update update);
 }

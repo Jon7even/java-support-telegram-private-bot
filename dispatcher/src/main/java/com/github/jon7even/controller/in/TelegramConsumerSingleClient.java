@@ -40,6 +40,7 @@ public class TelegramConsumerSingleClient implements SpringLongPollingBot, LongP
      */
     @Override
     public void consume(Update update) {
+        log.debug("Получено новое сообщение update={}", update);
         handleUpdateBot.processUpdate(update);
     }
 

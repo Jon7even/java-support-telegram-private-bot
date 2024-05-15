@@ -2,7 +2,6 @@ package com.github.jon7even.controller.in.impl;
 
 import com.github.jon7even.controller.in.HandleUpdateBot;
 import com.github.jon7even.controller.out.SenderBotClient;
-import com.github.jon7even.mapper.UserMapper;
 import com.github.jon7even.service.in.MainQuickService;
 import com.github.jon7even.service.in.auth.AuthorizationService;
 import com.github.jon7even.service.out.UpdateProducerService;
@@ -32,64 +31,60 @@ public class HandleUpdateBotImpl implements HandleUpdateBot {
     private final UpdateProducerService updateProducer;
     private final AuthorizationService authorizationService;
     private final MainQuickService mainQuickService;
-    private final UserMapper userMapper;
 
     /**
      * Реализация метода обработки входящих сообщений
      */
+    @Override
     public void processUpdate(Update update) {
         if (update == null) {
-            log.error("Received update is null!");
+            log.error("Update является null, срочно требуется проверить почему так случилось");
             return;
         }
+        boolean isUserAuthorized = authorizationService.processAuthorization(update);
 
-        if (update.hasMessage()) {
-            distributeMessagesByType(update);
-        } else if (update.hasCallbackQuery()) {
-            distributeCallbackByType(update);
-        } else {
-            log.error("Unsupported message type is received: update={}", update);
-        }
-    }
-
-    private void distributeCallbackByType(Update update) {
-        if (authorizationService.processAuthorizationForCallBack(update.getCallbackQuery().getMessage().getChatId())) {
-            processCallbackQuery(update);
-        } else {
-            var sendMessage = MessageUtils.buildAnswerWithMessage(
-                    update.getMessage(), String.format("Такую команду %s", WE_NOT_SUPPORT)
-            );
-            setView(sendMessage);
-        }
-    }
-
-    private void distributeMessagesByType(Update update) {
-        Message message = update.getMessage();
-
-        if (authorizationService.processAuthorization(userMapper.toDtoFromMessage(message.getChat(),
-                message.getText()))) {
-            if (message.hasText()) {
-                processTextMessage(update);
-            } else if (message.hasAudio()) {
-                processDocument(update);
-            } else if (message.hasDocument()) {
-                processPhotoMessage(update);
-            } else if (message.hasPhoto()) {
-                processAudioMessage(update);
+        if (isUserAuthorized) {
+            if (update.hasMessage()) {
+                distributeMessagesByType(update);
+            } else if (update.hasCallbackQuery()) {
+                distributeCallbackByType(update);
             } else {
                 setUnsupportedMessageTypeView(update);
             }
         } else {
-            var sendMessage = MessageUtils.buildAnswerWithMessage(
-                    message, String.format("Такую команду %s", WE_NOT_SUPPORT)
-            );
-            setView(sendMessage);
+            sendMessageToChatAccessDenied(update);
         }
     }
 
+    private void distributeMessagesByType(Update update) {
+        var message = update.getMessage();
+        log.debug("Начинаем обрабатывать обновление [пользователь отправил сообщение], его message={}", message);
+
+        if (message.hasText()) {
+            processTextMessage(update);
+        } else if (message.hasAudio()) {
+            processDocument(update);
+        } else if (message.hasDocument()) {
+            processPhotoMessage(update);
+        } else if (message.hasPhoto()) {
+            processAudioMessage(update);
+        } else {
+            setUnsupportedMessageTypeView(update);
+        }
+
+    }
+
+    private void distributeCallbackByType(Update update) {
+        var callbackQuery = update.getCallbackQuery();
+        log.debug("Начинаем обрабатывать обновление [пользователь нажал на кнопку], его callback={}", callbackQuery);
+        processCallbackQuery(update);
+    }
+
     private void processTextMessage(Update update) {
-        if (mainQuickService.existBaseCommand(update.getMessage().getText())) {
-            setView(mainQuickService.processQuickAnswer(update));
+        boolean isBaseCommand = mainQuickService.existBaseCommand(update.getMessage().getText());
+        if (isBaseCommand) {
+            var messageForBaseCommand = mainQuickService.processQuickAnswer(update);
+            setView(messageForBaseCommand);
         } else {
             updateProducer.produceText(TEXT_MESSAGE_UPDATE, update);
         }
@@ -100,29 +95,41 @@ public class HandleUpdateBotImpl implements HandleUpdateBot {
     }
 
     private void processDocument(Update update) {
-        var sendMessage = MessageUtils.buildAnswerWithMessage(
-                update.getMessage(), String.format("Получение документов %s", WE_NOT_SUPPORT)
-        );
-        setView(sendMessage);
+        sendMessageToChatErrorNotSupportType("Получение документов", update.getMessage());
     }
 
     private void processPhotoMessage(Update update) {
-        var sendMessage = MessageUtils.buildAnswerWithMessage(
-                update.getMessage(), String.format("Получение фото %s", WE_NOT_SUPPORT)
-        );
-        setView(sendMessage);
+        sendMessageToChatErrorNotSupportType("Получение фото ", update.getMessage());
     }
 
     private void processAudioMessage(Update update) {
-        var sendMessage = MessageUtils.buildAnswerWithMessage(
-                update.getMessage(), String.format("Получение аудио %s", WE_NOT_SUPPORT)
+        sendMessageToChatErrorNotSupportType("Получение аудио", update.getMessage());
+    }
+
+    private void setUnsupportedMessageTypeView(Update update) {
+        sendMessageToChatErrorNotSupportType("Получение данного типа сообщений", update.getMessage());
+    }
+
+    private void sendMessageToChatErrorNotSupportType(String action, Message message) {
+        log.error("Пользователь c chatId={} пытается сделать запрос на то что мы не умеем его message={}",
+                message.getChatId(), message);
+        var sendMessage = MessageUtils.buildAnswerWithText(
+                message.getChatId(), action + WE_NOT_SUPPORT
         );
         setView(sendMessage);
     }
 
-    private void setUnsupportedMessageTypeView(Update update) {
-        var sendMessage = MessageUtils.buildAnswerWithMessage(
-                update.getMessage(), String.format("Получение данного типа сообщений %s", WE_NOT_SUPPORT)
+    private void sendMessageToChatAccessDenied(Update update) {
+        Long chatId = -1L;
+        if (update.hasMessage()) {
+            chatId = update.getMessage().getChatId();
+        } else if (update.hasCallbackQuery()) {
+            chatId = update.getCallbackQuery().getMessage().getChatId();
+        }
+
+        log.error("Пользователь c chatId={} не авторизовался, его update={}", chatId, update);
+        var sendMessage = MessageUtils.buildAnswerWithText(
+                chatId, String.format("Такую команду %s", WE_NOT_SUPPORT)
         );
         setView(sendMessage);
     }
