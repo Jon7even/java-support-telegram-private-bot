@@ -38,7 +38,7 @@ public class HandleUpdateBotImpl implements HandleUpdateBot {
     @Override
     public void processUpdate(Update update) {
         if (update == null) {
-            log.error("Update является null, срочно требуется проверить почему так случилось");
+            log.error("Update является [null], срочно требуется проверить почему так случилось");
             return;
         }
         boolean isUserAuthorized = authorizationService.processAuthorization(update);
@@ -71,7 +71,6 @@ public class HandleUpdateBotImpl implements HandleUpdateBot {
         } else {
             setUnsupportedMessageTypeView(update);
         }
-
     }
 
     private void distributeCallbackByType(Update update) {
@@ -81,7 +80,9 @@ public class HandleUpdateBotImpl implements HandleUpdateBot {
     }
 
     private void processTextMessage(Update update) {
-        boolean isBaseCommand = mainQuickService.existBaseCommand(update.getMessage().getText());
+        var textMessageByUser = update.getMessage().getText();
+        boolean isBaseCommand = mainQuickService.existBaseCommand(textMessageByUser);
+
         if (isBaseCommand) {
             var messageForBaseCommand = mainQuickService.processQuickAnswer(update);
             setView(messageForBaseCommand);
