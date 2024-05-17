@@ -1,6 +1,6 @@
 package jon7even.setup;
 
-import com.github.jon7even.dto.UserShortDto;
+import com.github.jon7even.dto.UserAuthTrueDto;
 import com.github.jon7even.entity.user.UserEntity;
 
 import java.time.LocalDateTime;
@@ -10,9 +10,9 @@ public class PreparationForTests {
     protected UserEntity userEntitySecond;
     protected UserEntity userEntityThird;
 
-    protected UserShortDto userCreateDtoFirst;
-    protected UserShortDto userCreateDtoSecond;
-    protected UserShortDto userCreateDtoThird;
+    protected UserAuthTrueDto userCreateDtoFirst;
+    protected UserAuthTrueDto userCreateDtoSecond;
+    protected UserAuthTrueDto userCreateDtoThird;
 
     protected Long firstUserId = 1L;
     protected Long secondUserId = 2L;
@@ -43,21 +43,21 @@ public class PreparationForTests {
     }
 
     protected void initUserDto() {
-        userCreateDtoFirst = UserShortDto.builder()
+        userCreateDtoFirst = UserAuthTrueDto.builder()
                 .chatId(1111111L)
                 .firstName("FirstName")
                 .lastName("FirstLastName")
                 .userName("FirstUserName")
                 .build();
 
-        userCreateDtoSecond = UserShortDto.builder()
+        userCreateDtoSecond = UserAuthTrueDto.builder()
                 .chatId(2222222L)
                 .firstName("SecondName")
                 .lastName("SecondLastName")
                 .userName("SecondUserName")
                 .build();
 
-        userCreateDtoThird = UserShortDto.builder()
+        userCreateDtoThird = UserAuthTrueDto.builder()
                 .chatId(3333333L)
                 .firstName("ThirdName")
                 .lastName("ThirdLastName")
