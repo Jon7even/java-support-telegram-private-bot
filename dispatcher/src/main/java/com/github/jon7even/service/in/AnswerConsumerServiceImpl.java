@@ -24,7 +24,7 @@ public class AnswerConsumerServiceImpl implements AnswerConsumerService {
     @Override
     @RabbitListener(queues = ANSWER_MESSAGE)
     public void consume(SendMessage sendMessage) {
-        log.debug("Начинаем отправлять ответ text={}", sendMessage.getText());
+        log.debug("Начинаем отправлять ответ [text={}]", sendMessage.getText());
         senderBotClient.sendAnswerMessage(sendMessage);
     }
 }

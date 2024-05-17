@@ -1,16 +1,27 @@
 package com.github.jon7even.service.in.auth;
 
 import com.github.jon7even.configuration.SecurityConfig;
-import com.github.jon7even.dto.UserShortDto;
-import com.github.jon7even.entity.user.UserEntity;
+import com.github.jon7even.controller.out.SenderBotClient;
+import com.github.jon7even.dto.UserAuthFalseDto;
+import com.github.jon7even.dto.UserAuthTrueDto;
+import com.github.jon7even.dto.UserCreateDto;
+import com.github.jon7even.dto.UserUpdateDto;
+import com.github.jon7even.exception.AccessDeniedException;
+import com.github.jon7even.exception.AlreadyExistException;
+import com.github.jon7even.exception.NotFoundException;
 import com.github.jon7even.mapper.UserMapper;
-import com.github.jon7even.repository.UserRepository;
-import com.github.jon7even.service.in.auth.cache.UserAuthCache;
+import com.github.jon7even.service.in.UserService;
+import com.github.jon7even.service.in.auth.cache.UserAuthFalseCache;
+import com.github.jon7even.service.in.auth.cache.UserAuthTrueCache;
+import com.github.jon7even.utils.MessageUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.message.Message;
 
-import java.time.LocalDateTime;
+import static com.github.jon7even.telegram.constants.DefaultBaseMessagesToSend.USER_AUTH_TRUE;
 
 /**
  * Реализация сервиса авторизации пользователей
@@ -18,98 +29,146 @@ import java.time.LocalDateTime;
  * @author Jon7even
  * @version 1.0
  */
-@Service
 @Slf4j
+@Service
 @RequiredArgsConstructor
 public class AuthorizationServiceImpl implements AuthorizationService {
-    private final UserRepository userRepository;
-    private final SecurityConfig securityConfig;
-    private final UserAuthCache userAuthCache;
+    private final UserService userService;
     private final UserMapper userMapper;
+    private final UserAuthFalseCache userAuthFalseCache;
+    private final UserAuthTrueCache userAuthTrueCache;
+    private final SecurityConfig securityConfig;
+    private final SenderBotClient senderBotClient;
 
     @Override
-    public boolean processAuthorization(UserShortDto userShortDto) {
-        log.debug("На авторизацию пришел пользователь: userDto={}", userShortDto);
-        UserEntity userFromBD = registerOrGetUser(userShortDto);
-
-        if (userFromBD.getAuthorization()) {
-            log.debug("Пользователь авторизован");
-            return true;
+    public boolean processAuthorization(Update update) {
+        if (update.hasMessage()) {
+            var message = update.getMessage();
+            return checkAuthorizationFromMessage(message);
+        } else if (update.hasCallbackQuery()) {
+            var callbackQuery = update.getCallbackQuery();
+            return checkAuthorizationFromCallBack(callbackQuery);
         } else {
-            log.warn("Пользователь user={} еще не авторизован", userFromBD);
-            return processInputPassword(userFromBD, userShortDto);
-        }
-    }
-
-    @Override
-    public boolean processAuthorizationForCallBack(Long userId) {
-        UserEntity userFromBD = getUserByChatId(userId);
-
-        if (userFromBD.getAuthorization()) {
-            log.debug("Пользователь авторизован");
-            log.debug("Пользователь c tgId={} и userId={} уже есть в системе",
-                    userFromBD.getChatId(), userFromBD.getId());
-            return true;
-        } else {
-            log.error("Пользователь user={} странная попытка авторизоваться через CallbackQuery", userFromBD);
             return false;
         }
     }
 
-    private boolean processInputPassword(UserEntity userFromBD, UserShortDto userShortDto) {
-        if (isUserBanned(userFromBD.getId())) {
-            if (userShortDto.getTextMessage().equals(securityConfig.getKeyPass())) {
-                userFromBD.setAuthorization(true);
-                log.warn("Пользователь ввел правильный пароль, сохраняем в базу user={}", userFromBD);
-                userRepository.save(userFromBD);
-                log.trace("Пользователь user={} прошел авторизацию", userFromBD);
-                userAuthCache.deleteUserFromAuthCache(userFromBD.getId());
-                return true;
-            } else {
-                log.warn("Пользователь user={} пытается подобрать пароль", userFromBD);
-                return false;
+    private boolean checkAuthorizationFromMessage(Message message) {
+        if (isUserAuthorized(message)) {
+            return true;
+        } else {
+            if (!isUserBanned(message)) {
+                try {
+                    processInputPassword(message);
+                    return true;
+                } catch (AccessDeniedException exception) {
+                    return false;
+                }
             }
-        } else {
-            log.warn("Пользователь user={} ввел attemptsAuth={} раз пароль неправильно и был заблокирован",
-                    userFromBD, securityConfig.getAttemptsAuth());
             return false;
         }
     }
 
-    private UserEntity registerOrGetUser(UserShortDto userShortDto) {
-        UserEntity user;
-        Long chatId = userShortDto.getChatId();
-
-        if (userRepository.existsByChatId(chatId)) {
-            user = getUserByChatId(chatId);
-            log.debug("Пользователь c tgId={} и userId={} уже есть в системе", chatId, user.getId());
+    private boolean checkAuthorizationFromCallBack(CallbackQuery callbackQuery) {
+        var chatIdUser = callbackQuery.getMessage().getChatId();
+        if (userAuthTrueCache.isExistUserInCache(chatIdUser)) {
+            log.debug("Пользователь с [chatId={}] авторизован", chatIdUser);
+            return true;
         } else {
-            log.info("Начинаю регистрацию нового пользователя");
-            user = registerNewUser(userShortDto, chatId);
-            userAuthCache.setAttemptAuthForUserCache(chatId, 0);
+            var callBackData = callbackQuery.getData();
+            log.error("Пользователь с [chatId={}] подозрительная попытка авторизации через [callbackData={}]",
+                    chatIdUser, callBackData);
+            return false;
         }
-        return user;
     }
 
-    private UserEntity registerNewUser(UserShortDto userShortDto, Long chatId) {
-        log.debug("Начинаю регистрацию нового пользователя с tgId={}", chatId);
-        UserEntity userForSave = userMapper.toEntityFromShortDto(userShortDto, LocalDateTime.now());
-        log.debug("Новый пользователь собран user={}", userForSave);
-
-        UserEntity userAfterSave = userRepository.save(userForSave);
-        log.debug("Пользователь успешно сохранен в БД user={}", userAfterSave);
-        return userAfterSave;
+    private boolean isUserAuthorized(Message message) {
+        var chatIdUser = message.getChatId();
+        if (userAuthTrueCache.isExistUserInCache(chatIdUser)) {
+            log.debug("Пользователь с [chatId={}] авторизован", chatIdUser);
+            return true;
+        } else {
+            if (userService.isExistUserByChatId(chatIdUser)) {
+                log.trace("Пользователь с [chatId={}] есть в БД, но еще не авторизован", chatIdUser);
+            } else {
+                log.trace("Пользователя с [chatId={}] нет в БД, требуется регистрация", chatIdUser);
+                try {
+                    registerUser(message);
+                } catch (AlreadyExistException exception) {
+                    log.error("Срочно проверьте логи, произошла коллизия [exception={}]", exception.getErrorMessage());
+                }
+            }
+            return false;
+        }
     }
 
-    private boolean isUserBanned(Long userId) {
-        int currentAttemptsAuthUser = userAuthCache.getAttemptsAuthForUserCache(userId);
-        currentAttemptsAuthUser++;
-        userAuthCache.setAttemptAuthForUserCache(userId, currentAttemptsAuthUser);
-        return securityConfig.getAttemptsAuth() >= currentAttemptsAuthUser;
+    private void processInputPassword(Message message) {
+        var chatIdUser = message.getChatId();
+        var textInChatByUser = message.getText();
+        log.trace("Начинаем проверять правильно ли пользователь с [chatId={}] ввел пароль. Он написал [text={}]",
+                chatIdUser, textInChatByUser);
+
+        if (textInChatByUser.equals(securityConfig.getKeyPass())) {
+            log.trace("Пользователь с [chatId={}] ввел правильный пароль, сохраняем в БД", chatIdUser);
+            UserAuthTrueDto userForSaveInCache = userService.setAuthorizationTrue(chatIdUser);
+            log.trace("Пользователь с [chatId={}] ввел правильный пароль, сохраняем в кэш", chatIdUser);
+            userAuthTrueCache.saveUserInCache(userForSaveInCache);
+            log.trace("Пользователь с [chatId={}] ввел правильный пароль, удаляем из кэша для неавторизованных "
+                    + "пользователей", chatIdUser);
+            userAuthFalseCache.deleteUserFromAuthCache(chatIdUser);
+            log.trace("Пользователь с [chatId={}] прошел авторизацию", chatIdUser);
+            var sendMessage = MessageUtils.buildAnswerWithText(message.getChatId(), USER_AUTH_TRUE);
+            senderBotClient.sendAnswerMessage(sendMessage);
+        } else {
+            throw new AccessDeniedException(String.format("Authorization user with [chatId=%d]", chatIdUser));
+        }
     }
 
-    private UserEntity getUserByChatId(Long chatId) {
-        log.debug("Получаю пользователя с chatId={} из базы", chatId);
-        return userRepository.findByChatId(chatId);
+    private boolean isUserBanned(Message message) {
+        var chatId = message.getChatId();
+        if (!userAuthFalseCache.isExistUserInCache(chatId)) {
+            log.warn("Произошел рестарт приложения, сессия у пользователей истекла, требуется обновить данные "
+                    + "пользователя с [chatId={}]", chatId);
+            try {
+                updateUserAfterRestartApp(message);
+            } catch (NotFoundException exception) {
+                log.error("Проверьте логи приложения, произошла неправильная работа приложения, пользователь "
+                        + "с [chatId={}] не существует", chatId);
+                return true;
+            }
+        }
+
+        int currentAttemptsAuthUser = getCountAttemptsAuthForUser(chatId);
+        if (securityConfig.getAttemptsAuth() <= currentAttemptsAuthUser) {
+            log.warn("Пользователь с [chatId={}] находится в бан-листе ввел пароль [attemptsAuth={}] раз, "
+                    + "доступ запрещен", chatId, currentAttemptsAuthUser);
+            return true;
+        } else {
+            log.debug("Пользователя с [chatId={}] в бан-листе не обнаружено", chatId);
+            return false;
+        }
+    }
+
+    private int getCountAttemptsAuthForUser(Long chatId) {
+        var attemptsAuthUser = userAuthFalseCache.getAttemptsAuthFromCache(chatId);
+        var currentAttemptsAuthUser = userAuthFalseCache.increaseAttemptAuthToCache(chatId, attemptsAuthUser);
+        if (currentAttemptsAuthUser > securityConfig.getAttemptsAuth()) {
+            log.warn("Пользователь с [chatId={}] пытается подобраться пароль", chatId);
+        }
+        return currentAttemptsAuthUser;
+    }
+
+    private void registerUser(Message message) {
+        log.trace("Начинаю регистрировать пользователя с [chatId={}]", message.getChatId());
+        UserCreateDto userForSaveInRepository = userMapper.toDtoCreateFromMessage(message.getChat());
+        UserAuthFalseDto userFromRepository = userService.createUser(userForSaveInRepository);
+        userAuthFalseCache.saveUserInCache(userFromRepository);
+    }
+
+    private void updateUserAfterRestartApp(Message message) {
+        log.trace("Начинаю обновлять пользователя с [chatId={}]", message.getChatId());
+        UserUpdateDto userForUpdate = userMapper.toDtoUpdateFromMessage(message.getChat());
+        UserAuthFalseDto updatedUserFromRepository = userService.updateUser(userForUpdate);
+        userAuthFalseCache.saveUserInCache(updatedUserFromRepository);
     }
 }

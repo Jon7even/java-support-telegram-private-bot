@@ -58,7 +58,7 @@ public class HandleUpdateBotImpl implements HandleUpdateBot {
 
     private void distributeMessagesByType(Update update) {
         var message = update.getMessage();
-        log.debug("Начинаем обрабатывать обновление [пользователь отправил сообщение], его message={}", message);
+        log.debug("Начинаем обрабатывать обновление [пользователь отправил сообщение], его [message={}]", message);
 
         if (message.hasText()) {
             processTextMessage(update);
@@ -75,7 +75,7 @@ public class HandleUpdateBotImpl implements HandleUpdateBot {
 
     private void distributeCallbackByType(Update update) {
         var callbackQuery = update.getCallbackQuery();
-        log.debug("Начинаем обрабатывать обновление [пользователь нажал на кнопку], его callback={}", callbackQuery);
+        log.debug("Начинаем обрабатывать обновление [пользователь нажал на кнопку], его [callback={}]", callbackQuery);
         processCallbackQuery(update);
     }
 
@@ -112,7 +112,7 @@ public class HandleUpdateBotImpl implements HandleUpdateBot {
     }
 
     private void sendMessageToChatErrorNotSupportType(String action, Message message) {
-        log.error("Пользователь c chatId={} пытается сделать запрос на то что мы не умеем его message={}",
+        log.error("Пользователь c [chatId={}] пытается сделать запрос на то что мы не умеем его message={}",
                 message.getChatId(), message);
         var sendMessage = MessageUtils.buildAnswerWithText(
                 message.getChatId(), action + WE_NOT_SUPPORT
@@ -128,7 +128,7 @@ public class HandleUpdateBotImpl implements HandleUpdateBot {
             chatId = update.getCallbackQuery().getMessage().getChatId();
         }
 
-        log.error("Пользователь c chatId={} не авторизовался, его update={}", chatId, update);
+        log.warn("Пользователь c [chatId={}] не авторизовался, его [update={}]", chatId, update);
         var sendMessage = MessageUtils.buildAnswerWithText(
                 chatId, String.format("Такую команду %s", WE_NOT_SUPPORT)
         );

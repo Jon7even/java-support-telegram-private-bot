@@ -32,6 +32,8 @@
             <column name="register_on" type="TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
+            <column name="updated_on" type="TIMESTAMP">
+            </column>
             <column name="auth_on" type="BOOLEAN" defaultValueBoolean="false">
             </column>
         </createTable>

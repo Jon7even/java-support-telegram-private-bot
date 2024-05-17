@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import static com.github.jon7even.constants.DataTimePattern.DATE_TIME_FORMATTER;
 
@@ -43,6 +44,9 @@ public class UserEntity {
     @Column(name = "register_on", nullable = false)
     private LocalDateTime registeredOn;
 
+    @Column(name = "updated_on")
+    private LocalDateTime updatedOn;
+
     @Column(name = "auth_on")
     @ColumnDefault(value = "false")
     private Boolean authorization;
@@ -50,13 +54,20 @@ public class UserEntity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof UserEntity)) return false;
-        return chatId != null && chatId.equals(((UserEntity) o).getId());
+        if (!(o instanceof UserEntity that)) return false;
+        return id.equals(that.id)
+                && chatId.equals(that.chatId)
+                && firstName.equals(that.firstName)
+                && lastName.equals(that.lastName)
+                && userName.equals(that.userName)
+                && registeredOn.equals(that.registeredOn)
+                && updatedOn.equals(that.updatedOn)
+                && authorization.equals(that.authorization);
     }
 
     @Override
     public int hashCode() {
-        return getClass().hashCode();
+        return Objects.hash(id, chatId, firstName, lastName, userName, registeredOn, updatedOn, authorization);
     }
 
     @Override

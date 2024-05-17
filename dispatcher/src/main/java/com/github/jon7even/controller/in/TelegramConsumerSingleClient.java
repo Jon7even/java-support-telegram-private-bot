@@ -40,7 +40,7 @@ public class TelegramConsumerSingleClient implements SpringLongPollingBot, LongP
      */
     @Override
     public void consume(Update update) {
-        log.debug("Получено новое сообщение update={}", update);
+        log.debug("Получено новое сообщение [update={}]", update);
         handleUpdateBot.processUpdate(update);
     }
 
@@ -54,6 +54,6 @@ public class TelegramConsumerSingleClient implements SpringLongPollingBot, LongP
      */
     @AfterBotRegistration
     public void afterRegistration(BotSession botSession) {
-        log.trace("Бот запущен, его текущие состояние: {}", botSession.isRunning());
+        log.trace("Бот запущен, его текущие состояние: [{}]", botSession.isRunning());
     }
 }

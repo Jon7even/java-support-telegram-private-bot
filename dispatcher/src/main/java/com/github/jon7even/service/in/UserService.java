@@ -3,6 +3,7 @@ package com.github.jon7even.service.in;
 import com.github.jon7even.dto.UserAuthFalseDto;
 import com.github.jon7even.dto.UserAuthTrueDto;
 import com.github.jon7even.dto.UserCreateDto;
+import com.github.jon7even.dto.UserUpdateDto;
 
 /**
  * Интерфейс сервиса для взаимодействия с пользователями
@@ -18,6 +19,14 @@ public interface UserService {
      * @return UserAuthFalseDto объект DTO для дальнейшей авторизации пользователя
      */
     UserAuthFalseDto createUser(UserCreateDto userCreateDto);
+
+    /**
+     * Метод обновляющий данные существующего пользователя
+     *
+     * @param userUpdateDto заполненный объект DTO
+     * @return UserAuthFalseDto объект DTO для дальнейшей авторизации пользователя
+     */
+    UserAuthFalseDto updateUser(UserUpdateDto userUpdateDto);
 
     /**
      * Метод проверяющий имеется ли пользователь в БД

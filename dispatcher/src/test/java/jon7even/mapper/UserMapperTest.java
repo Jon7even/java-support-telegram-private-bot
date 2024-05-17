@@ -25,7 +25,7 @@ public class UserMapperTest extends PreparationForTests {
     @Test
     @DisplayName("Должен произойти правильный маппинг в сущность для создания новых данных в БД")
     public void toEntityFromDtoCreate_ReturnEntityNotId() {
-        UserEntity actualResult = userMapper.toEntityFromShortDto(userCreateDtoFirst, LocalDateTime.now());
+        UserEntity actualResult = userMapper.toEntityFromCreateDto(userCreateDtoFirst, LocalDateTime.now());
 
         assertThat(actualResult)
                 .isNotNull();

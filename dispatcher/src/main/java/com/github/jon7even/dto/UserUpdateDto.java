@@ -4,10 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 
 /**
- * Класс DTO для краткого представления пользователя
+ * Класс DTO для обновления данных пользователя
  *
  * @author Jon7even
  * @version 1.0
@@ -16,15 +15,9 @@ import org.jetbrains.annotations.NotNull;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserShortDto {
-    @NotNull
+public class UserUpdateDto {
     private Long chatId;
-
     private String firstName;
-
     private String lastName;
-
     private String userName;
-
-    private String textMessage;
 }

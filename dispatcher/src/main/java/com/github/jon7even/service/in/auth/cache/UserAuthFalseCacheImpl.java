@@ -1,6 +1,7 @@
 package com.github.jon7even.service.in.auth.cache;
 
 import com.github.jon7even.dto.UserAuthFalseDto;
+import com.github.jon7even.exception.AlreadyExistException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 
 /**
- * Реализация сервиса хранения неавторизованных пользователей в кеше
+ * Реализация сервиса хранения неавторизованных пользователей в кэше
  *
  * @author Jon7even
  * @version 1.0
@@ -25,8 +26,23 @@ public class UserAuthFalseCacheImpl implements UserAuthFalseCache {
 
     @Override
     public void saveUserInCache(UserAuthFalseDto userAuthFalseDto) {
-        mapOfUsersAuthFalse.put(userAuthFalseDto.getChatId(), userAuthFalseDto);
-        log.debug("Пользователь [userAuthFalseDto={}] сохранен в кеше", userAuthFalseDto);
+        log.trace("Начинаю сохранять пользователя [userAuthFalseDto={}] в кэше неавторизованных пользователей",
+                userAuthFalseDto);
+        if (!mapOfUsersAuthFalse.containsKey(userAuthFalseDto.getChatId())) {
+            mapOfUsersAuthFalse.put(userAuthFalseDto.getChatId(), userAuthFalseDto);
+            log.debug("Пользователь [userAuthFalseDto={}] сохранен в кэше неавторизованных пользователей",
+                    userAuthFalseDto);
+        } else {
+            log.error("Пользователь [userAuthFalseDto={}] не сохранен в кэше неавторизованных пользователей, т.к."
+                    + "уже здесь есть", userAuthFalseDto);
+            throw new AlreadyExistException(userAuthFalseDto.toString());
+        }
+    }
+
+    @Override
+    public boolean isExistUserInCache(Long chatIdUser) {
+        log.trace("Проверяем есть ли пользователь с [chatIdUser={}] в кэше неавторизованных пользователей", chatIdUser);
+        return mapOfUsersAuthFalse.containsKey(chatIdUser);
     }
 
     @Override
@@ -52,7 +68,7 @@ public class UserAuthFalseCacheImpl implements UserAuthFalseCache {
 
     @Override
     public void deleteUserFromAuthCache(Long chatIdUser) {
-        log.debug("Пользователь с [chatIdUser={}] ввел пароль правильно, удаляем данные", chatIdUser);
         mapOfUsersAuthFalse.remove(chatIdUser);
+        log.debug("Пользователь с [chatIdUser={}] удален из кэша неавторизованных пользователей", chatIdUser);
     }
 }

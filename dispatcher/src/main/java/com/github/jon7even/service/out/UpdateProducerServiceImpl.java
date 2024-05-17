@@ -20,13 +20,13 @@ public class UpdateProducerServiceImpl implements UpdateProducerService {
 
     @Override
     public void produceText(String rabbitQueue, Update update) {
-        log.debug("Конвертирую полученное сообщение с чата text={}", update.getMessage().getText());
+        log.debug("Конвертирую полученное сообщение с чата [text={}]", update.getMessage().getText());
         rabbitTemplate.convertAndSend(rabbitQueue, update);
     }
 
     @Override
     public void produceCallBackQuery(String rabbitQueue, Update update) {
-        log.debug("Конвертирую полученное сообщение c клавиатуры data={}", update.getCallbackQuery().getData());
+        log.debug("Конвертирую полученное сообщение c клавиатуры [data={}]", update.getCallbackQuery().getData());
         rabbitTemplate.convertAndSend(rabbitQueue, update);
     }
 }

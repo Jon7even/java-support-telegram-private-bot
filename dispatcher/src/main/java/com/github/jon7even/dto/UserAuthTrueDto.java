@@ -7,16 +7,21 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * Класс DTO для краткого представления пользователя
+ *
+ * @author Jon7even
+ * @version 1.0
+ */
 @Data
-@Builder(toBuilder = true)
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserAuthFalseDto {
+public class UserAuthTrueDto {
     private Long id;
     private Long chatId;
     private String firstName;
     private String lastName;
     private String userName;
     private LocalDateTime registeredOn;
-    private Integer attemptAuth;
 }
