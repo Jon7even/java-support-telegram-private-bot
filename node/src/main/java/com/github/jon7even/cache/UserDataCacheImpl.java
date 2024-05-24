@@ -7,6 +7,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 
+/**
+ * Реализация сервиса кеширования пользователей
+ *
+ * @author Jon7even
+ * @version 1.0
+ */
 @Component
 @RequiredArgsConstructor
 public class UserDataCacheImpl implements UserDataCache {

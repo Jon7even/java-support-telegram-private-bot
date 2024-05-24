@@ -8,9 +8,15 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import static com.github.jon7even.telegram.constants.BaseMessages.HELP_TEXT;
-import static com.github.jon7even.telegram.constants.BaseMessages.START_TEXT;
+import static com.github.jon7even.telegram.constants.DefaultBaseMessagesToSend.HELP_TEXT;
+import static com.github.jon7even.telegram.constants.DefaultBaseMessagesToSend.START_TEXT;
 
+/**
+ * Реализация сервиса быстрой обработки основных команд бота
+ *
+ * @author Jon7even
+ * @version 1.0
+ */
 @Slf4j
 @Service
 @NoArgsConstructor
@@ -38,5 +44,4 @@ public class MainQuickServiceImpl implements MainQuickService {
         }
         return MessageUtils.buildAnswerWithMessage(update.getMessage(), answer);
     }
-
 }

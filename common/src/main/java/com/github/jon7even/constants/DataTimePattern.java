@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
  *
  * @author Jon7even
  * @version 1.0
+ * @apiNote Можно использовать в разных частях приложения, в т.ч. тестах
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DataTimePattern {

@@ -1,7 +1,7 @@
 package com.github.jon7even.service;
 
 import com.github.jon7even.cache.UserDataCache;
-import com.github.jon7even.model.company.CompanyEntity;
+import com.github.jon7even.entity.company.CompanyEntity;
 import com.github.jon7even.repository.CompanyRepository;
 import com.github.jon7even.repository.UserRepository;
 import com.github.jon7even.service.in.message.ReplyMessageService;
@@ -13,12 +13,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static com.github.jon7even.telegram.menu.gift.MenuGift.*;
 
 @Slf4j
 @Service
@@ -91,7 +87,7 @@ public class MainServiceImpl implements MainService {
     }
 
     private void giftsCommandReceived(Long chatId) {
-        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+  /*      InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
         List<InlineKeyboardButton> rowInLineOne = new ArrayList<>();
         List<InlineKeyboardButton> rowInLineSecond = new ArrayList<>();
@@ -133,8 +129,9 @@ public class MainServiceImpl implements MainService {
         rowsInLine.add(rowInLineThird);
         rowsInLine.add(rowInLineFourth);
         markup.setKeyboard(rowsInLine);
-
-        senderMessageService.sendTextAndMarkup(chatId, "/TODO", markup);
+*/
+        //TODO refactor
+        senderMessageService.sendTextAndMarkup(chatId, "/TODO", InlineKeyboardMarkup.builder().build());
     }
 
 }

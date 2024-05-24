@@ -3,6 +3,12 @@ package com.github.jon7even.service.in.message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+/**
+ * Реализация сервиса конвертации сообщений
+ *
+ * @author Jon7even
+ * @version 1.0
+ */
 @Service
 @RequiredArgsConstructor
 public class ReplyMessageServiceImpl implements ReplyMessageService {
