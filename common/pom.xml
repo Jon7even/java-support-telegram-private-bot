@@ -14,7 +14,6 @@
     <name>Private Support Bot Common</name>
     <description>Common dependencies for services</description>
     <artifactId>common</artifactId>
-    <packaging>pom</packaging>
 
     <dependencies>
 
@@ -26,6 +25,12 @@
         <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots-client</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>

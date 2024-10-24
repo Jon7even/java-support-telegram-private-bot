@@ -1,5 +1,5 @@
 server:
-  port: ${SERVER_PORT_DISPATCHER}
+  port: ${SERVER_EXTERNAL_PORT_DISPATCHER}
 
 localeTag: ${LOCALE_TAG}
 
@@ -56,17 +56,18 @@ spring:
     open-in-view: false
 
   rabbitmq:
-    host: ${RABBIT_IP}
-    port: ${RABBIT_PORT}
+    host: ${RABBIT_HOST}
+    port: ${RABBIT_AMQP_PORT_LOCAL}
     username: ${RABBIT_USER}
     password: ${RABBIT_PASS}
 
   datasource:
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT_LOCAL}/${DB_NAME}
     username: ${DB_USER}
     password: ${DB_PASS}
-
+    hikari:
+      connection-timeout: 270
 ---
 # Configuration for the 'test' profile
 server:
@@ -118,7 +119,7 @@ spring:
     open-in-view: false
 
   rabbitmq:
-    host: ${RABBIT_IP}
-    port: ${RABBIT_PORT}
-    username: ${RABBIT_USER}
-    password: ${RABBIT_PASS}
+    host: ${RABBIT_HOST_TEST}
+    port: ${RABBIT_AMQP_PORT_LOCAL_TEST}
+    username: ${RABBIT_USER_TEST}
+    password: ${RABBIT_PASS_TEST}

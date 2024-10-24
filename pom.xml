@@ -10,6 +10,12 @@
         <relativePath/>
     </parent>
 
+    <modules>
+        <module>common</module>
+        <module>dispatcher</module>
+        <module>node</module>
+    </modules>
+
     <name>Private Support Bot</name>
     <groupId>com.github.jon7even</groupId>
     <version>1.0-SNAPSHOT</version>
@@ -30,12 +36,6 @@
         <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
         <preliquibase.version>1.5.0</preliquibase.version>
     </properties>
-
-    <modules>
-        <module>common</module>
-        <module>dispatcher</module>
-        <module>node</module>
-    </modules>
 
     <dependencyManagement>
         <dependencies>
@@ -87,14 +87,22 @@
         </dependencies>
     </dependencyManagement>
 
-    <dependencies>
+    <profiles>
 
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
-        </dependency>
+        <profile>
+            <id>standard-tbp</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
 
-    </dependencies>
+        <profile>
+            <id>no-tests-tbp</id>
+            <properties>
+                <maven.test.skip>true</maven.test.skip>
+            </properties>
+        </profile>
+
+    </profiles>
 
 </project>
