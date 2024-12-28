@@ -6,7 +6,7 @@ import com.github.jon7even.dto.UserCreateDto;
 import com.github.jon7even.dto.UserUpdateDto;
 import com.github.jon7even.entity.user.UserEntity;
 import org.mapstruct.*;
-import org.telegram.telegrambots.meta.api.objects.Chat;
+import org.telegram.telegrambots.meta.api.objects.chat.Chat;
 
 import java.time.LocalDateTime;
 

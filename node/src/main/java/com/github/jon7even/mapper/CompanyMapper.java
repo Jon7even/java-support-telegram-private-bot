@@ -27,6 +27,8 @@ public interface CompanyMapper {
     @Mapping(source = "now", target = "created")
     @Mapping(source = "userEntity", target = "creator")
     @Mapping(source = "companyBuildingDto.isGiven", target = "isGiven")
+    @Mapping(target = "updated", ignore = true)
+    @Mapping(target = "given", ignore = true)
     CompanyEntity toEntityFromBuildingDto(CompanyBuildingDto companyBuildingDto,
                                           UserEntity userEntity,
                                           GiftEntity gift,
