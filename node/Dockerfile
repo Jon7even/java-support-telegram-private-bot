@@ -1,4 +1,4 @@
-FROM amazoncorretto:17.0.11-alpine3.19
+FROM amazoncorretto:21-alpine-jdk
 COPY target/*.jar node-service.jar
 EXPOSE ${SERVER_EXTERNAL_PORT_DISPATCHER}
 ENTRYPOINT ["java", "-Dspring.profiles.active=${ACTIVE_PROFILE}", "-jar","/node-service.jar"]
