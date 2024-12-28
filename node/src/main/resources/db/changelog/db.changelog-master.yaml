@@ -13,7 +13,7 @@ databaseChangeLog:
             dbms: postgresql, h2
             splitStatements: false
             relativeToChangeLogFile: true
-            path: v-1.0/data/001-create-users-table.sql
+            path: v-2.0/data/001-create-users-table.sql
   - changeSet:
       id: 2
       author: jon7even
@@ -28,7 +28,7 @@ databaseChangeLog:
             dbms: postgresql, h2
             splitStatements: false
             relativeToChangeLogFile: true
-            path: v-1.0/data/002-create-gifts-table.sql
+            path: v-2.0/data/002-create-gifts-table.sql
   - changeSet:
       id: 3
       author: jon7even
@@ -43,7 +43,7 @@ databaseChangeLog:
             dbms: postgresql, h2
             splitStatements: false
             relativeToChangeLogFile: true
-            path: v-1.0/data/003-create-companies-table.sql
+            path: v-2.0/data/003-create-companies-table.sql
   - changeSet:
       id: 4
       author: jon7even
@@ -58,7 +58,7 @@ databaseChangeLog:
             dbms: postgresql, h2
             splitStatements: false
             relativeToChangeLogFile: true
-            path: v-1.0/data/004-create-competitors-table.sql
+            path: v-2.0/data/004-create-competitors-table.sql
   - changeSet:
       id: 5
       author: jon7even
@@ -73,4 +73,4 @@ databaseChangeLog:
             dbms: postgresql, h2
             splitStatements: false
             relativeToChangeLogFile: true
-            path: v-1.0/data/005-create-events-table.sql
+            path: v-2.0/data/005-create-events-table.sql
