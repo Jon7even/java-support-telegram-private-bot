@@ -1,0 +1,83 @@
+server:
+  port: 7098
+
+localeTag: ru-RU
+
+logging:
+  level:
+    com:
+      github:
+        jon7even: DEBUG
+    org:
+      springframework:
+        orm:
+          jpa: DEBUG
+          JpaTransactionManager: DEBUG
+        transaction: DEBUG
+      hibernate:
+        SQL: DEBUG
+        type.descriptor:
+          sql:
+            BasicBinder: DEBUG
+
+info:
+  app:
+    name: "Dispatcher Service Test"
+    description: "Service Test for handle message from Telegram"
+
+# Configuration for the 'test' profile
+bot:
+  token:
+    name: ${TELEGRAM_BOT_NAME_TEST}
+    token: ${TELEGRAM_BOT_PASS_TEST}
+  security:
+    keyPass: 7777
+    attemptsAuth: 3
+
+spring:
+  application:
+    name: dispatcher
+
+  config:
+    activate:
+      on-profile: test
+
+  liquibase:
+    enabled: true
+    liquibase-schema: public
+    default-schema: bot
+    change-log: classpath:db/changelog/changelog-master.xml
+
+  main:
+    banner-mode: off
+
+  output:
+    ansi:
+      enabled: ALWAYS
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        use_sql_comments: true
+        format_sql: true
+        default-schema: bot
+    open-in-view: false
+
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/test_db
+    username: test_username
+    password: test_password
+    hikari:
+      schema: bot
+      connection-timeout: 5000
+      maximum-pool-size: 7
+      minimum-idle: 3
+      idle-timeout: 30000
+      max-lifetime: 777777
+      connection-test-timeout: 1777
+      pool-name: DispatcherPoolTest
+      validation-timeout: 2777
+      leak-detection-threshold: 1777

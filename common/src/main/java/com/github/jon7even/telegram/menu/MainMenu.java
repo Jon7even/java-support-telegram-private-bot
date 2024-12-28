@@ -28,7 +28,7 @@ public enum MainMenu {
     /**
      * Инициализирует работу с подключенной нейросетью
      */
-    API("/api");
+    ASK("/ask");
 
     private final String command;
 

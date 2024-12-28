@@ -5,7 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,12 +25,11 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "user", schema = "bot-schema")
+@Table(name = "user", schema = "bot")
 public class UserEntity {
 
     @Id
-    @SequenceGenerator(name = "UserGenId", sequenceName = "user_seq", allocationSize = 7)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "UserGenId")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 

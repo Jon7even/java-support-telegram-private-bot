@@ -1,10 +1,16 @@
-package jon7even.setup;
+package com.github.jon7even.setup;
 
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+/**
+ * Подготовка настроек тестконтейнера
+ *
+ * @author Jon7even
+ * @version 2.0
+ */
 @Testcontainers
 public class ContainersSetup extends PreparationForTests {
 

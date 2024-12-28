@@ -5,7 +5,11 @@ import com.github.jon7even.dto.UserAuthTrueDto;
 import com.github.jon7even.dto.UserCreateDto;
 import com.github.jon7even.dto.UserUpdateDto;
 import com.github.jon7even.entity.user.UserEntity;
-import org.mapstruct.*;
+import org.mapstruct.BeanMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.telegram.telegrambots.meta.api.objects.chat.Chat;
 
 import java.time.LocalDateTime;
@@ -14,10 +18,11 @@ import java.time.LocalDateTime;
  * Интерфейс для маппинга DTO и сущностей пользователя
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  */
 @Mapper(componentModel = "spring")
 public interface UserMapper {
+
     @Mapping(source = "chatUser.id", target = "chatId")
     @Mapping(source = "chatUser.firstName", target = "firstName")
     @Mapping(source = "chatUser.lastName", target = "lastName")

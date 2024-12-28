@@ -11,11 +11,12 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
  * Класс для отправки сообщений в зарегистрированный Telegram бот
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  */
 @Slf4j
 @Component
 public class SenderBotClient extends OkHttpTelegramClient {
+
     public SenderBotClient(BotConfig botConfig) {
         super(botConfig.getToken());
         log.trace("Клиент HTTP Telegram загружен");

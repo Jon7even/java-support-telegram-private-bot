@@ -15,7 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
  * Класс для получения сообщений от зарегистрированного Telegram бота для дальнейшей обработки
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  * @apiNote По своей сути является слушателем. Однако, это LongPollingBot, поэтому в реальности, он делает запрос в
  * сам Telegram для получения обновлений. Можно реализовать webhook, тогда приложение будет отвечать быстрей и
  * потреблять меньше ресурсов сервера.
@@ -24,7 +24,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Component
 @RequiredArgsConstructor
 public class TelegramConsumerSingleClient implements SpringLongPollingBot, LongPollingSingleThreadUpdateConsumer {
+
     private final BotConfig botConfig;
+
     private final HandleUpdateBot handleUpdateBot;
 
     /**

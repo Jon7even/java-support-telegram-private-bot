@@ -6,9 +6,10 @@ import com.github.jon7even.dto.UserAuthTrueDto;
  * Интерфейс сервиса хранения авторизованных пользователей в кэше
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  */
 public interface UserAuthTrueCache {
+
     /**
      * Метод сохранения пользователя в кэше
      *

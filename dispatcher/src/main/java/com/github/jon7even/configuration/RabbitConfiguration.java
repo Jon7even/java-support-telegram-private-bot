@@ -6,16 +6,22 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static com.github.jon7even.configuration.RabbitQueue.*;
+import static com.github.jon7even.configuration.RabbitQueue.ANSWER_MESSAGE;
+import static com.github.jon7even.configuration.RabbitQueue.AUDIO_MESSAGE_UPDATE;
+import static com.github.jon7even.configuration.RabbitQueue.CALLBACK_QUERY_UPDATE;
+import static com.github.jon7even.configuration.RabbitQueue.DOC_MESSAGE_UPDATE;
+import static com.github.jon7even.configuration.RabbitQueue.PHOTO_MESSAGE_UPDATE;
+import static com.github.jon7even.configuration.RabbitQueue.TEXT_MESSAGE_UPDATE;
 
 /**
  * Конфигурация для работы с брокером очередей RabbitMq
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  */
 @Configuration
 public class RabbitConfiguration {
+
     @Bean
     public MessageConverter jsonMessageConverter() {
         return new Jackson2JsonMessageConverter();

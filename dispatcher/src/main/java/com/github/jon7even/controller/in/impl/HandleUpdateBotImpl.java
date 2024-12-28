@@ -21,15 +21,19 @@ import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend
  * Реализация обработчика входящих сообщений от зарегистрированного Telegram бота
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  */
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class HandleUpdateBotImpl implements HandleUpdateBot {
+
     private final SenderBotClient senderBotClient;
+
     private final UpdateProducerService updateProducer;
+
     private final AuthorizationService authorizationService;
+
     private final MainQuickService mainQuickService;
 
     /**
@@ -122,6 +126,7 @@ public class HandleUpdateBotImpl implements HandleUpdateBot {
 
     private void sendMessageToChatAccessDenied(Update update) {
         Long chatId = -1L;
+
         if (update.hasMessage()) {
             chatId = update.getMessage().getChatId();
         } else if (update.hasCallbackQuery()) {

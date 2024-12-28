@@ -1,5 +1,6 @@
-package com.github.jon7even.service.out;
+package com.github.jon7even.service.out.impl;
 
+import com.github.jon7even.service.out.UpdateProducerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -10,12 +11,13 @@ import org.telegram.telegrambots.meta.api.objects.Update;
  * Реализация сервиса для постановки запросов от пользователей в очередь для дальнейшей обработки другими сервисами
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class UpdateProducerServiceImpl implements UpdateProducerService {
+
     public final RabbitTemplate rabbitTemplate;
 
     @Override

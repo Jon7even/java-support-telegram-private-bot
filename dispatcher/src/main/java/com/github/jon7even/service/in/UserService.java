@@ -9,9 +9,10 @@ import com.github.jon7even.dto.UserUpdateDto;
  * Интерфейс сервиса для взаимодействия с пользователями
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  */
 public interface UserService {
+
     /**
      * Метод регистрирующий нового пользователя в системе
      *

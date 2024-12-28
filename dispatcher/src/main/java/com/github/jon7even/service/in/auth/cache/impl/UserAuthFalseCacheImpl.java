@@ -1,7 +1,8 @@
-package com.github.jon7even.service.in.auth.cache;
+package com.github.jon7even.service.in.auth.cache.impl;
 
 import com.github.jon7even.dto.UserAuthFalseDto;
 import com.github.jon7even.exception.AlreadyExistException;
+import com.github.jon7even.service.in.auth.cache.UserAuthFalseCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -12,7 +13,7 @@ import java.util.HashMap;
  * Реализация сервиса хранения неавторизованных пользователей в кэше
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  * @apiNote На текущий момент реализация состоит из хранения данных в памяти. А это значит, что при рестарте приложения
  * всем пользователям нужно будет вводить пароль заново. На текущий момент это работает как фича, т.к. когда
  * пользователь будет вводить пароль заново, его ник или имя (если они менялись), будут обновлены в БД. Но если
@@ -22,6 +23,7 @@ import java.util.HashMap;
 @Component
 @RequiredArgsConstructor
 public class UserAuthFalseCacheImpl implements UserAuthFalseCache {
+
     private final HashMap<Long, UserAuthFalseDto> mapOfUsersAuthFalse;
 
     @Override
@@ -50,11 +52,14 @@ public class UserAuthFalseCacheImpl implements UserAuthFalseCache {
         log.debug("Начинаем увеличивать счетчик количества попыток ввести пароль, "
                 + "текущий [attemptAuth={}] для пользователя [chatIdUser={}]", attemptAuth, chatIdUser);
         var userFromCache = mapOfUsersAuthFalse.get(chatIdUser);
+
         userFromCache.setAttemptAuth(++attemptAuth);
         mapOfUsersAuthFalse.put(chatIdUser, userFromCache);
+
         var currentAuthAttempts = getAttemptsAuthFromCache(chatIdUser);
         log.debug("Счетчик для пользователя [chatIdUser={}] увеличен, теперь он [attemptAuth={}]",
                 chatIdUser, currentAuthAttempts);
+
         return currentAuthAttempts;
     }
 

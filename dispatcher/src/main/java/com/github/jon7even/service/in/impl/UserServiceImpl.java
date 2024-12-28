@@ -1,4 +1,4 @@
-package com.github.jon7even.service.in;
+package com.github.jon7even.service.in.impl;
 
 import com.github.jon7even.dto.UserAuthFalseDto;
 import com.github.jon7even.dto.UserAuthTrueDto;
@@ -10,6 +10,7 @@ import com.github.jon7even.exception.AlreadyExistException;
 import com.github.jon7even.exception.NotFoundException;
 import com.github.jon7even.mapper.UserMapper;
 import com.github.jon7even.repository.UserRepository;
+import com.github.jon7even.service.in.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,13 +22,15 @@ import java.util.Optional;
  * Реализация сервиса взаимодействия с пользователями
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+
     private final UserRepository userRepository;
+
     private final UserMapper userMapper;
 
     @Override
@@ -48,6 +51,7 @@ public class UserServiceImpl implements UserService {
         log.trace("Начинаю обновлять существующего пользователя, данные для обновления [userUpdateDto={}]",
                 userUpdateDto);
         Optional<UserEntity> userFromRepository = getUserByChatId(userUpdateDto.getChatId());
+
         if (userFromRepository.isPresent()) {
             UserEntity userForUpdateInRepository = userFromRepository.get();
             log.debug("Объединяю данные в сущности");
@@ -78,6 +82,7 @@ public class UserServiceImpl implements UserService {
             UserEntity userForUpdate = userForSetAuthorizationTrue.get();
             userForUpdate.setAuthorization(true);
             userForUpdate.setUpdatedOn(LocalDateTime.now());
+
             UserEntity updatedUserFromRepository = userRepository.save(userForUpdate);
             log.trace("Пользователь обновлен в БД и прошел авторизацию [userEntity]={}", updatedUserFromRepository);
             return userMapper.toAuthTrueDtoFromEntity(updatedUserFromRepository);

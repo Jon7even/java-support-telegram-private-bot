@@ -6,9 +6,10 @@ import org.telegram.telegrambots.meta.api.objects.Update;
  * Интерфейс сервиса авторизации пользователей
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  */
 public interface AuthorizationService {
+
     /**
      * Метод для авторизации пользователей
      *

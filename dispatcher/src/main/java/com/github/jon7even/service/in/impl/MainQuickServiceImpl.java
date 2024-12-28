@@ -1,5 +1,6 @@
-package com.github.jon7even.service.in;
+package com.github.jon7even.service.in.impl;
 
+import com.github.jon7even.service.in.MainQuickService;
 import com.github.jon7even.telegram.menu.MainMenu;
 import com.github.jon7even.utils.MessageUtils;
 import lombok.NoArgsConstructor;
@@ -15,12 +16,13 @@ import static com.github.jon7even.telegram.constants.DefaultBaseMessagesToSend.S
  * Реализация сервиса быстрой обработки основных команд бота
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  */
 @Slf4j
 @Service
 @NoArgsConstructor
 public class MainQuickServiceImpl implements MainQuickService {
+
     @Override
     public boolean existBaseCommand(String command) {
         return command.equals(MainMenu.START.toString()) || command.equals(MainMenu.HELP.toString());
@@ -28,11 +30,9 @@ public class MainQuickServiceImpl implements MainQuickService {
 
     @Override
     public SendMessage processQuickAnswer(Update update) {
-        String resultMessage = update.getMessage().getText();
-
         String answer = "";
 
-        switch (resultMessage) {
+        switch (update.getMessage().getText()) {
             case "/start":
                 answer = START_TEXT;
                 break;

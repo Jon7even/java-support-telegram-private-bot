@@ -20,6 +20,11 @@ logging:
           sql:
             BasicBinder: TRACE
 
+info:
+  app:
+    name: "Dispatcher Service"
+    description: "Service for handle message from Telegram"
+
 # Configuration for the 'ci' profile
 bot:
   token:
@@ -30,14 +35,18 @@ bot:
     attemptsAuth: ${SECURITY_ATTEMPTS_AUTH_PROD}
 
 spring:
+  application:
+    name: dispatcher
+
   config:
     activate:
       on-profile: ci
 
   liquibase:
     enabled: true
+    liquibase-schema: public
     default-schema: ${SCHEMA_APP}
-    change-log: classpath:db/changelog/db.changelog-master.xml
+    change-log: classpath:db/changelog/changelog-master.xml
 
   main:
     banner-mode: off
@@ -67,59 +76,13 @@ spring:
     username: ${DB_USER}
     password: ${DB_PASS}
     hikari:
-      connection-timeout: 270
----
-# Configuration for the 'test' profile
-server:
-  port: ${SERVER_TEST_PORT_DISPATCHER}
-
-bot:
-  token:
-    name: ${TELEGRAM_BOT_NAME_TEST}
-    token: ${TELEGRAM_BOT_PASS_TEST}
-  security:
-    keyPass: ${SECURITY_KEY_PASS_BOT_TEST}
-    attemptsAuth: ${SECURITY_ATTEMPTS_AUTH_TEST}
-
-logging:
-  level:
-    com:
-      github:
-        jon7even: DEBUG
-    org:
-      springframework:
-        orm:
-          jpa: DEBUG
-          JpaTransactionManager: DEBUG
-        transaction: DEBUG
-      hibernate:
-        SQL: DEBUG
-        type.descriptor:
-          sql:
-            BasicBinder: DEBUG
-
-spring:
-  config:
-    activate:
-      on-profile: test
-
-  liquibase:
-    enabled: true
-    default-schema: ${SCHEMA_APP}
-    change-log: classpath:db/changelog/db.changelog-master.xml
-
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    properties:
-      hibernate:
-        use_sql_comments: true
-        format_sql: true
-        default-schema: ${SCHEMA_APP}
-    open-in-view: false
-
-  rabbitmq:
-    host: ${RABBIT_HOST_TEST}
-    port: ${RABBIT_AMQP_PORT_LOCAL_TEST}
-    username: ${RABBIT_USER_TEST}
-    password: ${RABBIT_PASS_TEST}
+      schema: ${SCHEMA_APP}
+      connection-timeout: 27777
+      maximum-pool-size: 17
+      minimum-idle: 4
+      idle-timeout: 27777
+      max-lifetime: 1777
+      connection-test-timeout: 4777
+      pool-name: DispatcherPoolCi
+      validation-timeout: 4777
+      leak-detection-threshold: 2777

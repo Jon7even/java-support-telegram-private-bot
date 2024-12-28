@@ -1,12 +1,19 @@
-package jon7even;
+package com.github.jon7even;
 
-import com.github.jon7even.DispatcherApp;
-import jon7even.setup.ContainersSetup;
+import com.github.jon7even.setup.ContainersSetup;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+/**
+ * Тестирование запуска контекста приложения без ошибок
+ *
+ * @author Jon7even
+ * @version 2.0
+ */
+@DisplayName("Тестирование запуска приложения")
 @ActiveProfiles(value = "test")
 @SpringBootTest(classes = DispatcherApp.class)
 class SupportBotDispatcherAppTests extends ContainersSetup {

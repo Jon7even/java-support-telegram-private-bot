@@ -6,9 +6,10 @@ import com.github.jon7even.dto.UserAuthFalseDto;
  * Интерфейс сервиса хранения неавторизованных пользователей в кэше
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  */
 public interface UserAuthFalseCache {
+
     /**
      * Метод сохранения пользователя в кэше
      *

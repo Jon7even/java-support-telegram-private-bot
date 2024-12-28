@@ -1,25 +1,37 @@
-package jon7even.setup;
+package com.github.jon7even.setup;
 
 import com.github.jon7even.dto.UserAuthTrueDto;
+import com.github.jon7even.dto.UserCreateDto;
 import com.github.jon7even.entity.user.UserEntity;
 
 import java.time.LocalDateTime;
 
+/**
+ * Подготовка данных для тестов
+ *
+ * @author Jon7even
+ * @version 2.0
+ */
 public class PreparationForTests {
-    protected UserEntity userEntityFirst;
-    protected UserEntity userEntitySecond;
-    protected UserEntity userEntityThird;
 
-    protected UserAuthTrueDto userCreateDtoFirst;
-    protected UserAuthTrueDto userCreateDtoSecond;
-    protected UserAuthTrueDto userCreateDtoThird;
+    protected UserEntity userEntityOne;
+    protected UserEntity userEntityTwo;
+    protected UserEntity userEntityThree;
 
-    protected Long firstUserId = 1L;
-    protected Long secondUserId = 2L;
-    protected Long thirdUserId = 3L;
+    protected UserAuthTrueDto userAuthTrueDtoOne;
+    protected UserAuthTrueDto UserAuthTrueDtoTwo;
+    protected UserAuthTrueDto UserAuthTrueDtoThree;
+
+    protected UserCreateDto userCreateDtoOne;
+
+    protected Long userIdOne = 1L;
+    protected Long userIdTwo = 2L;
+    protected Long userIdThree = 3L;
 
     protected void initUserEntity() {
-        userEntityFirst = UserEntity.builder()
+
+        userEntityOne = UserEntity.builder()
+                .id(userIdOne)
                 .chatId(1111111L)
                 .firstName("FirstName")
                 .lastName("FirstLastName")
@@ -27,12 +39,14 @@ public class PreparationForTests {
                 .registeredOn(LocalDateTime.now())
                 .build();
 
-        userEntitySecond = UserEntity.builder()
+        userEntityTwo = UserEntity.builder()
+                .id(userIdTwo)
                 .chatId(2222222L)
                 .registeredOn(LocalDateTime.now())
                 .build();
 
-        userEntityThird = UserEntity.builder()
+        userEntityThree = UserEntity.builder()
+                .id(userIdThree)
                 .chatId(3333333L)
                 .firstName("ThirdName")
                 .lastName("ThirdLastName")
@@ -43,25 +57,33 @@ public class PreparationForTests {
     }
 
     protected void initUserDto() {
-        userCreateDtoFirst = UserAuthTrueDto.builder()
+
+        userAuthTrueDtoOne = UserAuthTrueDto.builder()
                 .chatId(1111111L)
                 .firstName("FirstName")
                 .lastName("FirstLastName")
                 .userName("FirstUserName")
                 .build();
 
-        userCreateDtoSecond = UserAuthTrueDto.builder()
+        UserAuthTrueDtoTwo = UserAuthTrueDto.builder()
                 .chatId(2222222L)
                 .firstName("SecondName")
                 .lastName("SecondLastName")
                 .userName("SecondUserName")
                 .build();
 
-        userCreateDtoThird = UserAuthTrueDto.builder()
+        UserAuthTrueDtoThree = UserAuthTrueDto.builder()
                 .chatId(3333333L)
                 .firstName("ThirdName")
                 .lastName("ThirdLastName")
                 .userName("ThirdUserName")
+                .build();
+
+        userCreateDtoOne = UserCreateDto.builder()
+                .chatId(1111111L)
+                .firstName("FirstName")
+                .lastName("FirstLastName")
+                .userName("FirstUserName")
                 .build();
     }
 }

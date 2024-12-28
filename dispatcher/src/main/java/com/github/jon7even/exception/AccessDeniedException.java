@@ -1,12 +1,13 @@
 package com.github.jon7even.exception;
 
 /**
- * Класс описывающий исключение если доступ к ресурсу запрещен
+ * Класс описывающий исключение, если доступ к ресурсу запрещен
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  */
 public class AccessDeniedException extends ApplicationException {
+
     public AccessDeniedException(String resource) {
         super(getErrorMessage(resource));
     }
@@ -15,4 +16,3 @@ public class AccessDeniedException extends ApplicationException {
         return String.format("[%s] Access Denied", resource);
     }
 }
-

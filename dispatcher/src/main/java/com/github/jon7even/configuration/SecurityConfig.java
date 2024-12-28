@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
  * Утилитарный класс загружающий настройки для сервиса безопасности из переменных окружения
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  */
 @Getter
 @Setter

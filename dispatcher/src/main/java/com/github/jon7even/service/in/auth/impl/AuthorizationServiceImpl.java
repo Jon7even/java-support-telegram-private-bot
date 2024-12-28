@@ -1,4 +1,4 @@
-package com.github.jon7even.service.in.auth;
+package com.github.jon7even.service.in.auth.impl;
 
 import com.github.jon7even.configuration.SecurityConfig;
 import com.github.jon7even.controller.out.SenderBotClient;
@@ -11,6 +11,7 @@ import com.github.jon7even.exception.AlreadyExistException;
 import com.github.jon7even.exception.NotFoundException;
 import com.github.jon7even.mapper.UserMapper;
 import com.github.jon7even.service.in.UserService;
+import com.github.jon7even.service.in.auth.AuthorizationService;
 import com.github.jon7even.service.in.auth.cache.UserAuthFalseCache;
 import com.github.jon7even.service.in.auth.cache.UserAuthTrueCache;
 import com.github.jon7even.utils.MessageUtils;
@@ -27,17 +28,23 @@ import static com.github.jon7even.telegram.constants.DefaultBaseMessagesToSend.U
  * Реализация сервиса авторизации пользователей
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthorizationServiceImpl implements AuthorizationService {
+
     private final UserService userService;
+
     private final UserMapper userMapper;
+
     private final UserAuthFalseCache userAuthFalseCache;
+
     private final UserAuthTrueCache userAuthTrueCache;
+
     private final SecurityConfig securityConfig;
+
     private final SenderBotClient senderBotClient;
 
     @Override
@@ -71,6 +78,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 
     private boolean checkAuthorizationFromCallBack(CallbackQuery callbackQuery) {
         var chatIdUser = callbackQuery.getMessage().getChatId();
+
         if (userAuthTrueCache.isExistUserInCache(chatIdUser)) {
             log.debug("Пользователь с [chatId={}] авторизован", chatIdUser);
             return true;
@@ -84,6 +92,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 
     private boolean isUserAuthorized(Message message) {
         var chatIdUser = message.getChatId();
+
         if (userAuthTrueCache.isExistUserInCache(chatIdUser)) {
             log.debug("Пользователь с [chatId={}] авторизован", chatIdUser);
             return true;
@@ -105,6 +114,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     private void processInputPassword(Message message) {
         var chatIdUser = message.getChatId();
         var textInChatByUser = message.getText();
+
         log.trace("Начинаем проверять правильно ли пользователь с [chatId={}] ввел пароль. Он написал [text={}]",
                 chatIdUser, textInChatByUser);
 
@@ -112,11 +122,14 @@ public class AuthorizationServiceImpl implements AuthorizationService {
             log.trace("Пользователь с [chatId={}] ввел правильный пароль, сохраняем в БД", chatIdUser);
             UserAuthTrueDto userForSaveInCache = userService.setAuthorizationTrue(chatIdUser);
             log.trace("Пользователь с [chatId={}] ввел правильный пароль, сохраняем в кэш", chatIdUser);
+
             userAuthTrueCache.saveUserInCache(userForSaveInCache);
             log.trace("Пользователь с [chatId={}] ввел правильный пароль, удаляем из кэша для неавторизованных "
                     + "пользователей", chatIdUser);
+
             userAuthFalseCache.deleteUserFromAuthCache(chatIdUser);
             log.trace("Пользователь с [chatId={}] прошел авторизацию", chatIdUser);
+
             var sendMessage = MessageUtils.buildAnswerWithText(message.getChatId(), USER_AUTH_TRUE);
             senderBotClient.sendAnswerMessage(sendMessage);
         } else {
@@ -152,6 +165,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     private int getCountAttemptsAuthForUser(Long chatId) {
         var attemptsAuthUser = userAuthFalseCache.getAttemptsAuthFromCache(chatId);
         var currentAttemptsAuthUser = userAuthFalseCache.increaseAttemptAuthToCache(chatId, attemptsAuthUser);
+
         if (currentAttemptsAuthUser > securityConfig.getAttemptsAuth()) {
             log.warn("Пользователь с [chatId={}] пытается подобраться пароль", chatId);
         }

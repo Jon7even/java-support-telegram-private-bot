@@ -6,9 +6,10 @@ import org.telegram.telegrambots.meta.api.objects.Update;
  * Интерфейс для взаимодействия с обработкой входящих сообщений
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  */
 public interface HandleUpdateBot {
+
     /**
      * Метод для обработки сообщений
      *

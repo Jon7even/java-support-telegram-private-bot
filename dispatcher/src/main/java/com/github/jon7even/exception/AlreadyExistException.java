@@ -1,12 +1,13 @@
 package com.github.jon7even.exception;
 
 /**
- * Класс описывающий исключение если сущность не создана потому что уже существует
+ * Класс описывающий исключение, если сущность не создана потому что уже существует
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  */
 public class AlreadyExistException extends ApplicationException {
+
     public AlreadyExistException(String resource) {
         super(getErrorMessage(resource));
     }
@@ -15,4 +16,3 @@ public class AlreadyExistException extends ApplicationException {
         return String.format("[%s] already exist", resource);
     }
 }
-

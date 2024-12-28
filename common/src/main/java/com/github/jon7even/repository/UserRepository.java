@@ -16,6 +16,7 @@ import java.util.Optional;
  */
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
+
     /**
      * Метод проверки существования пользователя по chatId
      *

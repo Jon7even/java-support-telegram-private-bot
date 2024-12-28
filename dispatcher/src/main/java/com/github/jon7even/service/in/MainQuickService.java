@@ -7,11 +7,12 @@ import org.telegram.telegrambots.meta.api.objects.Update;
  * Интерфейс сервиса быстрой обработки основных команд бота
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  * @apiNote Чтобы снизить нагрузку и отсечь использование RabbitMq используется этот сервис. В него можно добавлять
  * обработку статичных методов типа HELP.
  */
 public interface MainQuickService {
+
     /**
      * Метод для проверки команды от пользователя на его тип
      *

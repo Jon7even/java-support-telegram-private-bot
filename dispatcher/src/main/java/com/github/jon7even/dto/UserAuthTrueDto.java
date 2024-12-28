@@ -8,20 +8,26 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 /**
- * Класс DTO для краткого представления пользователя
+ * Класс DTO для представления пользователя, который прошел процедуру аутентификации
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserAuthTrueDto {
+
     private Long id;
+
     private Long chatId;
+
     private String firstName;
+
     private String lastName;
+
     private String userName;
+
     private LocalDateTime registeredOn;
 }
