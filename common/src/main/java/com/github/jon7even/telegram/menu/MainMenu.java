@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
  * Перечисление основных команд главного меню чат-бота
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  */
 @AllArgsConstructor
 public enum MainMenu {
@@ -21,24 +21,14 @@ public enum MainMenu {
     HELP("/help"),
 
     /**
-     * Инициализирует работу с товарами
-     */
-    ITEMS("/items"),
-
-    /**
-     * Инициализирует работу с задачами
-     */
-    TASKS("/tasks"),
-
-    /**
-     * Инициализирует работу с конкурентами
-     */
-    COMPETITORS("/competitors"),
-
-    /**
      * Инициализирует работу с подарками
      */
-    GIFTS("/gifts");
+    GIFTS("/gifts"),
+
+    /**
+     * Инициализирует работу с подключенной нейросетью
+     */
+    API("/api");
 
     private final String command;
 

@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
  * Утилитарный класс для типовых служебных сообщений, которые отправляются пользователю
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DefaultSystemMessagesToSend {

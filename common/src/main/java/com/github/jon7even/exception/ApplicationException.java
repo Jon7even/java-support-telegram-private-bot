@@ -6,7 +6,7 @@ import lombok.Getter;
  * Подкласс-шаблон для наследуемых исключений
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  */
 @Getter
 public class ApplicationException extends RuntimeException {

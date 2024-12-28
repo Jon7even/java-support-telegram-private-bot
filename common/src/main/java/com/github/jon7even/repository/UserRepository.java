@@ -11,7 +11,7 @@ import java.util.Optional;
  * Интерфейс DAO для пользователя(UserEntity), использует JpaRepository
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  * @apiNote chatId присваивается самим Telegram и считается, что он уникальный
  */
 @Repository

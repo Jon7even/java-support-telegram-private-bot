@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter;
  * Утилитарный класс для работы с парсингом времени
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  * @apiNote Можно использовать в разных частях приложения, в т.ч. тестах
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

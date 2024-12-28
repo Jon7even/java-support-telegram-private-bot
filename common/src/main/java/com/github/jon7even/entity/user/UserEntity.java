@@ -26,7 +26,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "user", schema = "bot")
+@Table(name = "user", schema = "bot-schema")
 public class UserEntity {
 
     @Id
