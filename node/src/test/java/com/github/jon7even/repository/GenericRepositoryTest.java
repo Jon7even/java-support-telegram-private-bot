@@ -1,9 +1,8 @@
-package jon7even.repository;
+package com.github.jon7even.repository;
 
 import com.github.jon7even.NodeApp;
 import com.github.jon7even.entity.user.UserEntity;
-import com.github.jon7even.repository.UserRepository;
-import jon7even.setup.GenericTests;
+import com.github.jon7even.setup.GenericTests;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;

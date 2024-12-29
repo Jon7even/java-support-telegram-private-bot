@@ -1,4 +1,4 @@
-package jon7even;
+package com.github.jon7even;
 
 import com.github.jon7even.NodeApp;
 import org.junit.jupiter.api.Assertions;

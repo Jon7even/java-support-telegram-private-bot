@@ -1,10 +1,9 @@
-package jon7even.repository;
+package com.github.jon7even.repository;
 
 import com.github.jon7even.dto.gift.GiftBuildingDto;
 import com.github.jon7even.mapper.GiftMapper;
 import com.github.jon7even.entity.gift.GiftEntity;
 import com.github.jon7even.entity.gift.GiftStatus;
-import com.github.jon7even.repository.GiftRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

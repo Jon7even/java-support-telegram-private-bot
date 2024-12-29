@@ -1,4 +1,4 @@
-package jon7even.setup;
+package com.github.jon7even.setup;
 
 import com.github.jon7even.entity.user.UserEntity;
 

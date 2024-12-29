@@ -1,10 +1,9 @@
-package jon7even.repository;
+package com.github.jon7even.repository;
 
 import com.github.jon7even.dto.event.EventBuildingDto;
 import com.github.jon7even.mapper.EventMapper;
 import com.github.jon7even.entity.event.EventEntity;
 import com.github.jon7even.entity.event.EventStatus;
-import com.github.jon7even.repository.EventRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
