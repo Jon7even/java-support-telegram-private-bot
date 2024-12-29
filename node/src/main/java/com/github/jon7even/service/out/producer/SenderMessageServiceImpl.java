@@ -8,8 +8,14 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
-import static com.github.jon7even.constants.DefaultMessageError.ERROR_TO_SEND;
+import static com.github.jon7even.telegram.constants.DefaultMessageError.ERROR_TO_SEND;
 
+/**
+ * Реализация сервиса для конструирования ответа для дальнейшей отправки в RabbitMq
+ *
+ * @author Jon7even
+ * @version 1.0
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
