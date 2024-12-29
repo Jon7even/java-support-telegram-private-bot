@@ -12,6 +12,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Тестирование репозитория {@link UserRepository}
@@ -130,6 +131,76 @@ public class UserRepositoryTest extends ContainersSetup {
                 .isEqualTo(userEntityThree.getAuthorization());
         softAssertions.assertThat(userThreeAuthOn.getRegisteredOn())
                 .isEqualTo(userEntityThree.getRegisteredOn());
+        softAssertions.assertAll();
+    }
+
+    @Test
+    @DisplayName("Должен вернуть true, если существует пользователь с таким Telegram ID")
+    void existsByChatId_WhenCalledWithValidData_ReturnsTrue() {
+        UserEntity userOneFullName = userRepository.save(userEntityOne);
+        var validId = userOneFullName.getChatId();
+
+        Boolean actualResult = userRepository.existsByChatId(validId);
+
+        SoftAssertions softAssertions = new SoftAssertions();
+
+        softAssertions.assertThat(actualResult)
+                .isTrue();
+        softAssertions.assertThat(validId)
+                .isEqualTo(userEntityOne.getChatId());
+        softAssertions.assertAll();
+    }
+
+    @Test
+    @DisplayName("Должен вернуть false, если пользователя с таким Telegram ID нет")
+    void existsByChatId_WhenCalledWithValidData_ReturnsFalse() {
+        UserEntity userOneFullName = userRepository.save(userEntityOne);
+        var notValidId = userOneFullName.getChatId() + 1L;
+
+        Boolean actualResult = userRepository.existsByChatId(notValidId);
+
+        SoftAssertions softAssertions = new SoftAssertions();
+
+        softAssertions.assertThat(actualResult)
+                .isFalse();
+        softAssertions.assertThat(notValidId)
+                .isNotEqualTo(userEntityOne.getChatId());
+        softAssertions.assertAll();
+    }
+
+    @Test
+    @DisplayName("Должен найти пользователя, если существует пользователь с таким Telegram ID")
+    void findByChatId_WhenCalledWithValidData_ReturnsOptionalIsPresent() {
+        UserEntity userOneFullName = userRepository.save(userEntityOne);
+        var validId = userOneFullName.getChatId();
+
+        Optional<UserEntity> actualResult = userRepository.findByChatId(validId);
+
+        SoftAssertions softAssertions = new SoftAssertions();
+
+        softAssertions.assertThat(actualResult)
+                .isPresent();
+        softAssertions.assertThat(actualResult.get().getChatId())
+                .isEqualTo(userEntityOne.getChatId());
+        softAssertions.assertThat(validId)
+                .isEqualTo(userEntityOne.getChatId());
+        softAssertions.assertAll();
+    }
+
+    @Test
+    @DisplayName("Не должен найти пользователя, если пользователя с таким Telegram ID нет")
+    void findByChatId_WhenCalledWithValidData_ReturnsOptionalIsNull() {
+        UserEntity userOneFullName = userRepository.save(userEntityOne);
+        var notValidId = userOneFullName.getChatId() + 1L;
+
+        Optional<UserEntity> actualResult = userRepository.findByChatId(notValidId);
+
+        SoftAssertions softAssertions = new SoftAssertions();
+
+        softAssertions.assertThat(actualResult)
+                .isNotPresent();
+        softAssertions.assertThat(notValidId)
+                .isNotEqualTo(userEntityOne.getChatId());
         softAssertions.assertAll();
     }
 }
