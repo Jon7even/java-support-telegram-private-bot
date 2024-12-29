@@ -1,0 +1,83 @@
+volumes:
+  rabbitmq-data:
+    driver: local
+  postgres-data:
+    driver: local
+
+networks:
+  local:
+
+services:
+
+  postgres-service:
+    container_name: postgres-service
+    env_file:
+      - .env
+    image: "postgres:${POSTGRES_VERSION}"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "${DB_PORT_EXTERNAL}:${DB_PORT_LOCAL}"
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+    networks:
+      - local
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  rabbitmq-service:
+    container_name: rabbitmq-service
+    hostname: ${RABBIT_HOST}
+    image: "rabbitmq:${RABBIT_VERSION}"
+    ports:
+      - "${RABBIT_AMQP_PORT_EXTERNAL}:${RABBIT_AMQP_PORT_LOCAL}"
+      - "${RABBIT_GUI_PORT_EXTERNAL}:${RABBIT_GUI_PORT_LOCAL}"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBIT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBIT_PASS}
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    restart: unless-stopped
+    networks:
+      - local
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 7s
+      retries: 10
+
+  tbp-dispatcher:
+    container_name: tbp-dispatcher-service
+    env_file:
+      - .env
+    build: dispatcher/
+    depends_on:
+      postgres-service:
+        condition: service_healthy
+      rabbitmq-service:
+        condition: service_healthy
+    restart: on-failure
+    ports:
+      - "${SERVER_EXTERNAL_PORT_DISPATCHER}:8080"
+    networks:
+      - local
+
+#  tbp-node:
+#    container_name: tbp-node-service
+#    env_file:
+#      - .env
+#    build: node/
+#    depends_on:
+#      - postgres-service
+#      - rabbitmq-service
+#    restart: on-failure
+#    ports:
+#      - "${SERVER_EXTERNAL_PORT_NODE}:8080"
+#    networks:
+#      - local

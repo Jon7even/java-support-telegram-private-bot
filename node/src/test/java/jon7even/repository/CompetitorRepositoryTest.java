@@ -2,7 +2,7 @@ package jon7even.repository;
 
 import com.github.jon7even.dto.competitor.CompetitorBuildingDto;
 import com.github.jon7even.mapper.CompetitorMapper;
-import com.github.jon7even.model.competitor.CompetitorEntity;
+import com.github.jon7even.entity.competitor.CompetitorEntity;
 import com.github.jon7even.repository.CompetitorRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
