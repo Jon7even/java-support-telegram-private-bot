@@ -62,6 +62,7 @@ spring:
       hibernate:
         format_sql: true
         default-schema: ${SCHEMA_APP}
+    show-sql: true
     open-in-view: false
 
   rabbitmq:

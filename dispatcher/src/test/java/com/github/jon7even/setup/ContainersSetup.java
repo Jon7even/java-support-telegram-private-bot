@@ -11,6 +11,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
  *
  * @author Jon7even
  * @version 2.0
+ * @apiNote использует современные аннотации, которые не требуют явного указывания секретов
  */
 @Testcontainers
 public class ContainersSetup extends PreparationForTests {

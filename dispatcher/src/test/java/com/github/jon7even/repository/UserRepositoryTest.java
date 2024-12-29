@@ -3,6 +3,7 @@ package com.github.jon7even.repository;
 import com.github.jon7even.entity.user.UserEntity;
 import com.github.jon7even.setup.ContainersSetup;
 import org.assertj.core.api.SoftAssertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,19 +19,23 @@ import java.util.List;
  * @author Jon7even
  * @version 2.0
  */
-@DisplayName("Тестирование методов репозитория UserRepository")
 @DataJpaTest
 @ActiveProfiles(value = "test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@DisplayName("Тестирование методов репозитория UserRepository")
 public class UserRepositoryTest extends ContainersSetup {
 
     @Autowired
     private UserRepository userRepository;
 
+    @BeforeEach
+    void setUpEntity() {
+        initUserEntity();
+    }
+
     @Test
     @DisplayName("Корректное сохранение трех сущностей пользователя")
     void save_WhenCalledWithValidData_ReturnsThreeUserEntities() {
-        initUserEntity();
         userRepository.save(userEntityOne);
         userRepository.save(userEntityTwo);
         userRepository.save(userEntityThree);
@@ -51,7 +56,6 @@ public class UserRepositoryTest extends ContainersSetup {
     @Test
     @DisplayName("Корректное сохранение сущности не аутентифицированного пользователя со всеми полями")
     void save_WhenCalledWithValidData_ReturnsOneFullNameUser() {
-        initUserEntity();
         UserEntity actualUserOneFullName = userRepository.save(userEntityOne);
 
         SoftAssertions softAssertions = new SoftAssertions();
@@ -59,7 +63,7 @@ public class UserRepositoryTest extends ContainersSetup {
         softAssertions.assertThat(actualUserOneFullName)
                 .isNotNull();
         softAssertions.assertThat(actualUserOneFullName.getId())
-                .isEqualTo(userIdOne);
+                .isEqualTo(1L);
         softAssertions.assertThat(actualUserOneFullName.getChatId())
                 .isEqualTo(userEntityOne.getChatId());
         softAssertions.assertThat(actualUserOneFullName.getFirstName())
@@ -78,7 +82,6 @@ public class UserRepositoryTest extends ContainersSetup {
     @Test
     @DisplayName("Корректное сохранение сущности пользователя, если у него отсутствует имя фамилия и ник")
     void save_WhenCalledWithValidData_ReturnsOneUserOfNullFieldsName() {
-        initUserEntity();
         UserEntity userTwoNull = userRepository.save(userEntityTwo);
 
         SoftAssertions softAssertions = new SoftAssertions();
@@ -86,7 +89,7 @@ public class UserRepositoryTest extends ContainersSetup {
         softAssertions.assertThat(userTwoNull)
                 .isNotNull();
         softAssertions.assertThat(userTwoNull.getId())
-                .isEqualTo(userIdTwo);
+                .isEqualTo(1L);
         softAssertions.assertThat(userTwoNull.getChatId())
                 .isEqualTo(userEntityTwo.getChatId());
         softAssertions.assertThat(userTwoNull.getFirstName())
@@ -105,7 +108,6 @@ public class UserRepositoryTest extends ContainersSetup {
     @Test
     @DisplayName("Корректное сохранение сущности пользователя со всеми полями и аутентификацией")
     void save_WhenCalledWithValidData_ReturnsOneFullNameUserWitchAuthIsTrue() {
-        initUserEntity();
         UserEntity userThreeAuthOn = userRepository.save(userEntityThree);
 
         SoftAssertions softAssertions = new SoftAssertions();
@@ -113,7 +115,7 @@ public class UserRepositoryTest extends ContainersSetup {
         softAssertions.assertThat(userThreeAuthOn)
                 .isNotNull();
         softAssertions.assertThat(userThreeAuthOn.getId())
-                .isEqualTo(userIdThree);
+                .isEqualTo(1L);
         softAssertions.assertThat(userThreeAuthOn.getChatId())
                 .isEqualTo(userEntityThree.getChatId());
         softAssertions.assertThat(userThreeAuthOn.getFirstName())

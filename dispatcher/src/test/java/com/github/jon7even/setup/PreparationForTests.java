@@ -31,7 +31,6 @@ public class PreparationForTests {
     protected void initUserEntity() {
 
         userEntityOne = UserEntity.builder()
-                .id(userIdOne)
                 .chatId(1111111L)
                 .firstName("FirstName")
                 .lastName("FirstLastName")
@@ -40,13 +39,11 @@ public class PreparationForTests {
                 .build();
 
         userEntityTwo = UserEntity.builder()
-                .id(userIdTwo)
                 .chatId(2222222L)
                 .registeredOn(LocalDateTime.now())
                 .build();
 
         userEntityThree = UserEntity.builder()
-                .id(userIdThree)
                 .chatId(3333333L)
                 .firstName("ThirdName")
                 .lastName("ThirdLastName")
