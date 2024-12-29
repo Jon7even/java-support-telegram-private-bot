@@ -65,6 +65,10 @@ spring:
         default-schema: bot
     open-in-view: false
 
+  rabbitmq:
+    host: localhost
+    port: 5672
+
   datasource:
     driverClassName: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/test_db

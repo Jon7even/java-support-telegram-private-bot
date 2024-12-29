@@ -6,8 +6,8 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd"
         logicalFilePath="v-2.0/data/changelog.xml">
 
-    <include file="ddl/000-create-schema.xml" relativeToChangelogFile="true"/>
-    <include file="ddl/001-set-tag.xml" relativeToChangelogFile="true"/>
+    <include file="ddl/000-set-tag.xml" relativeToChangelogFile="true"/>
+    <include file="ddl/001-create-schema.xml" relativeToChangelogFile="true"/>
     <include file="ddl/002-create-user-table.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

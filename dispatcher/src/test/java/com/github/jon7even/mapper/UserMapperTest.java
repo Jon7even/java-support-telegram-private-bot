@@ -30,7 +30,6 @@ public class UserMapperTest extends PreparationForTests {
     @Test
     @DisplayName("Должен произойти правильный маппинг в сущность для создания новых данных в БД")
     public void toEntityFromDtoCreate_ReturnEntityNotId() {
-
         UserEntity actualResult = userMapper.toEntityFromCreateDto(userCreateDtoOne, LocalDateTime.now());
 
         SoftAssertions softAssertions = new SoftAssertions();
