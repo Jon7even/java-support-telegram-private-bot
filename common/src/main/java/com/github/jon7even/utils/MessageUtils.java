@@ -15,6 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class MessageUtils {
+
     public static SendMessage buildAnswerWithMessage(Message message,
                                                      String text) {
         return SendMessage.builder()

@@ -10,6 +10,7 @@ import lombok.Getter;
  */
 @Getter
 public class ApplicationException extends RuntimeException {
+
     private final String errorMessage;
 
     public ApplicationException(String errorMessage) {
