@@ -8,15 +8,17 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 
 /**
- * Реализация сервиса кеширования пользователей
+ * Реализация сервиса кэширования пользователей {@link UserDataCache}
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  */
 @Component
 @RequiredArgsConstructor
 public class UserDataCacheImpl implements UserDataCache {
+
     private final HashMap<Long, BotState> botStatesOfUsers;
+
     private final HashMap<Long, CompanyBuildingDto> companiesOfUsers;
 
     @Override

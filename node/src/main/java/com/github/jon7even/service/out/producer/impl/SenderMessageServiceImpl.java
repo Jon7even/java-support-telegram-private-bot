@@ -1,5 +1,7 @@
-package com.github.jon7even.service.out.producer;
+package com.github.jon7even.service.out.producer.impl;
 
+import com.github.jon7even.service.out.producer.ProducerService;
+import com.github.jon7even.service.out.producer.SenderMessageService;
 import com.github.jon7even.utils.MessageUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,15 +13,16 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import static com.github.jon7even.telegram.constants.DefaultMessageError.ERROR_TO_SEND;
 
 /**
- * Реализация сервиса для конструирования ответа для дальнейшей отправки в RabbitMq
+ * Реализация сервиса {@link SenderMessageService} для конструирования ответа для дальнейшей отправки в RabbitMq
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class SenderMessageServiceImpl implements SenderMessageService {
+
     private final ProducerService producerService;
 
     @Override

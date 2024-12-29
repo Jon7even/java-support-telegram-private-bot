@@ -4,7 +4,7 @@ package com.github.jon7even.telegram;
  * Перечисление текущего состояния бота для конкретного пользователя
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  */
 public enum BotState {
     /**

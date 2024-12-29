@@ -2,7 +2,6 @@ package com.github.jon7even.service;
 
 import com.github.jon7even.cache.UserDataCache;
 import com.github.jon7even.entity.company.CompanyEntity;
-import com.github.jon7even.repository.CompanyRepository;
 import com.github.jon7even.repository.UserRepository;
 import com.github.jon7even.service.in.message.ReplyMessageService;
 import com.github.jon7even.service.out.producer.SenderMessageService;

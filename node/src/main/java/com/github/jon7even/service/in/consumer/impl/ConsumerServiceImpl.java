@@ -1,6 +1,7 @@
-package com.github.jon7even.service.in.consumer;
+package com.github.jon7even.service.in.consumer.impl;
 
 import com.github.jon7even.service.MainService;
+import com.github.jon7even.service.in.consumer.ConsumerService;
 import com.github.jon7even.service.out.producer.SenderMessageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,21 +9,28 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import static com.github.jon7even.configuration.RabbitQueue.*;
+import static com.github.jon7even.configuration.RabbitQueue.AUDIO_MESSAGE_UPDATE;
+import static com.github.jon7even.configuration.RabbitQueue.CALLBACK_QUERY_UPDATE;
+import static com.github.jon7even.configuration.RabbitQueue.DOC_MESSAGE_UPDATE;
+import static com.github.jon7even.configuration.RabbitQueue.PHOTO_MESSAGE_UPDATE;
+import static com.github.jon7even.configuration.RabbitQueue.TEXT_MESSAGE_UPDATE;
 import static com.github.jon7even.telegram.constants.DefaultMessageError.ERROR_RECEIVE;
+import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend.ERROR_TO_EXECUTION_FOR_USER;
 import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend.WE_NOT_SUPPORT;
 
 /**
- * Реализация сервиса слушателя входящих сообщений от Telegram
+ * Реализация сервиса слушателя входящих сообщений от API Telegram {@link ConsumerService}
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ConsumerServiceImpl implements ConsumerService {
+
     private final MainService mainService;
+
     private final SenderMessageService senderMessageService;
 
     @Override
@@ -34,7 +42,7 @@ public class ConsumerServiceImpl implements ConsumerService {
             mainService.processTextMessage(update);
         } catch (RuntimeException exception) {
             senderMessageService.sendError(update.getMessage().getChatId(), ERROR_RECEIVE);
-            log.error("Произошла ошибка в процессе ответа пользователю Error: {}", exception.getMessage());
+            log.error("{} {}", ERROR_TO_EXECUTION_FOR_USER, exception.getMessage());
         }
     }
 
@@ -47,7 +55,7 @@ public class ConsumerServiceImpl implements ConsumerService {
             mainService.processCallbackQuery(update);
         } catch (RuntimeException exception) {
             senderMessageService.sendError(update.getMessage().getChatId(), ERROR_RECEIVE);
-            log.error("Произошла ошибка в процессе ответа пользователю Error: {}", exception.getMessage());
+            log.error("{} {}", ERROR_TO_EXECUTION_FOR_USER, exception.getMessage());
         }
     }
 
@@ -56,7 +64,7 @@ public class ConsumerServiceImpl implements ConsumerService {
     public void consumeDocMessageUpdates(Update update) {
         log.info("Получена новая DOC очередь doc={}", update);
         senderMessageService.sendError(update.getMessage().getChatId(), ERROR_RECEIVE);
-        log.error("Произошла ошибка в процессе ответа пользователю Error: {}", WE_NOT_SUPPORT);
+        log.error("{} {}", ERROR_TO_EXECUTION_FOR_USER, WE_NOT_SUPPORT);
     }
 
     @Override
@@ -64,7 +72,7 @@ public class ConsumerServiceImpl implements ConsumerService {
     public void consumePhotoMessageUpdates(Update update) {
         log.info("Получена новая PHOTO очередь photo={}", update);
         senderMessageService.sendError(update.getMessage().getChatId(), ERROR_RECEIVE);
-        log.error("Произошла ошибка в процессе ответа пользователю Error: {}", WE_NOT_SUPPORT);
+        log.error("{} {}", ERROR_TO_EXECUTION_FOR_USER, WE_NOT_SUPPORT);
     }
 
     @Override
@@ -72,6 +80,6 @@ public class ConsumerServiceImpl implements ConsumerService {
     public void consumeAudioMessageUpdates(Update update) {
         log.info("Получена новая AUDIO очередь audio={}", update);
         senderMessageService.sendError(update.getMessage().getChatId(), ERROR_RECEIVE);
-        log.error("Произошла ошибка в процессе ответа пользователю Error: {}", WE_NOT_SUPPORT);
+        log.error("{} {}", ERROR_TO_EXECUTION_FOR_USER, WE_NOT_SUPPORT);
     }
 }

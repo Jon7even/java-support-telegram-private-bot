@@ -6,10 +6,12 @@ import lombok.AllArgsConstructor;
  * Перечисление возможных команд меню Подарки(GIFTS)
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  */
+@Deprecated
 @AllArgsConstructor
 public enum MenuGift {
+
     /**
      * Добавить новую компанию
      */

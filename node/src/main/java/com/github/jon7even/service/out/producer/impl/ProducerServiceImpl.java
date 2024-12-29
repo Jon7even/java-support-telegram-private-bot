@@ -1,5 +1,7 @@
-package com.github.jon7even.service.out.producer;
+package com.github.jon7even.service.out.producer.impl;
 
+import com.github.jon7even.service.out.producer.ProducerService;
+import com.github.jon7even.service.out.producer.SenderMessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.annotation.Lazy;
@@ -10,17 +12,24 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageTe
 import static com.github.jon7even.configuration.RabbitQueue.ANSWER_MESSAGE;
 import static com.github.jon7even.telegram.constants.DefaultMessageError.ERROR_SEND_TEXT;
 
+/**
+ * Реализация сервиса {@link ProducerService} для отправки ответов в RabbitMq для дальнейшей обработки диспетчером
+ *
+ * @author Jon7even
+ * @version 2.0
+ */
 @Slf4j
 @Service
 public class ProducerServiceImpl implements ProducerService {
+
     private final RabbitTemplate rabbitTemplate;
+
     private final SenderMessageService senderMessageService;
 
     public ProducerServiceImpl(RabbitTemplate rabbitTemplate, @Lazy SenderMessageService senderMessageService) {
         this.rabbitTemplate = rabbitTemplate;
         this.senderMessageService = senderMessageService;
     }
-
 
     @Override
     public void producerAnswerText(SendMessage sendMessage) {

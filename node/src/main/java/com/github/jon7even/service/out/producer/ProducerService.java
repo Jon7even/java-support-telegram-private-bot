@@ -7,10 +7,11 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageTe
  * Интерфейс сервиса для отправки ответов в RabbitMq для дальнейшей обработки диспетчером
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  * @apiNote Основная точка отправления данных из сервиса "Узел"
  */
 public interface ProducerService {
+
     /**
      * Метод отправляющий ответ в виде текстового сообщения
      */
