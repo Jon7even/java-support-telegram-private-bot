@@ -72,12 +72,12 @@ spring:
     password: test_password
     hikari:
       schema: bot
-      connection-timeout: 5000
-      maximum-pool-size: 7
+      connection-timeout: 30000
+      maximum-pool-size: 10
       minimum-idle: 3
-      idle-timeout: 30000
-      max-lifetime: 777777
-      connection-test-timeout: 1777
+      idle-timeout: 37777
+      max-lifetime: 1800777
+      connection-test-timeout: 5000
       pool-name: DispatcherPoolTest
-      validation-timeout: 2777
-      leak-detection-threshold: 1777
+      validation-timeout: 3777
+      leak-detection-threshold: 2777

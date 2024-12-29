@@ -25,6 +25,11 @@ services:
       - POSTGRES_PASSWORD=${DB_PASS}
     networks:
       - local
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   rabbitmq-service:
     container_name: rabbitmq-service
@@ -39,6 +44,13 @@ services:
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
     restart: unless-stopped
+    networks:
+      - local
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 7s
+      retries: 10
 
   tbp-dispatcher:
     container_name: tbp-dispatcher-service
@@ -46,11 +58,10 @@ services:
       - .env
     build: dispatcher/
     depends_on:
-      - postgres-service
-      - rabbitmq-service
-    links:
-      - postgres-service
-      - rabbitmq-service
+      postgres-service:
+        condition: service_healthy
+      rabbitmq-service:
+        condition: service_healthy
     restart: on-failure
     ports:
       - "${SERVER_EXTERNAL_PORT_DISPATCHER}:8080"
@@ -63,9 +74,6 @@ services:
 #      - .env
 #    build: node/
 #    depends_on:
-#      - postgres-service
-#      - rabbitmq-service
-#    links:
 #      - postgres-service
 #      - rabbitmq-service
 #    restart: on-failure
