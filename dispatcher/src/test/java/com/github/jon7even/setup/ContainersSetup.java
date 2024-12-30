@@ -24,6 +24,5 @@ public class ContainersSetup extends PreparationForTests {
     @Container
     @ServiceConnection
     static RabbitMQContainer rabbitMQ =
-            new RabbitMQContainer("rabbitmq:3.11.9-management-alpine")
-                    .withExposedPorts(5672, 15672);
+            new RabbitMQContainer("rabbitmq:3.11.9-management-alpine");
 }
