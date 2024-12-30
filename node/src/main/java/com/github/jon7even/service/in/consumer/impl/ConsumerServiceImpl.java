@@ -1,6 +1,6 @@
 package com.github.jon7even.service.in.consumer.impl;
 
-import com.github.jon7even.service.MainService;
+import com.github.jon7even.service.in.handle.HandlerService;
 import com.github.jon7even.service.in.consumer.ConsumerService;
 import com.github.jon7even.service.out.producer.SenderMessageService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend
 @RequiredArgsConstructor
 public class ConsumerServiceImpl implements ConsumerService {
 
-    private final MainService mainService;
+    private final HandlerService mainService;
 
     private final SenderMessageService senderMessageService;
 
