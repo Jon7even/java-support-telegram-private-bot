@@ -1,5 +1,5 @@
 server:
-  port: 7098
+  port: 7099
 
 localeTag: ru-RU
 
@@ -22,21 +22,13 @@ logging:
 
 info:
   app:
-    name: "Dispatcher Service Test"
-    description: "Service Test for handle message from Telegram"
+    name: "Node Service Test"
+    description: "Service test containing business logic for Telegram Bot"
 
 # Configuration for the 'test' profile
-bot:
-  token:
-    name: ${TELEGRAM_BOT_NAME_TEST}
-    token: ${TELEGRAM_BOT_PASS_TEST}
-  security:
-    keyPass: 7777
-    attemptsAuth: 3
-
 spring:
   application:
-    name: dispatcher
+    name: node
 
   config:
     activate:
@@ -81,11 +73,11 @@ spring:
     hikari:
       schema: bot
       connection-timeout: 30000
-      maximum-pool-size: 10
+      maximum-pool-size: 17
       minimum-idle: 3
       idle-timeout: 37777
       max-lifetime: 1800777
       connection-test-timeout: 5000
-      pool-name: DispatcherPoolTest
+      pool-name: NodePoolTest
       validation-timeout: 3777
       leak-detection-threshold: 2777

@@ -18,15 +18,15 @@ import static com.github.jon7even.configuration.RabbitQueue.TEXT_MESSAGE_UPDATE;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 
 /**
- * Проверка запуска приложения {@link DispatcherApp}
+ * Проверка запуска приложения {@link NodeApp}
  *
  * @author Jon7even
  * @version 2.0
  */
 @ActiveProfiles(value = "test")
-@SpringBootTest(classes = DispatcherApp.class)
-@DisplayName("Тестирование запуска сервиса DispatcherApp")
-class SupportBotDispatcherAppTests extends ContainersSetup {
+@SpringBootTest(classes = NodeApp.class)
+@DisplayName("Тестирование запуска сервиса NodeApp")
+class SupportBotNodeAppTests extends ContainersSetup {
 
     @Autowired
     private RabbitAdmin rabbitAdmin;
@@ -39,7 +39,7 @@ class SupportBotDispatcherAppTests extends ContainersSetup {
     @Test
     @DisplayName("Проверка загрузки приложения без исключений")
     void testMain() {
-        assertThatCode(DispatcherApp::new).doesNotThrowAnyException();
+        assertThatCode(NodeApp::new).doesNotThrowAnyException();
     }
 
     @Test

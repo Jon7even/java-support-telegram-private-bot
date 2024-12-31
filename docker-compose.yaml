@@ -68,16 +68,18 @@ services:
     networks:
       - local
 
-#  tbp-node:
-#    container_name: tbp-node-service
-#    env_file:
-#      - .env
-#    build: node/
-#    depends_on:
-#      - postgres-service
-#      - rabbitmq-service
-#    restart: on-failure
-#    ports:
-#      - "${SERVER_EXTERNAL_PORT_NODE}:8080"
-#    networks:
-#      - local
+  tbp-node:
+    container_name: tbp-node-service
+    env_file:
+      - .env
+    build: node/
+    depends_on:
+      postgres-service:
+        condition: service_healthy
+      rabbitmq-service:
+        condition: service_healthy
+    restart: on-failure
+    ports:
+      - "${SERVER_EXTERNAL_PORT_NODE}:8080"
+    networks:
+      - local
