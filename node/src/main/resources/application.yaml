@@ -20,14 +20,26 @@ logging:
           sql:
             BasicBinder: TRACE
 
+info:
+  app:
+    name: "Node Service"
+    description: "Service containing business logic for Telegram Bot"
+
 # Configuration for the 'ci' profile
+
 spring:
+  application:
+    name: node
+
   config:
     activate:
       on-profile: ci
 
   liquibase:
     enabled: true
+    liquibase-schema: public
+    default-schema: ${SCHEMA_APP}
+    change-log: classpath:db/changelog/changelog-master.xml
 
   main:
     banner-mode: off
@@ -38,9 +50,12 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate
     properties:
-      hibernate.format_sql: true
+      hibernate:
+        format_sql: true
+        default-schema: ${SCHEMA_APP}
+    show-sql: true
     open-in-view: false
 
   rabbitmq:
@@ -55,61 +70,13 @@ spring:
     username: ${DB_USER}
     password: ${DB_PASS}
     hikari:
-      connection-timeout: 270
----
-# Configuration for the 'test' profile
-server:
-  port: ${SERVER_TEST_PORT_NODE}
-
-localeTag: ${LOCALE_TAG}
-
-logging:
-  level:
-    com:
-      github:
-        jon7even: DEBUG
-    org:
-      springframework:
-        orm:
-          jpa: DEBUG
-          JpaTransactionManager: DEBUG
-        transaction: DEBUG
-      hibernate:
-        SQL: DEBUG
-        type.descriptor:
-          sql:
-            BasicBinder: DEBUG
-
-spring:
-  config:
-    activate:
-      on-profile: test
-
-  liquibase:
-    enabled: true
-
-  jpa:
-    hibernate:
-      ddl-auto: validate
-      database-platform: org.hibernate.dialect.H2Dialect
-    show-sql: true
-    properties:
-      hibernate:
-        use_sql_comments: true
-        format_sql: true
-  h2:
-    console:
-      enabled: true
-      path: /console
-
-  rabbitmq:
-    host: ${RABBIT_HOST_TEST}
-    port: ${RABBIT_AMQP_PORT_LOCAL_TEST}
-    username: ${RABBIT_USER_TEST}
-    password: ${RABBIT_PASS_TEST}
-
-  datasource:
-    driverClassName: org.h2.Driver
-    url: jdbc:h2:mem:mainserver
-    username: test
-    password: test
+      schema: ${SCHEMA_APP}
+      connection-timeout: 30000
+      maximum-pool-size: 17
+      minimum-idle: 3
+      idle-timeout: 37777
+      max-lifetime: 1800777
+      connection-test-timeout: 5000
+      pool-name: NodePoolCi
+      validation-timeout: 3777
+      leak-detection-threshold: 2777

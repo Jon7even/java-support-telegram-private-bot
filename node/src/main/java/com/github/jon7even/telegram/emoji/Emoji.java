@@ -7,10 +7,11 @@ import lombok.AllArgsConstructor;
  * Перечисление смайликов, которые поддерживаются ботом
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  */
 @AllArgsConstructor
 public enum Emoji {
+
     /**
      * Улыбка с румянцем
      */

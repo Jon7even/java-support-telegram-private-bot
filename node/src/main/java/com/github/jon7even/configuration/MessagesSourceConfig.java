@@ -9,11 +9,12 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
  * Загрузка конфигурации языковой поддержки приложения
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  * @apiNote файл конфигурации языковой поддержки называется messages_ru_RU.properties, в нем находится RU локализация
  */
 @Configuration
 public class MessagesSourceConfig {
+
     @Bean
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();

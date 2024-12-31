@@ -1,6 +1,5 @@
 package com.github.jon7even.cache;
 
-import com.github.jon7even.dto.company.CompanyBuildingDto;
 import com.github.jon7even.telegram.BotState;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -8,25 +7,20 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 
 /**
- * Реализация сервиса кеширования пользователей
+ * Реализация сервиса кэширования пользователей {@link UserDataCache}
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  */
 @Component
 @RequiredArgsConstructor
 public class UserDataCacheImpl implements UserDataCache {
+
     private final HashMap<Long, BotState> botStatesOfUsers;
-    private final HashMap<Long, CompanyBuildingDto> companiesOfUsers;
 
     @Override
     public void setBotStateForCacheUser(Long userId, BotState botState) {
         botStatesOfUsers.put(userId, botState);
-    }
-
-    @Override
-    public void setCompanyForCacheUser(Long userId, CompanyBuildingDto companyBuildingDto) {
-        companiesOfUsers.put(userId, companyBuildingDto);
     }
 
     @Override
@@ -38,16 +32,5 @@ public class UserDataCacheImpl implements UserDataCache {
         }
 
         return state;
-    }
-
-    @Override
-    public CompanyBuildingDto getCompanyFromCache(Long userId) {
-        CompanyBuildingDto companyBuildingDto = companiesOfUsers.get(userId);
-
-        if (companyBuildingDto == null) {
-            companyBuildingDto = CompanyBuildingDto.builder().build();
-        }
-
-        return companyBuildingDto;
     }
 }

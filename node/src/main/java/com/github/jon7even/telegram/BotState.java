@@ -4,23 +4,27 @@ package com.github.jon7even.telegram;
  * Перечисление текущего состояния бота для конкретного пользователя
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  */
 public enum BotState {
+
     /**
-     * Статусы главного меню
+     * Статус главного меню
      */
     MAIN_START,
+
+    /**
+     * Статус меню помощи
+     */
     MAIN_HELP,
-    MAIN_ITEMS,
+
+    /**
+     * Статус меню подарков
+     */
     MAIN_GIFTS,
 
     /**
-     * Статусы добавления новой компании
+     * Статус меню работы с нейросетями
      */
-    COMPANY_NAME,
-    COMPANY_SUM,
-    COMPANY_TYPE_GIFT,
-    COMPANY_IS_GIVEN,
-    COMPANY_IS_DONE;
+    MAIN_ASK;
 }

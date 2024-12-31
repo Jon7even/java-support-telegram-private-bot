@@ -3,13 +3,14 @@ package com.github.jon7even.service.in.consumer;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 /**
- * Интерфейс сервиса слушателя очередей RabbitMq входящих сообщений от Telegram для их дальнейшей обработки
+ * Интерфейс сервиса слушателя очередей RabbitMq входящих сообщений от API Telegram для их дальнейшей обработки
  *
  * @author Jon7even
- * @version 1.0
+ * @version 2.0
  * @apiNote Основная точка поступления данных в сервис "Узел"
  */
 public interface ConsumerService {
+
     /**
      * Метод для обработки входящих текстовых сообщений
      */
