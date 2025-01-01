@@ -51,14 +51,4 @@
 
     </dependencies>
 
-    <dependencies>
-
-        <dependency>
-            <groupId>org.telegram</groupId>
-            <artifactId>telegrambots-spring-boot-starter</artifactId>
-            <version>${telegram.version}</version>
-        </dependency>
-
-    </dependencies>
-
 </project>
