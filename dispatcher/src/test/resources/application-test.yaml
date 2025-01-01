@@ -32,7 +32,7 @@ bot:
     token: ${TELEGRAM_BOT_PASS_TEST}
   security:
     keyPass: 7777
-    attemptsAuth: 3
+    attemptsAuth: 2
 
 spring:
   application:
