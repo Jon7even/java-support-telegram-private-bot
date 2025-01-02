@@ -34,6 +34,8 @@ public class SenderBotClient extends OkHttpTelegramClient {
             } catch (TelegramApiException exception) {
                 log.error("Произошла ошибка при отправке ответного сообщения: [{}]", exception.getMessage());
             }
+        } else {
+            log.warn("Неизвестная ошибка: произошла попытка отправки null сообщения");
         }
     }
 }
