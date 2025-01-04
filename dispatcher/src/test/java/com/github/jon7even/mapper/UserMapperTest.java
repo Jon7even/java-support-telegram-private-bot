@@ -1,5 +1,7 @@
 package com.github.jon7even.mapper;
 
+import com.github.jon7even.dto.UserAuthFalseDto;
+import com.github.jon7even.dto.UserAuthTrueDto;
 import com.github.jon7even.dto.UserCreateDto;
 import com.github.jon7even.dto.UserUpdateDto;
 import com.github.jon7even.entity.user.UserEntity;
@@ -121,6 +123,81 @@ public class UserMapperTest extends PreparationForTests {
         softAssertions.assertThat(actualResult.getUserName())
                 .isNotNull()
                 .isEqualTo(expectedChatUser.getUserName());
+        softAssertions.assertAll();
+    }
+
+    @Test
+    @DisplayName("Должен произойти правильный маппинг UserEntity в UserAuthFalseDto")
+    public void toAuthFalseDtoFromEntity_ReturnsUserAuthFalseDto() {
+        UserEntity expectedUser = UserEntity.builder()
+                .id(1L)
+                .chatId(userEntityOne.getChatId())
+                .firstName(userEntityOne.getFirstName())
+                .lastName(userEntityOne.getLastName())
+                .userName(userEntityOne.getUserName())
+                .registeredOn(userEntityOne.getRegisteredOn())
+                .build();
+
+        UserAuthFalseDto actualResult = userMapper.toAuthFalseDtoFromEntity(expectedUser);
+
+        SoftAssertions softAssertions = new SoftAssertions();
+
+        softAssertions.assertThat(actualResult)
+                .isNotNull();
+        softAssertions.assertThat(actualResult.getId())
+                .isNotNull()
+                .isEqualTo(expectedUser.getId());
+        softAssertions.assertThat(actualResult.getChatId())
+                .isNotNull()
+                .isEqualTo(expectedUser.getChatId());
+        softAssertions.assertThat(actualResult.getFirstName())
+                .isNotNull()
+                .isEqualTo(expectedUser.getFirstName());
+        softAssertions.assertThat(actualResult.getLastName())
+                .isNotNull()
+                .isEqualTo(expectedUser.getLastName());
+        softAssertions.assertThat(actualResult.getUserName())
+                .isNotNull()
+                .isEqualTo(expectedUser.getUserName());
+        softAssertions.assertThat(actualResult.getAttemptAuth())
+                .isNotNull()
+                .isEqualTo(0L);
+        softAssertions.assertAll();
+    }
+
+    @Test
+    @DisplayName("Должен произойти правильный маппинг UserEntity в UserAuthTrueDto")
+    public void toAuthTrueDtoFromEntity_ReturnsUserAuthFalseDto() {
+        UserEntity expectedUser = UserEntity.builder()
+                .id(1L)
+                .chatId(userEntityOne.getChatId())
+                .firstName(userEntityOne.getFirstName())
+                .lastName(userEntityOne.getLastName())
+                .userName(userEntityOne.getUserName())
+                .registeredOn(userEntityOne.getRegisteredOn())
+                .build();
+
+        UserAuthTrueDto actualResult = userMapper.toAuthTrueDtoFromEntity(expectedUser);
+
+        SoftAssertions softAssertions = new SoftAssertions();
+
+        softAssertions.assertThat(actualResult)
+                .isNotNull();
+        softAssertions.assertThat(actualResult.getId())
+                .isNotNull()
+                .isEqualTo(expectedUser.getId());
+        softAssertions.assertThat(actualResult.getChatId())
+                .isNotNull()
+                .isEqualTo(expectedUser.getChatId());
+        softAssertions.assertThat(actualResult.getFirstName())
+                .isNotNull()
+                .isEqualTo(expectedUser.getFirstName());
+        softAssertions.assertThat(actualResult.getLastName())
+                .isNotNull()
+                .isEqualTo(expectedUser.getLastName());
+        softAssertions.assertThat(actualResult.getUserName())
+                .isNotNull()
+                .isEqualTo(expectedUser.getUserName());
         softAssertions.assertAll();
     }
 }
