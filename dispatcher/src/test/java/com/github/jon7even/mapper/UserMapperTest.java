@@ -12,8 +12,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.objects.chat.Chat;
 
-import java.time.LocalDateTime;
-
 /**
  * Тестирование маппера {@link UserMapperImpl}
  *
@@ -35,7 +33,7 @@ public class UserMapperTest extends PreparationForTests {
     @Test
     @DisplayName("Должен произойти правильный маппинг UserCreateDto в UserEntity для сохранения нового юзера в БД")
     public void toEntityFromCreateDto_ReturnsUserEntityWithNotId() {
-        UserEntity actualResult = userMapper.toEntityFromCreateDto(userCreateDtoOne, LocalDateTime.now());
+        UserEntity actualResult = userMapper.toEntityFromCreateDto(userCreateDtoOne);
 
         SoftAssertions softAssertions = new SoftAssertions();
 
