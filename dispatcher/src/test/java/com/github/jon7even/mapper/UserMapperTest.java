@@ -200,4 +200,52 @@ public class UserMapperTest extends PreparationForTests {
                 .isEqualTo(expectedUser.getUserName());
         softAssertions.assertAll();
     }
+
+    @Test
+    @DisplayName("Должен произойти правильный маппинг UserEntity из полей UserUpdateDto")
+    public void updateUserEntityFromDtoUpdate_updatedUserEntity() {
+        UserEntity actualUserFromUpdate = UserEntity.builder()
+                .id(1L)
+                .chatId(userEntityOne.getChatId())
+                .firstName(userEntityOne.getFirstName())
+                .lastName(userEntityOne.getLastName())
+                .userName(userEntityOne.getUserName())
+                .authorization(false)
+                .registeredOn(userEntityOne.getRegisteredOn())
+                .build();
+
+        Long notValidTelegramId = 0L;
+
+        UserUpdateDto expectedUserUpdateDto = UserUpdateDto.builder()
+                .chatId(notValidTelegramId)
+                .firstName("Updated FirstName")
+                .lastName("Updated FirstLastName")
+                .userName("Updated FirstUserName")
+                .build();
+
+        userMapper.updateUserEntityFromDtoUpdate(actualUserFromUpdate, expectedUserUpdateDto, true);
+
+        SoftAssertions softAssertions = new SoftAssertions();
+
+        softAssertions.assertThat(actualUserFromUpdate)
+                .isNotNull();
+        softAssertions.assertThat(actualUserFromUpdate.getId())
+                .isNotNull();
+        softAssertions.assertThat(actualUserFromUpdate.getChatId())
+                .isNotNull()
+                .isNotEqualTo(notValidTelegramId);
+        softAssertions.assertThat(actualUserFromUpdate.getFirstName())
+                .isNotNull()
+                .isEqualTo(expectedUserUpdateDto.getFirstName());
+        softAssertions.assertThat(actualUserFromUpdate.getLastName())
+                .isNotNull()
+                .isEqualTo(expectedUserUpdateDto.getLastName());
+        softAssertions.assertThat(actualUserFromUpdate.getUserName())
+                .isNotNull()
+                .isEqualTo(expectedUserUpdateDto.getUserName());
+        softAssertions.assertThat(actualUserFromUpdate.getAuthorization())
+                .isNotNull()
+                .isEqualTo(true);
+        softAssertions.assertAll();
+    }
 }
