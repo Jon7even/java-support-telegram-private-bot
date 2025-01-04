@@ -40,10 +40,10 @@ public interface UserMapper {
     @Mapping(source = "userCreateDto.firstName", target = "firstName")
     @Mapping(source = "userCreateDto.lastName", target = "lastName")
     @Mapping(source = "userCreateDto.userName", target = "userName")
-    @Mapping(source = "now", target = "registeredOn")
+    @Mapping(target = "registeredOn", expression = "java(java.time.OffsetDateTime.now().toLocalDateTime())")
     @Mapping(constant = "false", target = "authorization")
     @Mapping(target = "updatedOn", ignore = true)
-    UserEntity toEntityFromCreateDto(UserCreateDto userCreateDto, LocalDateTime now);
+    UserEntity toEntityFromCreateDto(UserCreateDto userCreateDto);
 
     @Mapping(source = "userEntity.id", target = "id")
     @Mapping(source = "userEntity.chatId", target = "chatId")
@@ -69,10 +69,9 @@ public interface UserMapper {
     @Mapping(source = "userUpdateDto.lastName", target = "lastName")
     @Mapping(source = "userUpdateDto.userName", target = "userName")
     @Mapping(target = "registeredOn", ignore = true)
-    @Mapping(source = "now", target = "updatedOn")
+    @Mapping(target = "updatedOn", expression = "java(java.time.OffsetDateTime.now().toLocalDateTime())")
     @Mapping(source = "isAuthorization", target = "authorization")
     void updateUserEntityFromDtoUpdate(@MappingTarget UserEntity userEntity,
                                        UserUpdateDto userUpdateDto,
-                                       LocalDateTime now,
                                        boolean isAuthorization);
 }

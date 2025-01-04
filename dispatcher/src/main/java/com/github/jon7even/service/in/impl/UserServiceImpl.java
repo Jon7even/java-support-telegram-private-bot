@@ -37,7 +37,8 @@ public class UserServiceImpl implements UserService {
     public UserAuthFalseDto createUser(UserCreateDto userCreateDto) {
         if (!isExistUserByChatId(userCreateDto.getChatId())) {
             log.trace("Начинаю сохранять нового пользователя, данные для сохранения [userCreateDto={}]", userCreateDto);
-            UserEntity userForSaveInRepository = userMapper.toEntityFromCreateDto(userCreateDto, LocalDateTime.now());
+            UserEntity userForSaveInRepository = userMapper.toEntityFromCreateDto(userCreateDto);
+
             UserEntity createdUserFromRepository = userRepository.save(userForSaveInRepository);
             log.trace("Новый пользователь сохранен в БД [userEntity]={}", createdUserFromRepository);
             return userMapper.toAuthFalseDtoFromEntity(createdUserFromRepository);
@@ -55,10 +56,10 @@ public class UserServiceImpl implements UserService {
         if (userFromRepository.isPresent()) {
             UserEntity userForUpdateInRepository = userFromRepository.get();
             log.debug("Объединяю данные в сущности");
-            userMapper.updateUserEntityFromDtoUpdate(
-                    userForUpdateInRepository, userUpdateDto, LocalDateTime.now(), false
-            );
+
+            userMapper.updateUserEntityFromDtoUpdate(userForUpdateInRepository, userUpdateDto, false);
             log.debug("Сохраняю обновленные данные пользователя [UserEntity={}]", userForUpdateInRepository);
+
             UserEntity userUpdatedFromRepository = userRepository.save(userForUpdateInRepository);
             log.debug("Пользователь обновлен [UserEntity={}]", userUpdatedFromRepository);
             return userMapper.toAuthFalseDtoFromEntity(userUpdatedFromRepository);
