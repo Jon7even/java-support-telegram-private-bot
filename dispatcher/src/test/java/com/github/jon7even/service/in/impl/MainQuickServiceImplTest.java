@@ -92,4 +92,28 @@ public class MainQuickServiceImplTest {
                 .isNotNull()
                 .isEqualTo(expectedMessageId);
     }
+
+    @Test
+    @DisplayName("Если введена базовая команда должен вернуть true")
+    public void existsBaseCommand_ReturnsTrue() {
+        String commandForChecking = "/start";
+        boolean expectedResult = true;
+
+        boolean actualResponse = mainQuickService.existsBaseCommand(commandForChecking);
+
+        assertThat(actualResponse)
+                .isEqualTo(expectedResult);
+    }
+
+    @Test
+    @DisplayName("Если не введена базовая команда должен вернуть false")
+    public void existsBaseCommand_ReturnsFalse() {
+        String commandForChecking = "/test";
+        boolean expectedResult = false;
+
+        boolean actualResponse = mainQuickService.existsBaseCommand(commandForChecking);
+
+        assertThat(actualResponse)
+                .isEqualTo(expectedResult);
+    }
 }
