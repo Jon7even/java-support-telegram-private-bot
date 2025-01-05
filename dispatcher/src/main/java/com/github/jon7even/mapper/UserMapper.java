@@ -12,8 +12,6 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.telegram.telegrambots.meta.api.objects.chat.Chat;
 
-import java.time.LocalDateTime;
-
 /**
  * Интерфейс для маппинга DTO и сущностей пользователя
  *
@@ -74,4 +72,15 @@ public interface UserMapper {
     void updateUserEntityFromDtoUpdate(@MappingTarget UserEntity userEntity,
                                        UserUpdateDto userUpdateDto,
                                        boolean isAuthorization);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "chatId", ignore = true)
+    @Mapping(target = "firstName", ignore = true)
+    @Mapping(target = "lastName", ignore = true)
+    @Mapping(target = "userName", ignore = true)
+    @Mapping(target = "registeredOn", ignore = true)
+    @Mapping(target = "updatedOn", expression = "java(java.time.OffsetDateTime.now().toLocalDateTime())")
+    @Mapping(target = "authorization", constant = "true")
+    void updateUserEntitySetAuthorizationTrue(@MappingTarget UserEntity userEntity);
 }
