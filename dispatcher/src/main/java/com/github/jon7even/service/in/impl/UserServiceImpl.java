@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 /**
@@ -81,8 +80,7 @@ public class UserServiceImpl implements UserService {
 
         if (userForSetAuthorizationTrue.isEmpty() || !userForSetAuthorizationTrue.get().getAuthorization()) {
             UserEntity userForUpdate = userForSetAuthorizationTrue.get();
-            userForUpdate.setAuthorization(true);
-            userForUpdate.setUpdatedOn(LocalDateTime.now());
+            userMapper.updateUserEntitySetAuthorizationIsTrue(userForUpdate);
 
             UserEntity updatedUserFromRepository = userRepository.save(userForUpdate);
             log.trace("Пользователь обновлен в БД и прошел авторизацию [userEntity]={}", updatedUserFromRepository);
