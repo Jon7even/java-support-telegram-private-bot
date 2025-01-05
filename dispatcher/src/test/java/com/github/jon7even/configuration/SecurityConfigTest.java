@@ -33,13 +33,13 @@ public class SecurityConfigTest {
     @Test
     public void testBotConfigLoading() {
         when(mockSecurityConfig.getKeyPass()).thenReturn("testPass");
-        when(mockSecurityConfig.getAttemptsAuth()).thenReturn(777);
+        when(mockSecurityConfig.getAttemptsAuth()).thenReturn(3);
 
         SoftAssertions softAssertions = new SoftAssertions();
         assertThat(mockSecurityConfig.getKeyPass())
                 .isEqualTo("testPass");
         assertThat(mockSecurityConfig.getAttemptsAuth())
-                .isEqualTo(777);
+                .isEqualTo(3);
         softAssertions.assertAll();
     }
 }
