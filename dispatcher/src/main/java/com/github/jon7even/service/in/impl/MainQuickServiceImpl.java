@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend.ERROR_TO_EXECUTION_FOR_USER;
 
 /**
@@ -23,9 +26,14 @@ import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend
 @NoArgsConstructor
 public class MainQuickServiceImpl implements MainQuickService {
 
+    private static final Set<String> BASE_COMMANDS = new HashSet<>(Set.of(
+            MainMenu.START.toString(),
+            MainMenu.HELP.toString()
+    ));
+
     @Override
-    public boolean existBaseCommand(String command) {
-        return command.equals(MainMenu.START.toString()) || command.equals(MainMenu.HELP.toString());
+    public boolean existsBaseCommand(String command) {
+        return BASE_COMMANDS.contains(command);
     }
 
     @Override

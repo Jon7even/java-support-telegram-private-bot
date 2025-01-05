@@ -85,7 +85,7 @@ public class HandleUpdateBotImpl implements HandleUpdateBot {
 
     private void processTextMessage(Update update) {
         var textMessageByUser = update.getMessage().getText();
-        boolean isBaseCommand = mainQuickService.existBaseCommand(textMessageByUser);
+        boolean isBaseCommand = mainQuickService.existsBaseCommand(textMessageByUser);
 
         if (isBaseCommand) {
             var messageForBaseCommand = mainQuickService.processQuickAnswer(update);
