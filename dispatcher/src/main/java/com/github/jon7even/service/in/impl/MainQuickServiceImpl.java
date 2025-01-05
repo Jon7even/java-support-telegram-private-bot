@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend.ERROR_TO_EXECUTION_FOR_USER;
+
 /**
  * Реализация сервиса быстрой обработки основных команд бота
  *
@@ -31,13 +33,14 @@ public class MainQuickServiceImpl implements MainQuickService {
         String answer = "";
 
         switch (update.getMessage().getText()) {
-            case "/start":
-                answer = DefaultBaseMessagesToSend.START_TEXT;
-                break;
             case "/help":
                 answer = DefaultBaseMessagesToSend.HELP_TEXT;
                 break;
+            case "/start":
+                answer = DefaultBaseMessagesToSend.START_TEXT;
+                break;
             default:
+                answer = ERROR_TO_EXECUTION_FOR_USER;
                 log.error("Произошел сбой сервиса диспетчера первичной обработки!");
         }
         return MessageUtils.buildAnswerWithMessage(update.getMessage(), answer);

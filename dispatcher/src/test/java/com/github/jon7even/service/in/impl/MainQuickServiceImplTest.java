@@ -13,6 +13,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.chat.Chat;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 
+import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend.ERROR_TO_EXECUTION_FOR_USER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -33,7 +34,8 @@ public class MainQuickServiceImplTest {
     private Update update;
 
     @Test
-    public void processQuickAnswer_StartCommand() {
+    @DisplayName("Должен правильно ответить на команду /start")
+    public void processQuickAnswer_ReturnsStartCommand() {
         Message messageId = Message.builder()
                 .chat(Chat.builder().id(1L).type("private").build())
                 .text("/start")
@@ -52,13 +54,34 @@ public class MainQuickServiceImplTest {
     }
 
     @Test
-    public void testProcessQuickAnswer_HelpCommand() {
+    @DisplayName("Должен правильно ответить на команду /help")
+    public void testProcessQuickAnswer_ReturnsHelpCommand() {
         Message messageId = Message.builder()
                 .chat(Chat.builder().id(1L).type("private").build())
                 .text("/help")
                 .build();
         SendMessage expectedMessageId = MessageUtils.buildAnswerWithMessage(
                 messageId, DefaultBaseMessagesToSend.HELP_TEXT
+        );
+
+        when(update.getMessage()).thenReturn(messageId);
+
+        SendMessage actualResponse = mainQuickService.processQuickAnswer(update);
+
+        assertThat(actualResponse)
+                .isNotNull()
+                .isEqualTo(expectedMessageId);
+    }
+
+    @Test
+    @DisplayName("Должен распознать неправильную команду и выдать сообщение с ошибкой")
+    public void testProcessQuickAnswer_ReturnsErrorMessage() {
+        Message messageId = Message.builder()
+                .chat(Chat.builder().id(1L).type("private").build())
+                .text("/test")
+                .build();
+        SendMessage expectedMessageId = MessageUtils.buildAnswerWithMessage(
+                messageId, ERROR_TO_EXECUTION_FOR_USER
         );
 
         when(update.getMessage()).thenReturn(messageId);
