@@ -173,10 +173,17 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     }
 
     private void registerUser(Message message) {
-        log.trace("Начинаю регистрировать пользователя с [chatId={}]", message.getChatId());
+        Long chatId = message.getChatId();
+        log.trace("Начинаю регистрировать пользователя с [chatId={}]", chatId);
         UserCreateDto userForSaveInRepository = userMapper.toDtoCreateFromMessage(message.getChat());
-        UserAuthFalseDto userFromRepository = userService.createUser(userForSaveInRepository);
-        userAuthFalseCache.saveUserInCache(userFromRepository);
+        try {
+            UserAuthFalseDto userFromRepository = userService.createUser(userForSaveInRepository);
+            userAuthFalseCache.saveUserInCache(userFromRepository);
+        } catch (AlreadyExistException exception) {
+            log.error("Сохранить пользователя не получилось: {}", exception.getErrorMessage());
+            var errorMessage = MessageUtils.buildAnswerWithText(chatId, "Произошла ошибка: вы уже в системе");
+            senderBotClient.sendAnswerMessage(errorMessage);
+        }
     }
 
     private void updateUserAfterRestartApp(Message message) {
