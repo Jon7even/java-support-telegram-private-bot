@@ -73,14 +73,8 @@ public interface UserMapper {
                                        UserUpdateDto userUpdateDto,
                                        boolean isAuthorization);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "chatId", ignore = true)
-    @Mapping(target = "firstName", ignore = true)
-    @Mapping(target = "lastName", ignore = true)
-    @Mapping(target = "userName", ignore = true)
-    @Mapping(target = "registeredOn", ignore = true)
-    @Mapping(target = "updatedOn", expression = "java(java.time.OffsetDateTime.now().toLocalDateTime())")
-    @Mapping(target = "authorization", constant = "true")
-    void updateUserEntitySetAuthorizationTrue(@MappingTarget UserEntity userEntity);
+    default void updateUserEntitySetAuthorizationIsTrue(@MappingTarget UserEntity userEntity) {
+        userEntity.setUpdatedOn(java.time.OffsetDateTime.now().toLocalDateTime());
+        userEntity.setAuthorization(true);
+    }
 }

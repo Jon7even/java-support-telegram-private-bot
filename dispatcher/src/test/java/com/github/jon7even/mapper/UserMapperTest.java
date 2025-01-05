@@ -12,6 +12,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.objects.chat.Chat;
 
+import java.time.LocalDateTime;
+
 /**
  * Тестирование маппера {@link UserMapperImpl}
  *
@@ -200,7 +202,7 @@ public class UserMapperTest extends PreparationForTests {
     }
 
     @Test
-    @DisplayName("Должен произойти правильный маппинг UserEntity из полей UserUpdateDto")
+    @DisplayName("Должен произойти правильный маппинг обновления UserEntity из полей UserUpdateDto")
     public void updateUserEntityFromDtoUpdate_updatedUserEntity() {
         UserEntity actualUserFromUpdate = UserEntity.builder()
                 .id(1L)
@@ -244,6 +246,62 @@ public class UserMapperTest extends PreparationForTests {
         softAssertions.assertThat(actualUserFromUpdate.getAuthorization())
                 .isNotNull()
                 .isEqualTo(true);
+        softAssertions.assertThat(actualUserFromUpdate.getUpdatedOn())
+                .isNotNull()
+                .isBefore(LocalDateTime.now().plusMinutes(1));
+        softAssertions.assertAll();
+    }
+
+    @Test
+    @DisplayName("Должен произойти правильный маппинг обновления UserEntity и установить поле авторизации на true")
+    public void updateUserEntitySetAuthorizationTrue_updatedUserEntityIs() {
+        UserEntity actualUserFromUpdate = UserEntity.builder()
+                .id(1L)
+                .chatId(userEntityOne.getChatId())
+                .firstName(userEntityOne.getFirstName())
+                .lastName(userEntityOne.getLastName())
+                .userName(userEntityOne.getUserName())
+                .authorization(false)
+                .registeredOn(userEntityOne.getRegisteredOn())
+                .build();
+
+        UserEntity expectedUserAfterUpdate = UserEntity.builder()
+                .id(1L)
+                .chatId(userEntityOne.getChatId())
+                .firstName(userEntityOne.getFirstName())
+                .lastName(userEntityOne.getLastName())
+                .userName(userEntityOne.getUserName())
+                .authorization(true)
+                .registeredOn(userEntityOne.getRegisteredOn())
+                .build();
+
+        userMapper.updateUserEntitySetAuthorizationIsTrue(actualUserFromUpdate);
+
+        SoftAssertions softAssertions = new SoftAssertions();
+
+        softAssertions.assertThat(actualUserFromUpdate)
+                .isNotNull();
+        softAssertions.assertThat(actualUserFromUpdate.getId())
+                .isNotNull()
+                .isEqualTo(expectedUserAfterUpdate.getId());
+        softAssertions.assertThat(actualUserFromUpdate.getChatId())
+                .isNotNull()
+                .isEqualTo(expectedUserAfterUpdate.getChatId());
+        softAssertions.assertThat(actualUserFromUpdate.getFirstName())
+                .isNotNull()
+                .isEqualTo(expectedUserAfterUpdate.getFirstName());
+        softAssertions.assertThat(actualUserFromUpdate.getLastName())
+                .isNotNull()
+                .isEqualTo(expectedUserAfterUpdate.getLastName());
+        softAssertions.assertThat(actualUserFromUpdate.getUserName())
+                .isNotNull()
+                .isEqualTo(expectedUserAfterUpdate.getUserName());
+        softAssertions.assertThat(actualUserFromUpdate.getAuthorization())
+                .isNotNull()
+                .isEqualTo(expectedUserAfterUpdate.getAuthorization());
+        softAssertions.assertThat(actualUserFromUpdate.getUpdatedOn())
+                .isNotNull()
+                .isBefore(LocalDateTime.now().plusMinutes(1));
         softAssertions.assertAll();
     }
 }
