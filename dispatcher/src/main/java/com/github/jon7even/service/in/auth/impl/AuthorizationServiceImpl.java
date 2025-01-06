@@ -81,7 +81,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         var chatIdUser = callbackQuery.getMessage().getChatId();
 
         if (userAuthTrueCache.isExistUserInCache(chatIdUser)) {
-            log.debug("Пользователь с [chatId={}] авторизован", chatIdUser);
+            log.debug("Пользователь с [chatId={}] авторизован, действие: нажатие на клавиатуру", chatIdUser);
             return true;
         } else {
             var callBackData = callbackQuery.getData();
@@ -95,7 +95,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         var chatIdUser = message.getChatId();
 
         if (userAuthTrueCache.isExistUserInCache(chatIdUser)) {
-            log.debug("Пользователь с [chatId={}] авторизован", chatIdUser);
+            log.debug("Пользователь с [chatId={}] авторизован, действие: текст в чате", chatIdUser);
             return true;
         } else {
             if (userService.isExistUserByChatId(chatIdUser)) {
@@ -120,20 +120,29 @@ public class AuthorizationServiceImpl implements AuthorizationService {
                 chatIdUser, textInChatByUser);
 
         if (textInChatByUser.equals(securityConfig.getKeyPass())) {
-            log.trace("Пользователь с [chatId={}] ввел правильный пароль, сохраняем в БД", chatIdUser);
-            UserAuthTrueDto userForSaveInCache = userService.setAuthorizationTrue(chatIdUser);
-            log.trace("Пользователь с [chatId={}] ввел правильный пароль, сохраняем в кэш", chatIdUser);
+            try {
+                log.trace("Пользователь с [chatId={}] ввел правильный пароль, сохраняем в БД", chatIdUser);
+                UserAuthTrueDto userForSaveInCache = userService.setAuthorizationTrue(chatIdUser);
+                log.trace("Пользователь с [chatId={}] ввел правильный пароль, сохраняем в кэш", chatIdUser);
 
-            userAuthTrueCache.saveUserInCache(userForSaveInCache);
-            log.trace("Пользователь с [chatId={}] ввел правильный пароль, удаляем из кэша для неавторизованных "
-                    + "пользователей", chatIdUser);
+                userAuthTrueCache.saveUserInCache(userForSaveInCache);
+                log.trace("Пользователь с [chatId={}] ввел правильный пароль, удаляем из кэша для неавторизованных "
+                        + "пользователей", chatIdUser);
 
-            userAuthFalseCache.deleteUserFromAuthCache(chatIdUser);
-            log.trace("Пользователь с [chatId={}] прошел авторизацию", chatIdUser);
+                userAuthFalseCache.deleteUserFromAuthCache(chatIdUser);
+                log.trace("Пользователь с [chatId={}] прошел авторизацию", chatIdUser);
 
-            var sendMessage = MessageUtils.buildAnswerWithText(message.getChatId(), USER_AUTH_TRUE);
-            senderBotClient.sendAnswerMessage(sendMessage);
+                var sendMessage = MessageUtils.buildAnswerWithText(message.getChatId(), USER_AUTH_TRUE);
+                senderBotClient.sendAnswerMessage(sendMessage);
+            } catch (NotFoundException exception) {
+                log.error("Авторизовать пользователя не получилось: {}", exception.getErrorMessage());
+                var errorMessage = MessageUtils.buildAnswerWithText(
+                        message.getChatId(), String.format("%s, %s", ERROR_TO_SEND, "вас нет в системе")
+                );
+                senderBotClient.sendAnswerMessage(errorMessage);
+            }
         } else {
+            log.warn("Пользователь [chatId={}] ввел пароль неправильно [pass={}]", chatIdUser, textInChatByUser);
             throw new AccessDeniedException(String.format("Authorization user with [chatId=%d]", chatIdUser));
         }
     }
@@ -168,7 +177,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         var currentAttemptsAuthUser = userAuthFalseCache.increaseAttemptAuthToCache(chatId, attemptsAuthUser);
 
         if (currentAttemptsAuthUser > securityConfig.getAttemptsAuth()) {
-            log.warn("Пользователь с [chatId={}] пытается подобраться пароль", chatId);
+            log.warn("Пользователь с [chatId={}] пытается подобрать пароль", chatId);
         }
         return currentAttemptsAuthUser;
     }
@@ -192,7 +201,15 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     private void updateUserAfterRestartApp(Message message) {
         log.trace("Начинаю обновлять пользователя с [chatId={}]", message.getChatId());
         UserUpdateDto userForUpdate = userMapper.toDtoUpdateFromMessage(message.getChat());
-        UserAuthFalseDto updatedUserFromRepository = userService.updateUser(userForUpdate);
-        userAuthFalseCache.saveUserInCache(updatedUserFromRepository);
+        try {
+            UserAuthFalseDto updatedUserFromRepository = userService.updateUser(userForUpdate);
+            userAuthFalseCache.saveUserInCache(updatedUserFromRepository);
+        } catch (NotFoundException exception) {
+            log.error("Обновить пользователя не получилось: {}", exception.getErrorMessage());
+            var errorMessage = MessageUtils.buildAnswerWithText(
+                    message.getChatId(), String.format("%s, %s", ERROR_TO_SEND, "вас нет в системе")
+            );
+            senderBotClient.sendAnswerMessage(errorMessage);
+        }
     }
 }
