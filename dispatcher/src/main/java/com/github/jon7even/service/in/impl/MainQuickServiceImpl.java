@@ -13,7 +13,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend.ERROR_TO_EXECUTION_FOR_USER;
+import static com.github.jon7even.telegram.constants.DefaultMessageLogError.ERROR_TO_EXECUTION_FOR_USER;
+import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend.ERROR_TO_SEND;
 
 /**
  * Реализация сервиса быстрой обработки основных команд бота
@@ -48,8 +49,8 @@ public class MainQuickServiceImpl implements MainQuickService {
                 answer = DefaultBaseMessagesToSend.START_TEXT;
                 break;
             default:
-                answer = ERROR_TO_EXECUTION_FOR_USER;
-                log.error("Произошел сбой сервиса диспетчера первичной обработки!");
+                answer = String.format("%s, %s", ERROR_TO_SEND, "неправильная логика сервиса обработки сообщений");
+                log.error("{} сбой сервиса диспетчера первичной обработки", ERROR_TO_EXECUTION_FOR_USER);
         }
         return MessageUtils.buildAnswerWithMessage(update.getMessage(), answer);
     }

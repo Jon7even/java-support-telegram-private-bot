@@ -23,6 +23,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 
 import static com.github.jon7even.telegram.constants.DefaultBaseMessagesToSend.USER_AUTH_TRUE;
+import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend.ERROR_TO_SEND;
 
 /**
  * Реализация сервиса авторизации пользователей
@@ -181,7 +182,9 @@ public class AuthorizationServiceImpl implements AuthorizationService {
             userAuthFalseCache.saveUserInCache(userFromRepository);
         } catch (AlreadyExistException exception) {
             log.error("Сохранить пользователя не получилось: {}", exception.getErrorMessage());
-            var errorMessage = MessageUtils.buildAnswerWithText(chatId, "Произошла ошибка: вы уже в системе");
+            var errorMessage = MessageUtils.buildAnswerWithText(
+                    chatId, String.format("%s, %s", ERROR_TO_SEND, "вы уже в системе")
+            );
             senderBotClient.sendAnswerMessage(errorMessage);
         }
     }

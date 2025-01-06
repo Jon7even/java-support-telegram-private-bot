@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.chat.Chat;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 
-import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend.ERROR_TO_EXECUTION_FOR_USER;
+import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend.ERROR_TO_SEND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -81,7 +81,7 @@ public class MainQuickServiceImplTest {
                 .text("/test")
                 .build();
         SendMessage expectedMessageId = MessageUtils.buildAnswerWithMessage(
-                messageId, ERROR_TO_EXECUTION_FOR_USER
+                messageId, String.format("%s, %s", ERROR_TO_SEND, "неправильная логика сервиса обработки сообщений")
         );
 
         when(update.getMessage()).thenReturn(messageId);

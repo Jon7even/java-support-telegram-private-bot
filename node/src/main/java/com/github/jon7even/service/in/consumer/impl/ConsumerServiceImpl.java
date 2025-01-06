@@ -1,7 +1,7 @@
 package com.github.jon7even.service.in.consumer.impl;
 
-import com.github.jon7even.service.in.handle.HandlerService;
 import com.github.jon7even.service.in.consumer.ConsumerService;
+import com.github.jon7even.service.in.handle.HandlerService;
 import com.github.jon7even.service.out.producer.SenderMessageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,8 +14,8 @@ import static com.github.jon7even.configuration.RabbitQueue.CALLBACK_QUERY_UPDAT
 import static com.github.jon7even.configuration.RabbitQueue.DOC_MESSAGE_UPDATE;
 import static com.github.jon7even.configuration.RabbitQueue.PHOTO_MESSAGE_UPDATE;
 import static com.github.jon7even.configuration.RabbitQueue.TEXT_MESSAGE_UPDATE;
-import static com.github.jon7even.telegram.constants.DefaultMessageError.ERROR_RECEIVE;
-import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend.ERROR_TO_EXECUTION_FOR_USER;
+import static com.github.jon7even.telegram.constants.DefaultMessageLogError.ERROR_TO_EXECUTION_FOR_USER;
+import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend.ERROR_RECEIVE;
 import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend.WE_NOT_SUPPORT;
 
 /**
