@@ -156,6 +156,10 @@ public class AuthorizationServiceImpl implements AuthorizationService {
                     + "пользователя с [chatId={}]", chatId);
             try {
                 updateUserAfterRestartApp(message);
+                var warnMessageAfterRestartApp = MessageUtils.buildAnswerWithText(
+                        chatId, "Ваша сессия истекла, пожалуйста введите пароль для новой авторизации"
+                );
+                senderBotClient.sendAnswerMessage(warnMessageAfterRestartApp);
             } catch (NotFoundException exception) {
                 log.warn("Проверьте логи приложения, произошла неправильная работа приложения, пользователь "
                         + "с [chatId={}] не существует", chatId);

@@ -17,13 +17,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.chat.Chat;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 
 import static com.github.jon7even.telegram.constants.DefaultBaseMessagesToSend.USER_AUTH_TRUE;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -44,7 +47,6 @@ public class AuthorizationServiceImplTest extends PreparationForTests {
     @Mock
     private UserService userService;
 
-    @Mock
     private SecurityConfig securityConfig;
 
     @Mock
@@ -64,11 +66,14 @@ public class AuthorizationServiceImplTest extends PreparationForTests {
 
     private final String pass = "testPass";
 
+    private final int maxAttempts = 3;
+
     @BeforeEach
     void setUp() {
         initUserDto();
-        when(securityConfig.getKeyPass()).thenReturn(pass);
-        when(securityConfig.getAttemptsAuth()).thenReturn(2);
+        securityConfig = new SecurityConfig();
+        securityConfig.setKeyPass(pass);
+        securityConfig.setAttemptsAuth(maxAttempts);
         authorizationService = new AuthorizationServiceImpl(
                 userService, userMapper, userAuthFalseCache, userAuthTrueCache, securityConfig, senderBotClient
         );
@@ -125,5 +130,277 @@ public class AuthorizationServiceImplTest extends PreparationForTests {
         verify(userAuthTrueCache, times(1)).saveUserInCache(userAuthTrueDtoOne);
         verify(userAuthFalseCache, times(1)).deleteUserFromAuthCache(chatId);
         verify(senderBotClient, times(1)).sendAnswerMessage(expectedMessage);
+    }
+
+    @Test
+    @DisplayName("Существующий пользователь первый раз ошибся, но второй раз ввел правильный пароль и авторизовался")
+    void processAuthorization_WhenExistsUserSetValidPassAfterFirstAttempt_ReturnsTrue() {
+        boolean expectedResult = true;
+        long chatId = userCreateDtoOne.getChatId();
+        int attemptsAuthUser = 1;
+        Message testMessage = Message.builder()
+                .chat(Chat.builder()
+                        .id(chatId)
+                        .type("private")
+                        .firstName(userCreateDtoOne.getFirstName())
+                        .lastName(userCreateDtoOne.getLastName())
+                        .userName(userCreateDtoOne.getLastName())
+                        .build())
+                .text(pass)
+                .build();
+        SendMessage expectedMessage = MessageUtils.buildAnswerWithText(testMessage.getChatId(), USER_AUTH_TRUE);
+
+        when(update.hasMessage()).thenReturn(true);
+        when(update.getMessage()).thenReturn(testMessage);
+        when(userAuthTrueCache.isExistUserInCache(chatId)).thenReturn(false);
+        when(userService.isExistUserByChatId(chatId)).thenReturn(true);
+        when(userAuthFalseCache.isExistUserInCache(chatId)).thenReturn(true);
+        when(userAuthFalseCache.getAttemptsAuthFromCache(chatId)).thenReturn(attemptsAuthUser);
+        when(userAuthFalseCache.increaseAttemptAuthToCache(chatId, attemptsAuthUser)).thenReturn(2);
+        when(userService.setAuthorizationTrue(chatId)).thenReturn(userAuthTrueDtoOne);
+        doNothing().when(userAuthTrueCache).saveUserInCache(userAuthTrueDtoOne);
+        doNothing().when(userAuthFalseCache).deleteUserFromAuthCache(chatId);
+        doNothing().when(senderBotClient).sendAnswerMessage(expectedMessage);
+
+        boolean resultAuth = authorizationService.processAuthorization(update);
+
+        assertThat(resultAuth)
+                .isEqualTo(expectedResult);
+
+        verify(update, times(1)).hasMessage();
+        verify(update, times(1)).getMessage();
+        verify(userAuthTrueCache, times(1)).isExistUserInCache(chatId);
+        verify(userService, times(1)).isExistUserByChatId(chatId);
+        verify(userService, never()).createUser(userMapper.toDtoCreateFromMessage(testMessage.getChat()));
+        verify(userAuthFalseCache, never()).saveUserInCache(userAuthFalseDtoOne);
+        verify(userAuthFalseCache, times(1)).isExistUserInCache(chatId);
+        verify(userAuthFalseCache, times(1)).getAttemptsAuthFromCache(chatId);
+        verify(userAuthFalseCache, times(1)).increaseAttemptAuthToCache(chatId, attemptsAuthUser);
+        verify(userService, times(1)).setAuthorizationTrue(chatId);
+        verify(userAuthTrueCache, times(1)).saveUserInCache(userAuthTrueDtoOne);
+        verify(userAuthFalseCache, times(1)).deleteUserFromAuthCache(chatId);
+        verify(senderBotClient, times(1)).sendAnswerMessage(expectedMessage);
+    }
+
+    @Test
+    @DisplayName("Существующий и ранее авторизованный пользователь вводит текст после сброса сессии")
+    void processAuthorization_WhenExistsUserIsAuthButAppWasRestartedAndSessionIsClean_ReturnsFalse() {
+        boolean expectedResult = false;
+        long chatId = userCreateDtoOne.getChatId();
+        int attemptsAuthUser = 0;
+        SendMessage warnMessageAfterRestartApp = MessageUtils.buildAnswerWithText(
+                chatId, "Ваша сессия истекла, пожалуйста введите пароль для новой авторизации"
+        );
+        Message testMessage = Message.builder()
+                .chat(Chat.builder()
+                        .id(chatId)
+                        .type("private")
+                        .firstName(userCreateDtoOne.getFirstName())
+                        .lastName(userCreateDtoOne.getLastName())
+                        .userName(userCreateDtoOne.getLastName())
+                        .build())
+                .text("blablabla")
+                .build();
+
+        when(update.hasMessage()).thenReturn(true);
+        when(update.getMessage()).thenReturn(testMessage);
+        when(userService.isExistUserByChatId(chatId)).thenReturn(true);
+        when(userAuthTrueCache.isExistUserInCache(chatId)).thenReturn(false);
+        when(userService.updateUser(userMapper.toDtoUpdateFromMessage(testMessage.getChat())))
+                .thenReturn(userAuthFalseDtoOne);
+        doNothing().when(userAuthFalseCache).saveUserInCache(userAuthFalseDtoOne);
+        doNothing().when(senderBotClient).sendAnswerMessage(warnMessageAfterRestartApp);
+
+        boolean resultAuth = authorizationService.processAuthorization(update);
+
+        assertThat(resultAuth)
+                .isEqualTo(expectedResult);
+
+        verify(update, times(1)).hasMessage();
+        verify(update, times(1)).getMessage();
+        verify(userService, times(1)).isExistUserByChatId(chatId);
+        verify(userAuthTrueCache, times(1)).isExistUserInCache(chatId);
+        verify(userService, times(1)).updateUser(userMapper.toDtoUpdateFromMessage(testMessage.getChat()));
+        verify(userService, never()).createUser(userMapper.toDtoCreateFromMessage(testMessage.getChat()));
+        verify(userAuthFalseCache, times(1)).saveUserInCache(userAuthFalseDtoOne);
+        verify(senderBotClient, times(1)).sendAnswerMessage(warnMessageAfterRestartApp);
+        verify(userAuthFalseCache, times(1)).isExistUserInCache(chatId);
+        verify(userAuthFalseCache, times(1)).getAttemptsAuthFromCache(chatId);
+        verify(userAuthFalseCache, times(1)).increaseAttemptAuthToCache(chatId, attemptsAuthUser);
+        verify(userService, never()).setAuthorizationTrue(chatId);
+        verify(userAuthTrueCache, never()).saveUserInCache(userAuthTrueDtoOne);
+        verify(userAuthFalseCache, never()).deleteUserFromAuthCache(chatId);
+    }
+
+    @Test
+    @DisplayName("Существующий пользователь неправильно ввёл пароль и попал в бан-лист")
+    void processAuthorization_WhenExistsUserSetNotValidPassAfterAllAttempts_ReturnsFalseAndWasBanned() {
+        boolean expectedResult = false;
+        long chatId = userCreateDtoOne.getChatId();
+        int attemptsAuthUser = maxAttempts - 1;
+        Message testMessage = Message.builder()
+                .chat(Chat.builder()
+                        .id(chatId)
+                        .type("private")
+                        .firstName(userCreateDtoOne.getFirstName())
+                        .lastName(userCreateDtoOne.getLastName())
+                        .userName(userCreateDtoOne.getLastName())
+                        .build())
+                .text(pass)
+                .build();
+        SendMessage expectedMessage = MessageUtils.buildAnswerWithText(testMessage.getChatId(), USER_AUTH_TRUE);
+
+        when(update.hasMessage()).thenReturn(true);
+        when(update.getMessage()).thenReturn(testMessage);
+        when(userAuthTrueCache.isExistUserInCache(chatId)).thenReturn(false);
+        when(userService.isExistUserByChatId(chatId)).thenReturn(true);
+        when(userAuthFalseCache.isExistUserInCache(chatId)).thenReturn(true);
+        when(userAuthFalseCache.getAttemptsAuthFromCache(chatId)).thenReturn(attemptsAuthUser);
+        when(userAuthFalseCache.increaseAttemptAuthToCache(chatId, attemptsAuthUser)).thenReturn(maxAttempts);
+
+        boolean resultAuth = authorizationService.processAuthorization(update);
+
+        assertThat(resultAuth)
+                .isEqualTo(expectedResult);
+
+        verify(update, times(1)).hasMessage();
+        verify(update, times(1)).getMessage();
+        verify(userAuthTrueCache, times(1)).isExistUserInCache(chatId);
+        verify(userService, times(1)).isExistUserByChatId(chatId);
+        verify(userService, never()).createUser(userMapper.toDtoCreateFromMessage(testMessage.getChat()));
+        verify(userAuthFalseCache, never()).saveUserInCache(userAuthFalseDtoOne);
+        verify(userAuthFalseCache, times(1)).isExistUserInCache(chatId);
+        verify(userAuthFalseCache, times(1)).getAttemptsAuthFromCache(chatId);
+        verify(userAuthFalseCache, times(1)).increaseAttemptAuthToCache(chatId, attemptsAuthUser);
+        verify(userService, never()).setAuthorizationTrue(chatId);
+        verify(userAuthTrueCache, never()).saveUserInCache(userAuthTrueDtoOne);
+        verify(userAuthFalseCache, never()).deleteUserFromAuthCache(chatId);
+        verify(senderBotClient, never()).sendAnswerMessage(expectedMessage);
+    }
+
+    @Test
+    @DisplayName("Текстовое сообщение от авторизованного пользователя")
+    void processAuthorization_WhenUserIsAuthAndSendText_ReturnsTrue() {
+        boolean expectedResult = true;
+        long chatId = userCreateDtoOne.getChatId();
+        int attemptsAuthUser = 0;
+        Message testMessage = Message.builder()
+                .chat(Chat.builder()
+                        .id(chatId)
+                        .type("private")
+                        .firstName(userCreateDtoOne.getFirstName())
+                        .lastName(userCreateDtoOne.getLastName())
+                        .userName(userCreateDtoOne.getLastName())
+                        .build())
+                .text("/command")
+                .build();
+
+        when(update.hasMessage()).thenReturn(true);
+        when(update.getMessage()).thenReturn(testMessage);
+        when(userAuthTrueCache.isExistUserInCache(chatId)).thenReturn(true);
+
+        boolean resultAuth = authorizationService.processAuthorization(update);
+
+        assertThat(resultAuth)
+                .isEqualTo(expectedResult);
+
+        verify(update, times(1)).hasMessage();
+        verify(update, times(1)).getMessage();
+        verify(userAuthTrueCache, times(1)).isExistUserInCache(chatId);
+        verify(userService, never()).isExistUserByChatId(chatId);
+        verify(userService, never()).createUser(userMapper.toDtoCreateFromMessage(testMessage.getChat()));
+        verify(userAuthFalseCache, never()).saveUserInCache(userAuthFalseDtoOne);
+        verify(userAuthFalseCache, never()).isExistUserInCache(chatId);
+        verify(userAuthFalseCache, never()).getAttemptsAuthFromCache(chatId);
+        verify(userAuthFalseCache, never()).increaseAttemptAuthToCache(chatId, attemptsAuthUser);
+        verify(userService, never()).setAuthorizationTrue(chatId);
+        verify(userAuthTrueCache, never()).saveUserInCache(userAuthTrueDtoOne);
+        verify(userAuthFalseCache, never()).deleteUserFromAuthCache(chatId);
+        verify(senderBotClient, never()).sendAnswerMessage(any(SendMessage.class));
+    }
+
+    @Test
+    @DisplayName("Нажатие на клавиатуру от авторизованного пользователя")
+    void processAuthorization_WhenUserIsAuthAndCallbackQuery_ReturnsTrue() {
+        boolean expectedResult = true;
+        long chatId = userCreateDtoOne.getChatId();
+        Message testMessage = Message.builder()
+                .chat(Chat.builder()
+                        .id(chatId)
+                        .type("private")
+                        .firstName(userCreateDtoOne.getFirstName())
+                        .lastName(userCreateDtoOne.getLastName())
+                        .userName(userCreateDtoOne.getLastName())
+                        .build())
+                .text("/command")
+                .build();
+        CallbackQuery callbackQuery = new CallbackQuery();
+        callbackQuery.setMessage(testMessage);
+
+        when(update.hasMessage()).thenReturn(false);
+        when(update.hasCallbackQuery()).thenReturn(true);
+        when(update.getCallbackQuery()).thenReturn(callbackQuery);
+        when(userAuthTrueCache.isExistUserInCache(chatId)).thenReturn(true);
+
+        boolean resultAuth = authorizationService.processAuthorization(update);
+
+        assertThat(resultAuth)
+                .isEqualTo(expectedResult);
+
+        verify(update, times(1)).hasMessage();
+        verify(update, times(1)).hasCallbackQuery();
+        verify(update, times(1)).getCallbackQuery();
+        verify(userAuthTrueCache, times(1)).isExistUserInCache(chatId);
+    }
+
+    @Test
+    @DisplayName("Нажатие на клавиатуру от неавторизованного пользователя")
+    void processAuthorization_WhenUserIsNotAuthAndCallbackQuery_ReturnsFalse() {
+        boolean expectedResult = false;
+        long chatId = userCreateDtoOne.getChatId();
+        Message testMessage = Message.builder()
+                .chat(Chat.builder()
+                        .id(chatId)
+                        .type("private")
+                        .firstName(userCreateDtoOne.getFirstName())
+                        .lastName(userCreateDtoOne.getLastName())
+                        .userName(userCreateDtoOne.getLastName())
+                        .build())
+                .text("/command")
+                .build();
+        CallbackQuery callbackQuery = new CallbackQuery();
+        callbackQuery.setMessage(testMessage);
+
+        when(update.hasMessage()).thenReturn(false);
+        when(update.hasCallbackQuery()).thenReturn(true);
+        when(update.getCallbackQuery()).thenReturn(callbackQuery);
+        when(userAuthTrueCache.isExistUserInCache(chatId)).thenReturn(false);
+
+        boolean resultAuth = authorizationService.processAuthorization(update);
+
+        assertThat(resultAuth)
+                .isEqualTo(expectedResult);
+
+        verify(update, times(1)).hasMessage();
+        verify(update, times(1)).hasCallbackQuery();
+        verify(update, times(1)).getCallbackQuery();
+        verify(userAuthTrueCache, times(1)).isExistUserInCache(chatId);
+    }
+
+    @Test
+    @DisplayName("Пользователь прислал контент, который еще не поддерживается ботом")
+    void processAuthorization_WhenUserUsedOtherContent_ReturnsFalse() {
+        boolean expectedResult = false;
+
+        when(update.hasMessage()).thenReturn(false);
+        when(update.hasCallbackQuery()).thenReturn(false);
+
+        boolean resultAuth = authorizationService.processAuthorization(update);
+
+        assertThat(resultAuth)
+                .isEqualTo(expectedResult);
+
+        verify(update, times(1)).hasMessage();
+        verify(update, times(1)).hasCallbackQuery();
     }
 }
