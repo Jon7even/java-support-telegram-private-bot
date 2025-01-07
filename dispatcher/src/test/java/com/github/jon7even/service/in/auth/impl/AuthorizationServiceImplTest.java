@@ -45,9 +45,10 @@ public class AuthorizationServiceImplTest extends PreparationForTests {
     private AuthorizationServiceImpl authorizationService;
 
     @Mock
-    private UserService userService;
+    private Update update;
 
-    private SecurityConfig securityConfig;
+    @Mock
+    private UserService userService;
 
     @Mock
     private SenderBotClient senderBotClient;
@@ -59,20 +60,14 @@ public class AuthorizationServiceImplTest extends PreparationForTests {
     private UserAuthTrueCache userAuthTrueCache;
 
     private final UserMapper userMapper = new UserMapperImpl();
-    ;
-
-    @Mock
-    private Update update;
 
     private final String pass = "testPass";
-
     private final int maxAttempts = 3;
 
+    private long chatId;
+    private Message testMessage;
     private SendMessage expectedMessage;
 
-    private Message testMessage;
-
-    private long chatId;
 
     @BeforeEach
     void setUp() {
@@ -89,7 +84,7 @@ public class AuthorizationServiceImplTest extends PreparationForTests {
                 .text(pass)
                 .build();
         expectedMessage = MessageUtils.buildAnswerWithText(testMessage.getChatId(), USER_AUTH_TRUE);
-        securityConfig = new SecurityConfig();
+        SecurityConfig securityConfig = new SecurityConfig();
         securityConfig.setKeyPass(pass);
         securityConfig.setAttemptsAuth(maxAttempts);
         authorizationService = new AuthorizationServiceImpl(
