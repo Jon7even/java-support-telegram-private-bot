@@ -150,6 +150,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 
     private boolean isUserBanned(Message message) {
         var chatId = message.getChatId();
+
         if (!userAuthFalseCache.isExistUserInCache(chatId)) {
             log.warn("Произошел рестарт приложения, сессия у пользователей истекла, требуется обновить данные "
                     + "пользователя с [chatId={}]", chatId);
@@ -163,6 +164,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         }
 
         int currentAttemptsAuthUser = getCountAttemptsAuthForUser(chatId);
+
         if (securityConfig.getAttemptsAuth() <= currentAttemptsAuthUser) {
             log.warn("Пользователь с [chatId={}] находится в бан-листе ввел пароль [attemptsAuth={}] раз, "
                     + "доступ запрещен", chatId, currentAttemptsAuthUser);
@@ -186,6 +188,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     private void registerUser(Message message) {
         Long chatId = message.getChatId();
         log.trace("Начинаю регистрировать пользователя с [chatId={}]", chatId);
+
         UserCreateDto userForSaveInRepository = userMapper.toDtoCreateFromMessage(message.getChat());
         try {
             UserAuthFalseDto userFromRepository = userService.createUser(userForSaveInRepository);
@@ -202,6 +205,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     private void updateUserAfterRestartApp(Message message) {
         log.trace("Начинаю обновлять пользователя с [chatId={}]", message.getChatId());
         UserUpdateDto userForUpdate = userMapper.toDtoUpdateFromMessage(message.getChat());
+
         try {
             UserAuthFalseDto updatedUserFromRepository = userService.updateUser(userForUpdate);
             userAuthFalseCache.saveUserInCache(updatedUserFromRepository);
