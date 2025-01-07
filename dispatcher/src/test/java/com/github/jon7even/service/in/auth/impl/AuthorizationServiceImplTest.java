@@ -68,9 +68,27 @@ public class AuthorizationServiceImplTest extends PreparationForTests {
 
     private final int maxAttempts = 3;
 
+    private SendMessage expectedMessage;
+
+    private Message testMessage;
+
+    private long chatId;
+
     @BeforeEach
     void setUp() {
         initUserDto();
+        chatId = userCreateDtoOne.getChatId();
+        testMessage = Message.builder()
+                .chat(Chat.builder()
+                        .id(chatId)
+                        .type("private")
+                        .firstName(userCreateDtoOne.getFirstName())
+                        .lastName(userCreateDtoOne.getLastName())
+                        .userName(userCreateDtoOne.getLastName())
+                        .build())
+                .text(pass)
+                .build();
+        expectedMessage = MessageUtils.buildAnswerWithText(testMessage.getChatId(), USER_AUTH_TRUE);
         securityConfig = new SecurityConfig();
         securityConfig.setKeyPass(pass);
         securityConfig.setAttemptsAuth(maxAttempts);
@@ -83,19 +101,7 @@ public class AuthorizationServiceImplTest extends PreparationForTests {
     @DisplayName("Новый пользователь ввел правильный пароль и авторизовался")
     void processAuthorization_WhenNewUserSetValidPass_ReturnsTrue() {
         boolean expectedResult = true;
-        long chatId = userCreateDtoOne.getChatId();
         int attemptsAuthUser = 0;
-        Message testMessage = Message.builder()
-                .chat(Chat.builder()
-                        .id(chatId)
-                        .type("private")
-                        .firstName(userCreateDtoOne.getFirstName())
-                        .lastName(userCreateDtoOne.getLastName())
-                        .userName(userCreateDtoOne.getLastName())
-                        .build())
-                .text(pass)
-                .build();
-        SendMessage expectedMessage = MessageUtils.buildAnswerWithText(testMessage.getChatId(), USER_AUTH_TRUE);
 
         when(update.hasMessage()).thenReturn(true);
         when(update.getMessage()).thenReturn(testMessage);
@@ -136,19 +142,7 @@ public class AuthorizationServiceImplTest extends PreparationForTests {
     @DisplayName("Существующий пользователь первый раз ошибся, но второй раз ввел правильный пароль и авторизовался")
     void processAuthorization_WhenExistsUserSetValidPassAfterFirstAttempt_ReturnsTrue() {
         boolean expectedResult = true;
-        long chatId = userCreateDtoOne.getChatId();
         int attemptsAuthUser = 1;
-        Message testMessage = Message.builder()
-                .chat(Chat.builder()
-                        .id(chatId)
-                        .type("private")
-                        .firstName(userCreateDtoOne.getFirstName())
-                        .lastName(userCreateDtoOne.getLastName())
-                        .userName(userCreateDtoOne.getLastName())
-                        .build())
-                .text(pass)
-                .build();
-        SendMessage expectedMessage = MessageUtils.buildAnswerWithText(testMessage.getChatId(), USER_AUTH_TRUE);
 
         when(update.hasMessage()).thenReturn(true);
         when(update.getMessage()).thenReturn(testMessage);
@@ -186,21 +180,11 @@ public class AuthorizationServiceImplTest extends PreparationForTests {
     @DisplayName("Существующий и ранее авторизованный пользователь вводит текст после сброса сессии")
     void processAuthorization_WhenExistsUserIsAuthButAppWasRestartedAndSessionIsClean_ReturnsFalse() {
         boolean expectedResult = false;
-        long chatId = userCreateDtoOne.getChatId();
         int attemptsAuthUser = 0;
+        testMessage.setText("blablabla");
         SendMessage warnMessageAfterRestartApp = MessageUtils.buildAnswerWithText(
                 chatId, "Ваша сессия истекла, пожалуйста введите пароль для новой авторизации"
         );
-        Message testMessage = Message.builder()
-                .chat(Chat.builder()
-                        .id(chatId)
-                        .type("private")
-                        .firstName(userCreateDtoOne.getFirstName())
-                        .lastName(userCreateDtoOne.getLastName())
-                        .userName(userCreateDtoOne.getLastName())
-                        .build())
-                .text("blablabla")
-                .build();
 
         when(update.hasMessage()).thenReturn(true);
         when(update.getMessage()).thenReturn(testMessage);
@@ -236,19 +220,7 @@ public class AuthorizationServiceImplTest extends PreparationForTests {
     @DisplayName("Существующий пользователь неправильно ввёл пароль и попал в бан-лист")
     void processAuthorization_WhenExistsUserSetNotValidPassAfterAllAttempts_ReturnsFalseAndWasBanned() {
         boolean expectedResult = false;
-        long chatId = userCreateDtoOne.getChatId();
         int attemptsAuthUser = maxAttempts - 1;
-        Message testMessage = Message.builder()
-                .chat(Chat.builder()
-                        .id(chatId)
-                        .type("private")
-                        .firstName(userCreateDtoOne.getFirstName())
-                        .lastName(userCreateDtoOne.getLastName())
-                        .userName(userCreateDtoOne.getLastName())
-                        .build())
-                .text(pass)
-                .build();
-        SendMessage expectedMessage = MessageUtils.buildAnswerWithText(testMessage.getChatId(), USER_AUTH_TRUE);
 
         when(update.hasMessage()).thenReturn(true);
         when(update.getMessage()).thenReturn(testMessage);
@@ -282,18 +254,8 @@ public class AuthorizationServiceImplTest extends PreparationForTests {
     @DisplayName("Текстовое сообщение от авторизованного пользователя")
     void processAuthorization_WhenUserIsAuthAndSendText_ReturnsTrue() {
         boolean expectedResult = true;
-        long chatId = userCreateDtoOne.getChatId();
         int attemptsAuthUser = 0;
-        Message testMessage = Message.builder()
-                .chat(Chat.builder()
-                        .id(chatId)
-                        .type("private")
-                        .firstName(userCreateDtoOne.getFirstName())
-                        .lastName(userCreateDtoOne.getLastName())
-                        .userName(userCreateDtoOne.getLastName())
-                        .build())
-                .text("/command")
-                .build();
+        testMessage.setText("/command");
 
         when(update.hasMessage()).thenReturn(true);
         when(update.getMessage()).thenReturn(testMessage);
@@ -323,17 +285,7 @@ public class AuthorizationServiceImplTest extends PreparationForTests {
     @DisplayName("Нажатие на клавиатуру от авторизованного пользователя")
     void processAuthorization_WhenUserIsAuthAndCallbackQuery_ReturnsTrue() {
         boolean expectedResult = true;
-        long chatId = userCreateDtoOne.getChatId();
-        Message testMessage = Message.builder()
-                .chat(Chat.builder()
-                        .id(chatId)
-                        .type("private")
-                        .firstName(userCreateDtoOne.getFirstName())
-                        .lastName(userCreateDtoOne.getLastName())
-                        .userName(userCreateDtoOne.getLastName())
-                        .build())
-                .text("/command")
-                .build();
+        testMessage.setText("/command");
         CallbackQuery callbackQuery = new CallbackQuery();
         callbackQuery.setMessage(testMessage);
 
@@ -357,17 +309,7 @@ public class AuthorizationServiceImplTest extends PreparationForTests {
     @DisplayName("Нажатие на клавиатуру от неавторизованного пользователя")
     void processAuthorization_WhenUserIsNotAuthAndCallbackQuery_ReturnsFalse() {
         boolean expectedResult = false;
-        long chatId = userCreateDtoOne.getChatId();
-        Message testMessage = Message.builder()
-                .chat(Chat.builder()
-                        .id(chatId)
-                        .type("private")
-                        .firstName(userCreateDtoOne.getFirstName())
-                        .lastName(userCreateDtoOne.getLastName())
-                        .userName(userCreateDtoOne.getLastName())
-                        .build())
-                .text("/command")
-                .build();
+        testMessage.setText("/command");
         CallbackQuery callbackQuery = new CallbackQuery();
         callbackQuery.setMessage(testMessage);
 
