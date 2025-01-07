@@ -27,7 +27,7 @@ public class UserAuthFalseCacheImpl implements UserAuthFalseCache {
     private final HashMap<Long, UserAuthFalseDto> mapOfUsersAuthFalse;
 
     @Override
-    public void saveUserInCache(UserAuthFalseDto userAuthFalseDto) {
+    public void saveUserInCache(UserAuthFalseDto userAuthFalseDto) throws AlreadyExistException {
         log.trace("Начинаю сохранять пользователя [userAuthFalseDto={}] в кэше неавторизованных пользователей",
                 userAuthFalseDto);
         if (!mapOfUsersAuthFalse.containsKey(userAuthFalseDto.getChatId())) {

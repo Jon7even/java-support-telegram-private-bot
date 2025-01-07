@@ -112,7 +112,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         }
     }
 
-    private void processInputPassword(Message message) {
+    private void processInputPassword(Message message) throws AccessDeniedException {
         var chatIdUser = message.getChatId();
         var textInChatByUser = message.getText();
 
@@ -121,15 +121,16 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 
         if (textInChatByUser.equals(securityConfig.getKeyPass())) {
             try {
-                log.trace("Пользователь с [chatId={}] ввел правильный пароль, сохраняем в БД", chatIdUser);
+                log.debug("Пользователь с [chatId={}] ввел правильный пароль, сохраняем в БД", chatIdUser);
                 UserAuthTrueDto userForSaveInCache = userService.setAuthorizationTrue(chatIdUser);
-                log.trace("Пользователь с [chatId={}] ввел правильный пароль, сохраняем в кэш", chatIdUser);
 
+                log.debug("Пользователь с [chatId={}] ввел правильный пароль, сохраняем в кэш", chatIdUser);
                 userAuthTrueCache.saveUserInCache(userForSaveInCache);
-                log.trace("Пользователь с [chatId={}] ввел правильный пароль, удаляем из кэша для неавторизованных "
-                        + "пользователей", chatIdUser);
 
+                log.debug("Пользователь с [chatId={}] ввел правильный пароль, удаляем из кэша для неавторизованных "
+                        + "пользователей", chatIdUser);
                 userAuthFalseCache.deleteUserFromAuthCache(chatIdUser);
+
                 log.trace("Пользователь с [chatId={}] прошел авторизацию", chatIdUser);
 
                 var sendMessage = MessageUtils.buildAnswerWithText(message.getChatId(), USER_AUTH_TRUE);
@@ -155,7 +156,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
             try {
                 updateUserAfterRestartApp(message);
             } catch (NotFoundException exception) {
-                log.error("Проверьте логи приложения, произошла неправильная работа приложения, пользователь "
+                log.warn("Проверьте логи приложения, произошла неправильная работа приложения, пользователь "
                         + "с [chatId={}] не существует", chatId);
                 return true;
             }
@@ -204,7 +205,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         try {
             UserAuthFalseDto updatedUserFromRepository = userService.updateUser(userForUpdate);
             userAuthFalseCache.saveUserInCache(updatedUserFromRepository);
-        } catch (NotFoundException exception) {
+        } catch (NotFoundException | AlreadyExistException exception) {
             log.error("Обновить пользователя не получилось: {}", exception.getErrorMessage());
             var errorMessage = MessageUtils.buildAnswerWithText(
                     message.getChatId(), String.format("%s, %s", ERROR_TO_SEND, "вас нет в системе")
