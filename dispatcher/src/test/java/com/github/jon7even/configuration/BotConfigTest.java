@@ -3,9 +3,10 @@ package com.github.jon7even.configuration;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.when;
@@ -18,6 +19,7 @@ import static org.mockito.Mockito.when;
  */
 
 @DisplayName("Тестирование загрузки конфигурации BotConfig")
+@ExtendWith(MockitoExtension.class)
 public class BotConfigTest {
 
     @InjectMocks
@@ -25,10 +27,6 @@ public class BotConfigTest {
 
     @Mock
     private BotConfig mockBotConfig;
-
-    public BotConfigTest() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     @Test
     public void testBotConfigLoading() {

@@ -23,8 +23,8 @@ import static org.mockito.Mockito.when;
  * @author Jon7even
  * @version 2.0
  */
-@DisplayName("Тестирование методов сервиса MainQuickServiceImpl")
 @ExtendWith(MockitoExtension.class)
+@DisplayName("Тестирование методов сервиса MainQuickServiceImpl")
 public class MainQuickServiceImplTest {
 
     @InjectMocks

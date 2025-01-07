@@ -20,8 +20,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
  * @author Jon7even
  * @version 2.0
  */
-@DisplayName("Тестирование методов сервиса AuthorizationServiceImpl")
 @ExtendWith(MockitoExtension.class)
+@DisplayName("Тестирование методов сервиса AuthorizationServiceImpl")
 public class AuthorizationServiceImplTest {
 
     @InjectMocks
