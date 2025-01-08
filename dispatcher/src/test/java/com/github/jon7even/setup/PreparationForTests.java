@@ -1,5 +1,6 @@
 package com.github.jon7even.setup;
 
+import com.github.jon7even.dto.UserAuthFalseDto;
 import com.github.jon7even.dto.UserAuthTrueDto;
 import com.github.jon7even.dto.UserCreateDto;
 import com.github.jon7even.entity.user.UserEntity;
@@ -21,6 +22,8 @@ public class PreparationForTests {
     protected UserAuthTrueDto userAuthTrueDtoOne;
     protected UserAuthTrueDto UserAuthTrueDtoTwo;
     protected UserAuthTrueDto UserAuthTrueDtoThree;
+
+    protected UserAuthFalseDto userAuthFalseDtoOne;
 
     protected UserCreateDto userCreateDtoOne;
 
@@ -81,6 +84,16 @@ public class PreparationForTests {
                 .firstName("FirstName")
                 .lastName("FirstLastName")
                 .userName("FirstUserName")
+                .build();
+
+        userAuthFalseDtoOne = UserAuthFalseDto.builder()
+                .id(userIdOne)
+                .chatId(1111111L)
+                .firstName("FirstName")
+                .lastName("FirstLastName")
+                .userName("FirstUserName")
+                .registeredOn(LocalDateTime.now())
+                .attemptAuth(0)
                 .build();
     }
 }

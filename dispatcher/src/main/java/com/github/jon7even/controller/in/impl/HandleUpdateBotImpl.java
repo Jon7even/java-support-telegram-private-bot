@@ -85,7 +85,7 @@ public class HandleUpdateBotImpl implements HandleUpdateBot {
 
     private void processTextMessage(Update update) {
         var textMessageByUser = update.getMessage().getText();
-        boolean isBaseCommand = mainQuickService.existBaseCommand(textMessageByUser);
+        boolean isBaseCommand = mainQuickService.existsBaseCommand(textMessageByUser);
 
         if (isBaseCommand) {
             var messageForBaseCommand = mainQuickService.processQuickAnswer(update);
@@ -100,7 +100,7 @@ public class HandleUpdateBotImpl implements HandleUpdateBot {
     }
 
     private void processDocument(Update update) {
-        sendMessageToChatErrorNotSupportType("Получение документов", update.getMessage());
+        sendMessageToChatErrorNotSupportType("Получение документов ", update.getMessage());
     }
 
     private void processPhotoMessage(Update update) {
@@ -108,18 +108,18 @@ public class HandleUpdateBotImpl implements HandleUpdateBot {
     }
 
     private void processAudioMessage(Update update) {
-        sendMessageToChatErrorNotSupportType("Получение аудио", update.getMessage());
+        sendMessageToChatErrorNotSupportType("Получение аудио ", update.getMessage());
     }
 
     private void setUnsupportedMessageTypeView(Update update) {
-        sendMessageToChatErrorNotSupportType("Получение данного типа сообщений", update.getMessage());
+        sendMessageToChatErrorNotSupportType("Получение данного типа сообщений ", update.getMessage());
     }
 
     private void sendMessageToChatErrorNotSupportType(String action, Message message) {
         log.error("Пользователь c [chatId={}] пытается сделать запрос на то что мы не умеем его message={}",
                 message.getChatId(), message);
         var sendMessage = MessageUtils.buildAnswerWithText(
-                message.getChatId(), action + WE_NOT_SUPPORT
+                message.getChatId(), String.format("%s %s", action, WE_NOT_SUPPORT)
         );
         setView(sendMessage);
     }

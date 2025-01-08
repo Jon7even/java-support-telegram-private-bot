@@ -14,9 +14,7 @@ import com.github.jon7even.service.in.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Реализация сервиса взаимодействия с пользователями
@@ -34,65 +32,67 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     @Override
-    public UserAuthFalseDto createUser(UserCreateDto userCreateDto) {
-        if (!isExistUserByChatId(userCreateDto.getChatId())) {
-            log.trace("Начинаю сохранять нового пользователя, данные для сохранения [userCreateDto={}]", userCreateDto);
-            UserEntity userForSaveInRepository = userMapper.toEntityFromCreateDto(userCreateDto, LocalDateTime.now());
-            UserEntity createdUserFromRepository = userRepository.save(userForSaveInRepository);
-            log.trace("Новый пользователь сохранен в БД [userEntity]={}", createdUserFromRepository);
-            return userMapper.toAuthFalseDtoFromEntity(createdUserFromRepository);
-        } else {
-            throw new AlreadyExistException(String.format("userCreateDto=%s", userCreateDto));
-        }
+    @Transactional(rollbackFor = {AlreadyExistException.class})
+    public UserAuthFalseDto createUser(UserCreateDto userCreateDto) throws AlreadyExistException {
+        checkUserExistenceByChatId(userCreateDto.getChatId());
+
+        log.debug("Начинаю сохранять нового пользователя, данные для сохранения [userCreateDto={}]", userCreateDto);
+        UserEntity userForSaveInRepository = userMapper.toEntityFromCreateDto(userCreateDto);
+
+        UserEntity createdUserFromRepository = userRepository.save(userForSaveInRepository);
+        log.trace("Новый пользователь сохранен в БД [userEntity]={}", createdUserFromRepository);
+        return userMapper.toAuthFalseDtoFromEntity(createdUserFromRepository);
     }
 
     @Override
-    public UserAuthFalseDto updateUser(UserUpdateDto userUpdateDto) {
-        log.trace("Начинаю обновлять существующего пользователя, данные для обновления [userUpdateDto={}]",
-                userUpdateDto);
-        Optional<UserEntity> userFromRepository = getUserByChatId(userUpdateDto.getChatId());
+    @Transactional(rollbackFor = {NotFoundException.class})
+    public UserAuthFalseDto updateUser(UserUpdateDto userUpdateDto) throws NotFoundException {
+        log.trace("Начинаю обновлять существующего пользователя, DTO для обновления [userUpdateDto={}]", userUpdateDto);
+        UserEntity userFromRepository = getUserByChatId(userUpdateDto.getChatId());
 
-        if (userFromRepository.isPresent()) {
-            UserEntity userForUpdateInRepository = userFromRepository.get();
-            log.debug("Объединяю данные в сущности");
-            userMapper.updateUserEntityFromDtoUpdate(
-                    userForUpdateInRepository, userUpdateDto, LocalDateTime.now(), false
-            );
-            log.debug("Сохраняю обновленные данные пользователя [UserEntity={}]", userForUpdateInRepository);
-            UserEntity userUpdatedFromRepository = userRepository.save(userForUpdateInRepository);
-            log.debug("Пользователь обновлен [UserEntity={}]", userUpdatedFromRepository);
-            return userMapper.toAuthFalseDtoFromEntity(userUpdatedFromRepository);
-        } else {
-            throw new NotFoundException(String.format("User with [chatId=%d]", userUpdateDto.getChatId()));
-        }
+        log.debug("Объединяю данные в сущности");
+        userMapper.updateUserEntityFromDtoUpdate(userFromRepository, userUpdateDto, false);
+        log.debug("Сохраняю обновленные данные пользователя [UserEntity={}]", userFromRepository);
+
+        UserEntity userUpdatedFromRepository = userRepository.save(userFromRepository);
+        log.trace("Пользователь обновлен [UserEntity={}]", userUpdatedFromRepository);
+        return userMapper.toAuthFalseDtoFromEntity(userUpdatedFromRepository);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean isExistUserByChatId(Long chatId) {
         log.trace("Начинаю проверять существует ли пользователь с [chatId={}] в БД", chatId);
         return userRepository.existsByChatId(chatId);
     }
 
     @Override
-    public UserAuthTrueDto setAuthorizationTrue(Long chatId) {
-        log.trace("Начинаю выставлять авторизацию true для пользователя с [chatId={}]", chatId);
-        Optional<UserEntity> userForSetAuthorizationTrue = getUserByChatId(chatId);
+    @Transactional(rollbackFor = {NotFoundException.class})
+    public UserAuthTrueDto setAuthorizationTrue(Long chatId) throws NotFoundException, AccessDeniedException {
+        log.debug("Начинаю выставлять авторизацию true для пользователя с [chatId={}]", chatId);
+        UserEntity userForSetAuthorizationTrue = getUserByChatId(chatId);
 
-        if (userForSetAuthorizationTrue.isEmpty() || !userForSetAuthorizationTrue.get().getAuthorization()) {
-            UserEntity userForUpdate = userForSetAuthorizationTrue.get();
-            userForUpdate.setAuthorization(true);
-            userForUpdate.setUpdatedOn(LocalDateTime.now());
+        log.trace("На текущий момент поле авторизации [authorization={}] у пользователя c [chatId={}]",
+                userForSetAuthorizationTrue.getAuthorization(), chatId
+        );
 
-            UserEntity updatedUserFromRepository = userRepository.save(userForUpdate);
-            log.trace("Пользователь обновлен в БД и прошел авторизацию [userEntity]={}", updatedUserFromRepository);
-            return userMapper.toAuthTrueDtoFromEntity(updatedUserFromRepository);
-        } else {
-            throw new AccessDeniedException(String.format("Set Authorization true for User with [chatId=%s]", chatId));
-        }
+        userMapper.updateUserEntitySetAuthorizationIsTrue(userForSetAuthorizationTrue);
+
+        UserEntity updatedUserFromRepository = userRepository.save(userForSetAuthorizationTrue);
+        log.trace("Пользователь обновлен в БД и прошел авторизацию [userEntity]={}", updatedUserFromRepository);
+
+        return userMapper.toAuthTrueDtoFromEntity(updatedUserFromRepository);
     }
 
-    private Optional<UserEntity> getUserByChatId(Long chatId) {
+    private UserEntity getUserByChatId(Long chatId) {
         log.debug("Начинаю искать пользователя с [chatId={}]", chatId);
-        return userRepository.findByChatId(chatId);
+        return userRepository.findByChatId(chatId)
+                .orElseThrow(() -> new NotFoundException(String.format("User with [chatId=%d]", chatId)));
+    }
+
+    private void checkUserExistenceByChatId(Long chatId) {
+        if (isExistUserByChatId(chatId)) {
+            throw new AlreadyExistException(String.format("User with [chatId=%d]", chatId));
+        }
     }
 }

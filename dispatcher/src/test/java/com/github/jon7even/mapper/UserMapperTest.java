@@ -1,11 +1,16 @@
 package com.github.jon7even.mapper;
 
+import com.github.jon7even.dto.UserAuthFalseDto;
+import com.github.jon7even.dto.UserAuthTrueDto;
+import com.github.jon7even.dto.UserCreateDto;
+import com.github.jon7even.dto.UserUpdateDto;
 import com.github.jon7even.entity.user.UserEntity;
 import com.github.jon7even.setup.PreparationForTests;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.telegram.telegrambots.meta.api.objects.chat.Chat;
 
 import java.time.LocalDateTime;
 
@@ -28,9 +33,9 @@ public class UserMapperTest extends PreparationForTests {
     }
 
     @Test
-    @DisplayName("Должен произойти правильный маппинг в сущность для создания новых данных в БД")
-    public void toEntityFromDtoCreate_ReturnEntityNotId() {
-        UserEntity actualResult = userMapper.toEntityFromCreateDto(userCreateDtoOne, LocalDateTime.now());
+    @DisplayName("Должен произойти правильный маппинг UserCreateDto в UserEntity для сохранения нового юзера в БД")
+    public void toEntityFromCreateDto_ReturnsUserEntityWithNotId() {
+        UserEntity actualResult = userMapper.toEntityFromCreateDto(userCreateDtoOne);
 
         SoftAssertions softAssertions = new SoftAssertions();
 
@@ -50,6 +55,253 @@ public class UserMapperTest extends PreparationForTests {
         softAssertions.assertThat(actualResult.getUserName())
                 .isNotNull()
                 .isEqualTo(userCreateDtoOne.getUserName());
+        softAssertions.assertAll();
+    }
+
+    @Test
+    @DisplayName("Должен произойти правильный маппинг Chat в UserCreateDto")
+    public void toDtoCreateFromMessage_ReturnsUserCreateDto() {
+        Chat expectedChatUser = Chat.builder()
+                .id(userIdOne)
+                .firstName(userCreateDtoOne.getFirstName())
+                .lastName(userCreateDtoOne.getLastName())
+                .userName(userCreateDtoOne.getUserName())
+                .isForum(false)
+                .title("test")
+                .type("private")
+                .build();
+
+        UserCreateDto actualResult = userMapper.toDtoCreateFromMessage(expectedChatUser);
+
+        SoftAssertions softAssertions = new SoftAssertions();
+
+        softAssertions.assertThat(actualResult)
+                .isNotNull();
+        softAssertions.assertThat(actualResult.getChatId())
+                .isNotNull()
+                .isEqualTo(expectedChatUser.getId());
+        softAssertions.assertThat(actualResult.getFirstName())
+                .isNotNull()
+                .isEqualTo(expectedChatUser.getFirstName());
+        softAssertions.assertThat(actualResult.getLastName())
+                .isNotNull()
+                .isEqualTo(expectedChatUser.getLastName());
+        softAssertions.assertThat(actualResult.getUserName())
+                .isNotNull()
+                .isEqualTo(expectedChatUser.getUserName());
+        softAssertions.assertAll();
+    }
+
+    @Test
+    @DisplayName("Должен произойти правильный маппинг Chat в UserUpdateDto")
+    public void toDtoCreateFromMessage_ReturnsUserUpdateDto() {
+        Chat expectedChatUser = Chat.builder()
+                .id(userIdOne)
+                .firstName(userCreateDtoOne.getFirstName())
+                .lastName(userCreateDtoOne.getLastName())
+                .userName(userCreateDtoOne.getUserName())
+                .isForum(false)
+                .title("test")
+                .type("private")
+                .build();
+
+        UserUpdateDto actualResult = userMapper.toDtoUpdateFromMessage(expectedChatUser);
+
+        SoftAssertions softAssertions = new SoftAssertions();
+
+        softAssertions.assertThat(actualResult)
+                .isNotNull();
+        softAssertions.assertThat(actualResult.getChatId())
+                .isNotNull()
+                .isEqualTo(expectedChatUser.getId());
+        softAssertions.assertThat(actualResult.getFirstName())
+                .isNotNull()
+                .isEqualTo(expectedChatUser.getFirstName());
+        softAssertions.assertThat(actualResult.getLastName())
+                .isNotNull()
+                .isEqualTo(expectedChatUser.getLastName());
+        softAssertions.assertThat(actualResult.getUserName())
+                .isNotNull()
+                .isEqualTo(expectedChatUser.getUserName());
+        softAssertions.assertAll();
+    }
+
+    @Test
+    @DisplayName("Должен произойти правильный маппинг UserEntity в UserAuthFalseDto")
+    public void toAuthFalseDtoFromEntity_ReturnsUserAuthFalseDto() {
+        UserEntity expectedUser = UserEntity.builder()
+                .id(1L)
+                .chatId(userEntityOne.getChatId())
+                .firstName(userEntityOne.getFirstName())
+                .lastName(userEntityOne.getLastName())
+                .userName(userEntityOne.getUserName())
+                .registeredOn(userEntityOne.getRegisteredOn())
+                .build();
+
+        UserAuthFalseDto actualResult = userMapper.toAuthFalseDtoFromEntity(expectedUser);
+
+        SoftAssertions softAssertions = new SoftAssertions();
+
+        softAssertions.assertThat(actualResult)
+                .isNotNull();
+        softAssertions.assertThat(actualResult.getId())
+                .isNotNull()
+                .isEqualTo(expectedUser.getId());
+        softAssertions.assertThat(actualResult.getChatId())
+                .isNotNull()
+                .isEqualTo(expectedUser.getChatId());
+        softAssertions.assertThat(actualResult.getFirstName())
+                .isNotNull()
+                .isEqualTo(expectedUser.getFirstName());
+        softAssertions.assertThat(actualResult.getLastName())
+                .isNotNull()
+                .isEqualTo(expectedUser.getLastName());
+        softAssertions.assertThat(actualResult.getUserName())
+                .isNotNull()
+                .isEqualTo(expectedUser.getUserName());
+        softAssertions.assertThat(actualResult.getAttemptAuth())
+                .isNotNull()
+                .isEqualTo(0L);
+        softAssertions.assertAll();
+    }
+
+    @Test
+    @DisplayName("Должен произойти правильный маппинг UserEntity в UserAuthTrueDto")
+    public void toAuthTrueDtoFromEntity_ReturnsUserAuthTrueDto() {
+        UserEntity expectedUser = UserEntity.builder()
+                .id(1L)
+                .chatId(userEntityOne.getChatId())
+                .firstName(userEntityOne.getFirstName())
+                .lastName(userEntityOne.getLastName())
+                .userName(userEntityOne.getUserName())
+                .registeredOn(userEntityOne.getRegisteredOn())
+                .build();
+
+        UserAuthTrueDto actualResult = userMapper.toAuthTrueDtoFromEntity(expectedUser);
+
+        SoftAssertions softAssertions = new SoftAssertions();
+
+        softAssertions.assertThat(actualResult)
+                .isNotNull();
+        softAssertions.assertThat(actualResult.getId())
+                .isNotNull()
+                .isEqualTo(expectedUser.getId());
+        softAssertions.assertThat(actualResult.getChatId())
+                .isNotNull()
+                .isEqualTo(expectedUser.getChatId());
+        softAssertions.assertThat(actualResult.getFirstName())
+                .isNotNull()
+                .isEqualTo(expectedUser.getFirstName());
+        softAssertions.assertThat(actualResult.getLastName())
+                .isNotNull()
+                .isEqualTo(expectedUser.getLastName());
+        softAssertions.assertThat(actualResult.getUserName())
+                .isNotNull()
+                .isEqualTo(expectedUser.getUserName());
+        softAssertions.assertAll();
+    }
+
+    @Test
+    @DisplayName("Должен произойти правильный маппинг обновления UserEntity из полей UserUpdateDto")
+    public void updateUserEntityFromDtoUpdate_updatedUserEntity() {
+        UserEntity actualUserFromUpdate = UserEntity.builder()
+                .id(1L)
+                .chatId(userEntityOne.getChatId())
+                .firstName(userEntityOne.getFirstName())
+                .lastName(userEntityOne.getLastName())
+                .userName(userEntityOne.getUserName())
+                .authorization(false)
+                .registeredOn(userEntityOne.getRegisteredOn())
+                .build();
+
+        Long notValidTelegramId = 0L;
+
+        UserUpdateDto expectedUserUpdateDto = UserUpdateDto.builder()
+                .chatId(notValidTelegramId)
+                .firstName("Updated FirstName")
+                .lastName("Updated FirstLastName")
+                .userName("Updated FirstUserName")
+                .build();
+
+        userMapper.updateUserEntityFromDtoUpdate(actualUserFromUpdate, expectedUserUpdateDto, true);
+
+        SoftAssertions softAssertions = new SoftAssertions();
+
+        softAssertions.assertThat(actualUserFromUpdate)
+                .isNotNull();
+        softAssertions.assertThat(actualUserFromUpdate.getId())
+                .isNotNull();
+        softAssertions.assertThat(actualUserFromUpdate.getChatId())
+                .isNotNull()
+                .isNotEqualTo(notValidTelegramId);
+        softAssertions.assertThat(actualUserFromUpdate.getFirstName())
+                .isNotNull()
+                .isEqualTo(expectedUserUpdateDto.getFirstName());
+        softAssertions.assertThat(actualUserFromUpdate.getLastName())
+                .isNotNull()
+                .isEqualTo(expectedUserUpdateDto.getLastName());
+        softAssertions.assertThat(actualUserFromUpdate.getUserName())
+                .isNotNull()
+                .isEqualTo(expectedUserUpdateDto.getUserName());
+        softAssertions.assertThat(actualUserFromUpdate.getAuthorization())
+                .isNotNull()
+                .isEqualTo(true);
+        softAssertions.assertThat(actualUserFromUpdate.getUpdatedOn())
+                .isNotNull()
+                .isBefore(LocalDateTime.now().plusMinutes(1));
+        softAssertions.assertAll();
+    }
+
+    @Test
+    @DisplayName("Должен произойти правильный маппинг обновления UserEntity и установить поле авторизации на true")
+    public void updateUserEntitySetAuthorizationTrue_updatedUserEntityIs() {
+        UserEntity actualUserFromUpdate = UserEntity.builder()
+                .id(1L)
+                .chatId(userEntityOne.getChatId())
+                .firstName(userEntityOne.getFirstName())
+                .lastName(userEntityOne.getLastName())
+                .userName(userEntityOne.getUserName())
+                .authorization(false)
+                .registeredOn(userEntityOne.getRegisteredOn())
+                .build();
+
+        UserEntity expectedUserAfterUpdate = UserEntity.builder()
+                .id(1L)
+                .chatId(userEntityOne.getChatId())
+                .firstName(userEntityOne.getFirstName())
+                .lastName(userEntityOne.getLastName())
+                .userName(userEntityOne.getUserName())
+                .authorization(true)
+                .registeredOn(userEntityOne.getRegisteredOn())
+                .build();
+
+        userMapper.updateUserEntitySetAuthorizationIsTrue(actualUserFromUpdate);
+
+        SoftAssertions softAssertions = new SoftAssertions();
+
+        softAssertions.assertThat(actualUserFromUpdate)
+                .isNotNull();
+        softAssertions.assertThat(actualUserFromUpdate.getId())
+                .isNotNull()
+                .isEqualTo(expectedUserAfterUpdate.getId());
+        softAssertions.assertThat(actualUserFromUpdate.getChatId())
+                .isNotNull()
+                .isEqualTo(expectedUserAfterUpdate.getChatId());
+        softAssertions.assertThat(actualUserFromUpdate.getFirstName())
+                .isNotNull()
+                .isEqualTo(expectedUserAfterUpdate.getFirstName());
+        softAssertions.assertThat(actualUserFromUpdate.getLastName())
+                .isNotNull()
+                .isEqualTo(expectedUserAfterUpdate.getLastName());
+        softAssertions.assertThat(actualUserFromUpdate.getUserName())
+                .isNotNull()
+                .isEqualTo(expectedUserAfterUpdate.getUserName());
+        softAssertions.assertThat(actualUserFromUpdate.getAuthorization())
+                .isNotNull()
+                .isEqualTo(expectedUserAfterUpdate.getAuthorization());
+        softAssertions.assertThat(actualUserFromUpdate.getUpdatedOn())
+                .isNotNull()
+                .isBefore(LocalDateTime.now().plusMinutes(1));
         softAssertions.assertAll();
     }
 }

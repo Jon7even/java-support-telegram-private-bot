@@ -10,7 +10,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 
 import static com.github.jon7even.configuration.RabbitQueue.ANSWER_MESSAGE;
-import static com.github.jon7even.telegram.constants.DefaultMessageError.ERROR_SEND_TEXT;
+import static com.github.jon7even.telegram.constants.DefaultMessageLogError.ERROR_TO_EXECUTION_FOR_USER;
+import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend.ERROR_SEND_TEXT;
 
 /**
  * Реализация сервиса {@link ProducerService} для отправки ответов в RabbitMq для дальнейшей обработки диспетчером
@@ -37,8 +38,7 @@ public class ProducerServiceImpl implements ProducerService {
             rabbitTemplate.convertAndSend(ANSWER_MESSAGE, sendMessage);
         } catch (RuntimeException exception) {
             senderMessageService.sendError(Long.valueOf(sendMessage.getChatId()), ERROR_SEND_TEXT);
-            log.error("Произошла ошибка в процессе ответа пользователю Text: {} Error: {}",
-                    sendMessage, exception.getMessage());
+            log.error("{} {} Text: {}", ERROR_TO_EXECUTION_FOR_USER, exception.getMessage(), sendMessage);
         }
     }
 
@@ -48,8 +48,7 @@ public class ProducerServiceImpl implements ProducerService {
             rabbitTemplate.convertAndSend(ANSWER_MESSAGE, editMessageText);
         } catch (RuntimeException exception) {
             senderMessageService.sendError(Long.valueOf(editMessageText.getChatId()), ERROR_SEND_TEXT);
-            log.error("Произошла ошибка в процессе ответа пользователю EditText: {} Error: {}",
-                    editMessageText, exception.getMessage());
+            log.error("{} {} EditText: {}", ERROR_TO_EXECUTION_FOR_USER, exception.getMessage(), editMessageText);
         }
     }
 }

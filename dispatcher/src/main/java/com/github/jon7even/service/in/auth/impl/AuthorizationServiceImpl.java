@@ -23,6 +23,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 
 import static com.github.jon7even.telegram.constants.DefaultBaseMessagesToSend.USER_AUTH_TRUE;
+import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend.ERROR_TO_SEND;
 
 /**
  * Реализация сервиса авторизации пользователей
@@ -80,7 +81,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         var chatIdUser = callbackQuery.getMessage().getChatId();
 
         if (userAuthTrueCache.isExistUserInCache(chatIdUser)) {
-            log.debug("Пользователь с [chatId={}] авторизован", chatIdUser);
+            log.debug("Пользователь с [chatId={}] авторизован, действие: нажатие на клавиатуру", chatIdUser);
             return true;
         } else {
             var callBackData = callbackQuery.getData();
@@ -94,7 +95,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         var chatIdUser = message.getChatId();
 
         if (userAuthTrueCache.isExistUserInCache(chatIdUser)) {
-            log.debug("Пользователь с [chatId={}] авторизован", chatIdUser);
+            log.debug("Пользователь с [chatId={}] авторизован, действие: текст в чате", chatIdUser);
             return true;
         } else {
             if (userService.isExistUserByChatId(chatIdUser)) {
@@ -111,7 +112,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         }
     }
 
-    private void processInputPassword(Message message) {
+    private void processInputPassword(Message message) throws AccessDeniedException {
         var chatIdUser = message.getChatId();
         var textInChatByUser = message.getText();
 
@@ -119,39 +120,55 @@ public class AuthorizationServiceImpl implements AuthorizationService {
                 chatIdUser, textInChatByUser);
 
         if (textInChatByUser.equals(securityConfig.getKeyPass())) {
-            log.trace("Пользователь с [chatId={}] ввел правильный пароль, сохраняем в БД", chatIdUser);
-            UserAuthTrueDto userForSaveInCache = userService.setAuthorizationTrue(chatIdUser);
-            log.trace("Пользователь с [chatId={}] ввел правильный пароль, сохраняем в кэш", chatIdUser);
+            try {
+                log.debug("Пользователь с [chatId={}] ввел правильный пароль, сохраняем в БД", chatIdUser);
+                UserAuthTrueDto userForSaveInCache = userService.setAuthorizationTrue(chatIdUser);
 
-            userAuthTrueCache.saveUserInCache(userForSaveInCache);
-            log.trace("Пользователь с [chatId={}] ввел правильный пароль, удаляем из кэша для неавторизованных "
-                    + "пользователей", chatIdUser);
+                log.debug("Пользователь с [chatId={}] ввел правильный пароль, сохраняем в кэш", chatIdUser);
+                userAuthTrueCache.saveUserInCache(userForSaveInCache);
 
-            userAuthFalseCache.deleteUserFromAuthCache(chatIdUser);
-            log.trace("Пользователь с [chatId={}] прошел авторизацию", chatIdUser);
+                log.debug("Пользователь с [chatId={}] ввел правильный пароль, удаляем из кэша для неавторизованных "
+                        + "пользователей", chatIdUser);
+                userAuthFalseCache.deleteUserFromAuthCache(chatIdUser);
 
-            var sendMessage = MessageUtils.buildAnswerWithText(message.getChatId(), USER_AUTH_TRUE);
-            senderBotClient.sendAnswerMessage(sendMessage);
+                log.trace("Пользователь с [chatId={}] прошел авторизацию", chatIdUser);
+
+                var sendMessage = MessageUtils.buildAnswerWithText(message.getChatId(), USER_AUTH_TRUE);
+                senderBotClient.sendAnswerMessage(sendMessage);
+            } catch (NotFoundException exception) {
+                log.error("Авторизовать пользователя не получилось: {}", exception.getErrorMessage());
+                var errorMessage = MessageUtils.buildAnswerWithText(
+                        message.getChatId(), String.format("%s, %s", ERROR_TO_SEND, "вас нет в системе")
+                );
+                senderBotClient.sendAnswerMessage(errorMessage);
+            }
         } else {
+            log.warn("Пользователь [chatId={}] ввел пароль неправильно [pass={}]", chatIdUser, textInChatByUser);
             throw new AccessDeniedException(String.format("Authorization user with [chatId=%d]", chatIdUser));
         }
     }
 
     private boolean isUserBanned(Message message) {
         var chatId = message.getChatId();
+
         if (!userAuthFalseCache.isExistUserInCache(chatId)) {
             log.warn("Произошел рестарт приложения, сессия у пользователей истекла, требуется обновить данные "
                     + "пользователя с [chatId={}]", chatId);
             try {
                 updateUserAfterRestartApp(message);
+                var warnMessageAfterRestartApp = MessageUtils.buildAnswerWithText(
+                        chatId, "Ваша сессия истекла, пожалуйста введите пароль для новой авторизации"
+                );
+                senderBotClient.sendAnswerMessage(warnMessageAfterRestartApp);
             } catch (NotFoundException exception) {
-                log.error("Проверьте логи приложения, произошла неправильная работа приложения, пользователь "
+                log.warn("Проверьте логи приложения, произошла неправильная работа приложения, пользователь "
                         + "с [chatId={}] не существует", chatId);
                 return true;
             }
         }
 
         int currentAttemptsAuthUser = getCountAttemptsAuthForUser(chatId);
+
         if (securityConfig.getAttemptsAuth() <= currentAttemptsAuthUser) {
             log.warn("Пользователь с [chatId={}] находится в бан-листе ввел пароль [attemptsAuth={}] раз, "
                     + "доступ запрещен", chatId, currentAttemptsAuthUser);
@@ -167,22 +184,41 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         var currentAttemptsAuthUser = userAuthFalseCache.increaseAttemptAuthToCache(chatId, attemptsAuthUser);
 
         if (currentAttemptsAuthUser > securityConfig.getAttemptsAuth()) {
-            log.warn("Пользователь с [chatId={}] пытается подобраться пароль", chatId);
+            log.warn("Пользователь с [chatId={}] пытается подобрать пароль", chatId);
         }
         return currentAttemptsAuthUser;
     }
 
     private void registerUser(Message message) {
-        log.trace("Начинаю регистрировать пользователя с [chatId={}]", message.getChatId());
+        Long chatId = message.getChatId();
+        log.trace("Начинаю регистрировать пользователя с [chatId={}]", chatId);
+
         UserCreateDto userForSaveInRepository = userMapper.toDtoCreateFromMessage(message.getChat());
-        UserAuthFalseDto userFromRepository = userService.createUser(userForSaveInRepository);
-        userAuthFalseCache.saveUserInCache(userFromRepository);
+        try {
+            UserAuthFalseDto userFromRepository = userService.createUser(userForSaveInRepository);
+            userAuthFalseCache.saveUserInCache(userFromRepository);
+        } catch (AlreadyExistException exception) {
+            log.error("Сохранить пользователя не получилось: {}", exception.getErrorMessage());
+            var errorMessage = MessageUtils.buildAnswerWithText(
+                    chatId, String.format("%s, %s", ERROR_TO_SEND, "вы уже в системе")
+            );
+            senderBotClient.sendAnswerMessage(errorMessage);
+        }
     }
 
     private void updateUserAfterRestartApp(Message message) {
         log.trace("Начинаю обновлять пользователя с [chatId={}]", message.getChatId());
         UserUpdateDto userForUpdate = userMapper.toDtoUpdateFromMessage(message.getChat());
-        UserAuthFalseDto updatedUserFromRepository = userService.updateUser(userForUpdate);
-        userAuthFalseCache.saveUserInCache(updatedUserFromRepository);
+
+        try {
+            UserAuthFalseDto updatedUserFromRepository = userService.updateUser(userForUpdate);
+            userAuthFalseCache.saveUserInCache(updatedUserFromRepository);
+        } catch (NotFoundException | AlreadyExistException exception) {
+            log.error("Обновить пользователя не получилось: {}", exception.getErrorMessage());
+            var errorMessage = MessageUtils.buildAnswerWithText(
+                    message.getChatId(), String.format("%s, %s", ERROR_TO_SEND, "вас нет в системе")
+            );
+            senderBotClient.sendAnswerMessage(errorMessage);
+        }
     }
 }

@@ -19,7 +19,7 @@ public interface MainQuickService {
      * @param command команда пользователя
      * @return boolean с ответом базовая команда или нет
      */
-    boolean existBaseCommand(String command);
+    boolean existsBaseCommand(String command);
 
     /**
      * Метод для обработки и отправки статичного сообщения пользователю

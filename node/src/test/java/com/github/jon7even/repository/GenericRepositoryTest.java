@@ -23,7 +23,7 @@ public class GenericRepositoryTest extends ContainersSetup {
     private UserRepository userRepository;
 
     @BeforeEach
-    void setUpEntity() {
+    public void setUpEntity() {
         initUserEntity();
     }
 
@@ -32,7 +32,7 @@ public class GenericRepositoryTest extends ContainersSetup {
     protected UserEntity userInBaseThird;
 
     @BeforeEach
-    void addUser() {
+    public void addUser() {
         initUserEntity();
         userInBaseOne = userRepository.save(userEntityOne);
         userInBaseSecond = userRepository.save(userEntityTwo);

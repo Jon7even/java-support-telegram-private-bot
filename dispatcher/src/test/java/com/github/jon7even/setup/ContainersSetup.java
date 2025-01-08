@@ -18,11 +18,11 @@ public class ContainersSetup extends PreparationForTests {
 
     @Container
     @ServiceConnection
-    static PostgreSQLContainer<?> postgres =
+    public static PostgreSQLContainer<?> postgres =
             new PostgreSQLContainer<>("postgres:16.2-alpine3.19");
 
     @Container
     @ServiceConnection
-    static RabbitMQContainer rabbitMQ =
+    public static RabbitMQContainer rabbitMQ =
             new RabbitMQContainer("rabbitmq:3.11.9-management-alpine");
 }
