@@ -36,7 +36,7 @@ public class UserRepositoryTest extends ContainersSetup {
 
     @Test
     @DisplayName("Корректное сохранение трех сущностей пользователя")
-    void save_WhenCalledWithValidData_ReturnsThreeUserEntities() {
+    public void save_WhenCalledWithValidData_ReturnsThreeUserEntities() {
         userRepository.save(userEntityOne);
         userRepository.save(userEntityTwo);
         userRepository.save(userEntityThree);
@@ -56,7 +56,7 @@ public class UserRepositoryTest extends ContainersSetup {
 
     @Test
     @DisplayName("Корректное сохранение сущности не аутентифицированного пользователя со всеми полями")
-    void save_WhenCalledWithValidData_ReturnsOneFullNameUser() {
+    public void save_WhenCalledWithValidData_ReturnsOneFullNameUser() {
         UserEntity actualUserOneFullName = userRepository.save(userEntityOne);
 
         SoftAssertions softAssertions = new SoftAssertions();
@@ -82,7 +82,7 @@ public class UserRepositoryTest extends ContainersSetup {
 
     @Test
     @DisplayName("Корректное сохранение сущности пользователя, если у него отсутствует имя фамилия и ник")
-    void save_WhenCalledWithValidData_ReturnsOneUserOfNullFieldsName() {
+    public void save_WhenCalledWithValidData_ReturnsOneUserOfNullFieldsName() {
         UserEntity userTwoNull = userRepository.save(userEntityTwo);
 
         SoftAssertions softAssertions = new SoftAssertions();
@@ -108,7 +108,7 @@ public class UserRepositoryTest extends ContainersSetup {
 
     @Test
     @DisplayName("Корректное сохранение сущности пользователя со всеми полями и аутентификацией")
-    void save_WhenCalledWithValidData_ReturnsOneFullNameUserWitchAuthIsTrue() {
+    public void save_WhenCalledWithValidData_ReturnsOneFullNameUserWitchAuthIsTrue() {
         UserEntity userThreeAuthOn = userRepository.save(userEntityThree);
 
         SoftAssertions softAssertions = new SoftAssertions();
@@ -136,7 +136,7 @@ public class UserRepositoryTest extends ContainersSetup {
 
     @Test
     @DisplayName("Должен вернуть true, если существует пользователь с таким Telegram ID")
-    void existsByChatId_WhenCalledWithValidData_ReturnsTrue() {
+    public void existsByChatId_WhenCalledWithValidData_ReturnsTrue() {
         UserEntity userOneFullName = userRepository.save(userEntityOne);
         var validId = userOneFullName.getChatId();
 
@@ -153,7 +153,7 @@ public class UserRepositoryTest extends ContainersSetup {
 
     @Test
     @DisplayName("Должен вернуть false, если пользователя с таким Telegram ID нет")
-    void existsByChatId_WhenCalledWithValidData_ReturnsFalse() {
+    public void existsByChatId_WhenCalledWithValidData_ReturnsFalse() {
         UserEntity userOneFullName = userRepository.save(userEntityOne);
         var notValidId = userOneFullName.getChatId() + 1L;
 
@@ -170,7 +170,7 @@ public class UserRepositoryTest extends ContainersSetup {
 
     @Test
     @DisplayName("Должен найти пользователя, если существует пользователь с таким Telegram ID")
-    void findByChatId_WhenCalledWithValidData_ReturnsOptionalIsPresent() {
+    public void findByChatId_WhenCalledWithValidData_ReturnsOptionalIsPresent() {
         UserEntity userOneFullName = userRepository.save(userEntityOne);
         var validId = userOneFullName.getChatId();
 
@@ -189,7 +189,7 @@ public class UserRepositoryTest extends ContainersSetup {
 
     @Test
     @DisplayName("Не должен найти пользователя, если пользователя с таким Telegram ID нет")
-    void findByChatId_WhenCalledWithValidData_ReturnsOptionalIsNull() {
+    public void findByChatId_WhenCalledWithValidData_ReturnsOptionalIsNull() {
         UserEntity userOneFullName = userRepository.save(userEntityOne);
         var notValidId = userOneFullName.getChatId() + 1L;
 

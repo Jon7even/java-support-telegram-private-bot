@@ -21,14 +21,14 @@ public class UserAuthTrueCacheImplTest extends PreparationForTests {
     private UserAuthTrueCacheImpl userAuthTrueCache;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         initUserDto();
         userAuthTrueCache = new UserAuthTrueCacheImpl(new HashMap<>(3));
     }
 
     @Test
     @DisplayName("Должен сохранить авторизованного пользователя в кэше")
-    void saveUserInCache_WhenUserSaveInCacheWithValidDates_Success() {
+    public void saveUserInCache_WhenUserSaveInCacheWithValidDates_Success() {
         userAuthTrueCache.saveUserInCache(userAuthTrueDtoOne);
 
         assertThat(userAuthTrueCache.isExistUserInCache(userAuthTrueDtoOne.getChatId()))
@@ -37,7 +37,7 @@ public class UserAuthTrueCacheImplTest extends PreparationForTests {
 
     @Test
     @DisplayName("Должен удалить авторизованного пользователя из кэша по chatId")
-    void deleteUserFromAuthCache_Success() {
+    public void deleteUserFromAuthCache_Success() {
         userAuthTrueCache.saveUserInCache(userAuthTrueDtoOne);
         userAuthTrueCache.deleteUserFromAuthCache(userAuthTrueDtoOne.getChatId());
 
@@ -47,7 +47,7 @@ public class UserAuthTrueCacheImplTest extends PreparationForTests {
 
     @Test
     @DisplayName("Должен вернуть False, если авторизованный пользователь с таким chatId не существует в кэше")
-    void isExistUserInCache_WhenUserIsNotExistInCache_ReturnsFalse() {
+    public void isExistUserInCache_WhenUserIsNotExistInCache_ReturnsFalse() {
         assertThat(userAuthTrueCache.isExistUserInCache(userAuthTrueDtoOne.getChatId()))
                 .isFalse();
     }

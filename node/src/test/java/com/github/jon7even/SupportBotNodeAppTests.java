@@ -33,18 +33,18 @@ class SupportBotNodeAppTests extends ContainersSetup {
 
     @Test
     @DisplayName("Проверка загрузки контекста приложения")
-    void contextLoads() {
+    public void contextLoads() {
     }
 
     @Test
     @DisplayName("Проверка загрузки приложения без исключений")
-    void testMain() {
+    public void testMain() {
         assertThatCode(NodeApp::new).doesNotThrowAnyException();
     }
 
     @Test
     @DisplayName("Проверка создания очередей RabbitMq")
-    void testQueuesExist() {
+    public void testQueuesExist() {
         SoftAssertions softAssertions = new SoftAssertions();
 
         softAssertions.assertThat(rabbitAdmin.getQueueInfo(TEXT_MESSAGE_UPDATE))

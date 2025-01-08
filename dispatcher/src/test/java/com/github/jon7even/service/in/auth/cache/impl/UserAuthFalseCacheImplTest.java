@@ -23,14 +23,14 @@ public class UserAuthFalseCacheImplTest extends PreparationForTests {
     private UserAuthFalseCacheImpl authFalseCache;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         initUserDto();
         authFalseCache = new UserAuthFalseCacheImpl(new HashMap<>(3));
     }
 
     @Test
     @DisplayName("Должен сохранить неавторизованного пользователя в кэше")
-    void saveUserInCache_WhenUserSaveInCacheWithValidDates_Success() {
+    public void saveUserInCache_WhenUserSaveInCacheWithValidDates_Success() {
         authFalseCache.saveUserInCache(userAuthFalseDtoOne);
 
         assertThat(authFalseCache.isExistUserInCache(userAuthFalseDtoOne.getChatId()))
@@ -39,7 +39,7 @@ public class UserAuthFalseCacheImplTest extends PreparationForTests {
 
     @Test
     @DisplayName("Должен у неавторизованного пользователя вернуть правильное текущее количество попыток входа - 0")
-    void getAttemptsAuthFromCache_WhenUserHasDefaultCountAttempt_ReturnsZero() {
+    public void getAttemptsAuthFromCache_WhenUserHasDefaultCountAttempt_ReturnsZero() {
         int expectedCountAttempt = 0;
         authFalseCache.saveUserInCache(userAuthFalseDtoOne);
 
@@ -49,7 +49,7 @@ public class UserAuthFalseCacheImplTest extends PreparationForTests {
 
     @Test
     @DisplayName("Должен у неавторизованного пользователя увеличить счетчик попыток входа на 1")
-    void increaseAttemptAuthToCache_WhenUserIncreaseAttemptAuthToCache_ReturnsOne() {
+    public void increaseAttemptAuthToCache_WhenUserIncreaseAttemptAuthToCache_ReturnsOne() {
         int expectedCountAttempt = 1;
         authFalseCache.saveUserInCache(userAuthFalseDtoOne);
         authFalseCache.increaseAttemptAuthToCache(
@@ -62,7 +62,7 @@ public class UserAuthFalseCacheImplTest extends PreparationForTests {
 
     @Test
     @DisplayName("Должен удалить неавторизованного пользователя из кэша по chatId")
-    void deleteUserFromAuthCache_Success() {
+    public void deleteUserFromAuthCache_Success() {
         authFalseCache.saveUserInCache(userAuthFalseDtoOne);
         authFalseCache.deleteUserFromAuthCache(userAuthFalseDtoOne.getChatId());
 
@@ -72,14 +72,14 @@ public class UserAuthFalseCacheImplTest extends PreparationForTests {
 
     @Test
     @DisplayName("Должен вернуть False, если неавторизованный пользователь с таким chatId не существует в кэше")
-    void isExistUserInCache_WhenUserIsNotExistInCache_ReturnsFalse() {
+    public void isExistUserInCache_WhenUserIsNotExistInCache_ReturnsFalse() {
         assertThat(authFalseCache.isExistUserInCache(userAuthFalseDtoOne.getChatId()))
                 .isFalse();
     }
 
     @Test
     @DisplayName("Не должен сохранить неавторизованного пользователя в кэше: такой пользователь уже существует")
-    void saveUserInCache_WhenUserAlreadyExist_ThrowsAlreadyExistException() {
+    public void saveUserInCache_WhenUserAlreadyExist_ThrowsAlreadyExistException() {
         authFalseCache.saveUserInCache(userAuthFalseDtoOne);
 
         String expectedErrorMessage = String.format("[%s] already exist", userAuthFalseDtoOne.toString());

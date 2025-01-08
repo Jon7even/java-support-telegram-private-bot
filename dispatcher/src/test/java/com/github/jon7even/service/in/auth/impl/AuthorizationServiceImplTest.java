@@ -69,7 +69,7 @@ public class AuthorizationServiceImplTest extends PreparationForTests {
     private SendMessage expectedMessage;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         initUserDto();
         chatId = userCreateDtoOne.getChatId();
         testMessage = Message.builder()
@@ -93,7 +93,7 @@ public class AuthorizationServiceImplTest extends PreparationForTests {
 
     @Test
     @DisplayName("Новый пользователь ввел правильный пароль и авторизовался")
-    void processAuthorization_WhenNewUserSetValidPass_ReturnsTrue() {
+    public void processAuthorization_WhenNewUserSetValidPass_ReturnsTrue() {
         boolean expectedResult = true;
         int attemptsAuthUser = 0;
 
@@ -134,7 +134,7 @@ public class AuthorizationServiceImplTest extends PreparationForTests {
 
     @Test
     @DisplayName("Существующий пользователь первый раз ошибся, но второй раз ввел правильный пароль и авторизовался")
-    void processAuthorization_WhenExistsUserSetValidPassAfterFirstAttempt_ReturnsTrue() {
+    public void processAuthorization_WhenExistsUserSetValidPassAfterFirstAttempt_ReturnsTrue() {
         boolean expectedResult = true;
         int attemptsAuthUser = 1;
 
@@ -172,7 +172,7 @@ public class AuthorizationServiceImplTest extends PreparationForTests {
 
     @Test
     @DisplayName("Существующий и ранее авторизованный пользователь вводит текст после сброса сессии")
-    void processAuthorization_WhenExistsUserIsAuthButAppWasRestartedAndSessionIsClean_ReturnsFalse() {
+    public void processAuthorization_WhenExistsUserIsAuthButAppWasRestartedAndSessionIsClean_ReturnsFalse() {
         boolean expectedResult = false;
         int attemptsAuthUser = 0;
         testMessage.setText("blablabla");
@@ -212,7 +212,7 @@ public class AuthorizationServiceImplTest extends PreparationForTests {
 
     @Test
     @DisplayName("Существующий пользователь неправильно ввёл пароль и попал в бан-лист")
-    void processAuthorization_WhenExistsUserSetNotValidPassAfterAllAttempts_ReturnsFalseAndWasBanned() {
+    public void processAuthorization_WhenExistsUserSetNotValidPassAfterAllAttempts_ReturnsFalseAndWasBanned() {
         boolean expectedResult = false;
         int attemptsAuthUser = maxAttempts - 1;
 
@@ -246,7 +246,7 @@ public class AuthorizationServiceImplTest extends PreparationForTests {
 
     @Test
     @DisplayName("Текстовое сообщение от авторизованного пользователя")
-    void processAuthorization_WhenUserIsAuthAndSendText_ReturnsTrue() {
+    public void processAuthorization_WhenUserIsAuthAndSendText_ReturnsTrue() {
         boolean expectedResult = true;
         int attemptsAuthUser = 0;
         testMessage.setText("/command");
@@ -277,7 +277,7 @@ public class AuthorizationServiceImplTest extends PreparationForTests {
 
     @Test
     @DisplayName("Нажатие на клавиатуру от авторизованного пользователя")
-    void processAuthorization_WhenUserIsAuthAndCallbackQuery_ReturnsTrue() {
+    public void processAuthorization_WhenUserIsAuthAndCallbackQuery_ReturnsTrue() {
         boolean expectedResult = true;
         testMessage.setText("/command");
         CallbackQuery callbackQuery = new CallbackQuery();
@@ -301,7 +301,7 @@ public class AuthorizationServiceImplTest extends PreparationForTests {
 
     @Test
     @DisplayName("Нажатие на клавиатуру от неавторизованного пользователя")
-    void processAuthorization_WhenUserIsNotAuthAndCallbackQuery_ReturnsFalse() {
+    public void processAuthorization_WhenUserIsNotAuthAndCallbackQuery_ReturnsFalse() {
         boolean expectedResult = false;
         testMessage.setText("/command");
         CallbackQuery callbackQuery = new CallbackQuery();
@@ -325,7 +325,7 @@ public class AuthorizationServiceImplTest extends PreparationForTests {
 
     @Test
     @DisplayName("Пользователь прислал контент, который еще не поддерживается ботом")
-    void processAuthorization_WhenUserUsedOtherContent_ReturnsFalse() {
+    public void processAuthorization_WhenUserUsedOtherContent_ReturnsFalse() {
         boolean expectedResult = false;
 
         when(update.hasMessage()).thenReturn(false);
