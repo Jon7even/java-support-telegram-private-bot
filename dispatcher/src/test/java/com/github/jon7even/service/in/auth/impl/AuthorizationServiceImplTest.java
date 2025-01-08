@@ -68,7 +68,6 @@ public class AuthorizationServiceImplTest extends PreparationForTests {
     private Message testMessage;
     private SendMessage expectedMessage;
 
-
     @BeforeEach
     void setUp() {
         initUserDto();

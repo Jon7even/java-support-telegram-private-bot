@@ -93,6 +93,7 @@ public class PreparationForTests {
                 .lastName("FirstLastName")
                 .userName("FirstUserName")
                 .registeredOn(LocalDateTime.now())
+                .attemptAuth(0)
                 .build();
     }
 }

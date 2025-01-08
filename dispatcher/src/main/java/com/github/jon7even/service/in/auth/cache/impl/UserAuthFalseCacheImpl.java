@@ -30,8 +30,10 @@ public class UserAuthFalseCacheImpl implements UserAuthFalseCache {
     public void saveUserInCache(UserAuthFalseDto userAuthFalseDto) throws AlreadyExistException {
         log.trace("Начинаю сохранять пользователя [userAuthFalseDto={}] в кэше неавторизованных пользователей",
                 userAuthFalseDto);
-        if (!mapOfUsersAuthFalse.containsKey(userAuthFalseDto.getChatId())) {
-            mapOfUsersAuthFalse.put(userAuthFalseDto.getChatId(), userAuthFalseDto);
+        long chatId = userAuthFalseDto.getChatId();
+
+        if (!isExistUserInCache(chatId)) {
+            mapOfUsersAuthFalse.put(chatId, userAuthFalseDto);
             log.debug("Пользователь [userAuthFalseDto={}] сохранен в кэше неавторизованных пользователей",
                     userAuthFalseDto);
         } else {
