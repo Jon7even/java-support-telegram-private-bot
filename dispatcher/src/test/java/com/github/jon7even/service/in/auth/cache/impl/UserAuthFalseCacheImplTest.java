@@ -38,7 +38,7 @@ public class UserAuthFalseCacheImplTest extends PreparationForTests {
     }
 
     @Test
-    @DisplayName("Должен вернуть правильное текущее количество попыток входа - 0")
+    @DisplayName("Должен у неавторизованного пользователя вернуть правильное текущее количество попыток входа - 0")
     void getAttemptsAuthFromCache_WhenUserHasDefaultCountAttempt_ReturnsZero() {
         int expectedCountAttempt = 0;
         authFalseCache.saveUserInCache(userAuthFalseDtoOne);
@@ -48,7 +48,7 @@ public class UserAuthFalseCacheImplTest extends PreparationForTests {
     }
 
     @Test
-    @DisplayName("Должен увеличить счетчик попыток входа на 1")
+    @DisplayName("Должен у неавторизованного пользователя увеличить счетчик попыток входа на 1")
     void increaseAttemptAuthToCache_WhenUserIncreaseAttemptAuthToCache_ReturnsOne() {
         int expectedCountAttempt = 1;
         authFalseCache.saveUserInCache(userAuthFalseDtoOne);
@@ -61,7 +61,7 @@ public class UserAuthFalseCacheImplTest extends PreparationForTests {
     }
 
     @Test
-    @DisplayName("Должен удалить пользователя из кэша по chatId")
+    @DisplayName("Должен удалить неавторизованного пользователя из кэша по chatId")
     void deleteUserFromAuthCache_Success() {
         authFalseCache.saveUserInCache(userAuthFalseDtoOne);
         authFalseCache.deleteUserFromAuthCache(userAuthFalseDtoOne.getChatId());
@@ -71,7 +71,7 @@ public class UserAuthFalseCacheImplTest extends PreparationForTests {
     }
 
     @Test
-    @DisplayName("Должен вернуть False, если пользователь с таким chatId не существует в кэше")
+    @DisplayName("Должен вернуть False, если неавторизованный пользователь с таким chatId не существует в кэше")
     void isExistUserInCache_WhenUserIsNotExistInCache_ReturnsFalse() {
         assertThat(authFalseCache.isExistUserInCache(userAuthFalseDtoOne.getChatId()))
                 .isFalse();
