@@ -42,15 +42,12 @@ public class MainQuickServiceImpl implements MainQuickService {
         String answer = "";
 
         switch (update.getMessage().getText()) {
-            case "/help":
-                answer = DefaultBaseMessagesToSend.HELP_TEXT;
-                break;
-            case "/start":
-                answer = DefaultBaseMessagesToSend.START_TEXT;
-                break;
-            default:
+            case "/help" -> answer = DefaultBaseMessagesToSend.HELP_TEXT;
+            case "/start" -> answer = DefaultBaseMessagesToSend.START_TEXT;
+            default -> {
                 answer = String.format("%s, %s", ERROR_TO_SEND, "неправильная логика сервиса обработки сообщений");
                 log.error("{} сбой сервиса диспетчера первичной обработки", ERROR_TO_EXECUTION_FOR_USER);
+            }
         }
         return MessageUtils.buildAnswerWithMessage(update.getMessage(), answer);
     }
