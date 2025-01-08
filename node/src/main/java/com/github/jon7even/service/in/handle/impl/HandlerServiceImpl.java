@@ -10,15 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import static com.github.jon7even.telegram.emoji.Emoji.BANG;
-import static com.github.jon7even.telegram.emoji.Emoji.HEART;
-import static com.github.jon7even.telegram.emoji.Emoji.HEAVY_CHECK;
-import static com.github.jon7even.telegram.emoji.Emoji.MAGIC;
-import static com.github.jon7even.telegram.emoji.Emoji.NO_CHECK;
-import static com.github.jon7even.telegram.emoji.Emoji.QUESTION;
-import static com.github.jon7even.telegram.emoji.Emoji.SMAIL_BLUSH;
-import static com.github.jon7even.telegram.emoji.Emoji.STAR;
-
 /**
  * Реализация сервиса обработки данных от пользователей {@link HandlerService}
  *
