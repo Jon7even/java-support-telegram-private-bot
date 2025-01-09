@@ -32,16 +32,15 @@ public class HandlerServiceImpl implements HandlerService {
     @Override
     public void processTextMessage(Update update) {
         String resultTextFromMessage = update.getMessage().getText();
-        Long chaId = update.getMessage().getChatId();
+        Long chatId = update.getMessage().getChatId();
 
         switch (resultTextFromMessage) {
             case "/gifts" ->
-                    senderMessageService.sendText(chaId, replyMessageService.getReplyText("reply.nonSupportedYet"));
-            case "/ask" ->
-                    senderMessageService.sendText(chaId, replyMessageService.getReplyText("reply.bu"));
+                    senderMessageService.sendText(chatId, replyMessageService.getReplyText("reply.nonSupportedYet"));
+            case "/ask" -> senderMessageService.sendText(chatId, replyMessageService.getReplyText("reply.bu"));
             default -> {
-                senderMessageService.sendText(chaId, replyMessageService.getReplyText("reply.nonSupport"));
-                userDataCache.setBotStateForCacheUser(chaId, BotState.MAIN_HELP);
+                senderMessageService.sendText(chatId, replyMessageService.getReplyText("reply.nonSupport"));
+                userDataCache.setBotStateForCacheUser(chatId, BotState.MAIN_HELP);
                 log.trace(ERROR_COMMAND_NOT_SUPPORT + "текст: [{}]", resultTextFromMessage);
             }
         }
@@ -50,20 +49,19 @@ public class HandlerServiceImpl implements HandlerService {
     @Override
     public void processCallbackQuery(Update update) {
         String queryCallbackQuery = update.getCallbackQuery().getData();
-        Long chaId = update.getCallbackQuery().getMessage().getChatId();
+        Long chatId = update.getCallbackQuery().getMessage().getChatId();
         Integer messageId = update.getCallbackQuery().getMessage().getMessageId();
         log.debug("Пользователь {} нажал на клавиатуру в сообщении {} и передает: {}",
-                chaId, queryCallbackQuery, messageId);
+                chatId, queryCallbackQuery, messageId);
 
         switch (queryCallbackQuery) {
-            case "/anyCallback":
-                senderMessageService.sendEditText(
-                        chaId, replyMessageService.getReplyText("reply.callBackAddNewCompany"), messageId
-                );
-                break;
-            default:
-                senderMessageService.sendText(chaId, replyMessageService.getReplyText("reply.nonSupport"));
+            case "/anyCallback" -> senderMessageService.sendEditText(
+                    chatId, replyMessageService.getReplyText("reply.callBack.AddNewCompany"), messageId
+            );
+            default -> {
+                senderMessageService.sendText(chatId, replyMessageService.getReplyText("reply.nonSupport"));
                 log.trace(ERROR_COMMAND_NOT_SUPPORT + "нажатие на клавиатуру [{}]", queryCallbackQuery);
+            }
         }
     }
 }
