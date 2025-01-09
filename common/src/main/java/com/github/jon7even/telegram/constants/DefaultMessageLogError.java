@@ -11,5 +11,8 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DefaultMessageLogError {
+
     public static final String ERROR_TO_EXECUTION_FOR_USER = "Произошла ошибка в процессе ответа пользователю Error:";
+
+    public static final String ERROR_COMMAND_NOT_SUPPORT = "Эту команду мы еще не поддерживаем. Команда пользователя: ";
 }

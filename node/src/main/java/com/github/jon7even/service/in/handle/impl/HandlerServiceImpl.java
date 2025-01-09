@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import static com.github.jon7even.telegram.constants.DefaultMessageLogError.ERROR_COMMAND_NOT_SUPPORT;
+
 /**
  * Реализация сервиса обработки данных от пользователей {@link HandlerService}
  *
@@ -29,22 +31,19 @@ public class HandlerServiceImpl implements HandlerService {
 
     @Override
     public void processTextMessage(Update update) {
-        String resultMessage = update.getMessage().getText();
+        String resultTextFromMessage = update.getMessage().getText();
         Long chaId = update.getMessage().getChatId();
 
-        switch (resultMessage) {
-            case "/gifts":
-                senderMessageService.sendText(chaId, replyMessageService.getReplyText("reply.nonSupportedYet"));
-                break;
-            case "/ask":
-                senderMessageService.sendText(chaId,
-                        "Бу испугался! Не бойса! Данная команда еще находится в разработке"
-                );
-                break;
-            default:
+        switch (resultTextFromMessage) {
+            case "/gifts" ->
+                    senderMessageService.sendText(chaId, replyMessageService.getReplyText("reply.nonSupportedYet"));
+            case "/ask" ->
+                    senderMessageService.sendText(chaId, replyMessageService.getReplyText("reply.bu"));
+            default -> {
                 senderMessageService.sendText(chaId, replyMessageService.getReplyText("reply.nonSupport"));
                 userDataCache.setBotStateForCacheUser(chaId, BotState.MAIN_HELP);
-                log.warn("Эту команду мы еще не поддерживаем. Команда пользователя: " + resultMessage);
+                log.trace(ERROR_COMMAND_NOT_SUPPORT + "текст: [{}]", resultTextFromMessage);
+            }
         }
     }
 
@@ -64,7 +63,7 @@ public class HandlerServiceImpl implements HandlerService {
                 break;
             default:
                 senderMessageService.sendText(chaId, replyMessageService.getReplyText("reply.nonSupport"));
-                log.warn("Эту команду мы еще не поддерживаем. Команда пользователя: " + queryCallbackQuery);
+                log.trace(ERROR_COMMAND_NOT_SUPPORT + "нажатие на клавиатуру [{}]", queryCallbackQuery);
         }
     }
 }

@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
  */
 @AllArgsConstructor
 public enum MainMenu {
+
     /**
      * Регистрация и инициализация пользователя
      */
