@@ -2,6 +2,7 @@ package com.github.jon7even.service.out.producer.impl;
 
 import com.github.jon7even.service.out.producer.ProducerService;
 import com.github.jon7even.service.out.producer.SenderMessageService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.annotation.Lazy;
@@ -21,16 +22,13 @@ import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class ProducerServiceImpl implements ProducerService {
 
     private final RabbitTemplate rabbitTemplate;
 
+    @Lazy
     private final SenderMessageService senderMessageService;
-
-    public ProducerServiceImpl(RabbitTemplate rabbitTemplate, @Lazy SenderMessageService senderMessageService) {
-        this.rabbitTemplate = rabbitTemplate;
-        this.senderMessageService = senderMessageService;
-    }
 
     @Override
     public void producerAnswerText(SendMessage sendMessage) {
