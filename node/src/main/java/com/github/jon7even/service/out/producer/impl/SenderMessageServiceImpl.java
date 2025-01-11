@@ -42,7 +42,7 @@ public class SenderMessageServiceImpl implements SenderMessageService {
 
     @Override
     public void sendError(Long chatId, String textToError) {
-        sendMessageText(MessageUtils.buildAnswerWithText(chatId,  String.format("%s %s", ERROR_TO_SEND, textToError)));
+        sendMessageText(MessageUtils.buildAnswerWithText(chatId, String.format("%s %s", ERROR_TO_SEND, textToError)));
     }
 
     private void sendMessageText(SendMessage message) {
