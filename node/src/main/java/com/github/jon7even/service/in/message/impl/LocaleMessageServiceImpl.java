@@ -1,6 +1,8 @@
 package com.github.jon7even.service.in.message.impl;
 
 import com.github.jon7even.service.in.message.LocaleMessageService;
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
@@ -14,15 +16,19 @@ import java.util.Locale;
  * @version 2.0
  */
 @Service
+@RequiredArgsConstructor
 public class LocaleMessageServiceImpl implements LocaleMessageService {
 
-    private final Locale locale;
+    @Value("${localeTag}")
+    private String localeTag;
+
+    private Locale locale;
 
     private final MessageSource messageSource;
 
-    public LocaleMessageServiceImpl(@Value("${localeTag}") String localeTag, MessageSource messageSource) {
+    @PostConstruct
+    public void initLocale() {
         this.locale = Locale.forLanguageTag(localeTag);
-        this.messageSource = messageSource;
     }
 
     @Override
