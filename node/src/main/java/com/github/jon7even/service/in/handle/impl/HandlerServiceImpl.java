@@ -1,10 +1,8 @@
 package com.github.jon7even.service.in.handle.impl;
 
-import com.github.jon7even.cache.UserDataCache;
 import com.github.jon7even.service.in.handle.HandlerService;
 import com.github.jon7even.service.in.message.ReplyMessageService;
 import com.github.jon7even.service.out.producer.SenderMessageService;
-import com.github.jon7even.telegram.BotState;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,8 +21,6 @@ import static com.github.jon7even.telegram.constants.DefaultMessageLogError.ERRO
 @RequiredArgsConstructor
 public class HandlerServiceImpl implements HandlerService {
 
-    private final UserDataCache userDataCache;
-
     private final ReplyMessageService replyMessageService;
 
     private final SenderMessageService senderMessageService;
@@ -40,7 +36,6 @@ public class HandlerServiceImpl implements HandlerService {
             case "/ask" -> senderMessageService.sendText(chatId, replyMessageService.getReplyText("reply.bu"));
             default -> {
                 senderMessageService.sendText(chatId, replyMessageService.getReplyText("reply.nonSupport"));
-                userDataCache.setBotStateForCacheUser(chatId, BotState.MAIN_HELP);
                 log.trace(ERROR_COMMAND_NOT_SUPPORT + "текст: [{}]", resultTextFromMessage);
             }
         }
