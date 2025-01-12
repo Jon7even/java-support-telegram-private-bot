@@ -3,7 +3,7 @@ package com.github.jon7even.service.in.status;
 import com.github.jon7even.telegram.BotState;
 
 /**
- * Интерфейс сервиса отвечающего за работу со статусами пользователей
+ * Интерфейс сервиса отвечающего за статус бота для пользователей.
  *
  * @author Jon7even
  * @version 2.0
@@ -24,7 +24,7 @@ public interface UserStatusService {
     void setBotStateForUser(Long chatId, BotState botState);
 
     /**
-     * Метод для установки статуса бота для конкретного пользователя.
+     * Метод для получения статуса бота для конкретного пользователя.
      *
      * @param chatId ID пользователя из Telegram
      * @return перечисление {@link BotState} с текущим статусом для пользователя
