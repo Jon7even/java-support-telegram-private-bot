@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 
 /**
- * Реализация сервиса хранения авторизованных пользователей в кэше
+ * Реализация сервиса {@link UserAuthTrueCache} хранения авторизованных пользователей в кэше.
  *
  * @author Jon7even
  * @version 2.0

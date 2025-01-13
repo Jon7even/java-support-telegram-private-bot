@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend.ERROR_TO_SEND;
 
 /**
- * Реализация сервиса {@link SenderMessageService} для конструирования ответа для дальнейшей отправки в RabbitMq
+ * Реализация сервиса {@link SenderMessageService} для конструирования ответа для дальнейшей отправки в RabbitMq.
  *
  * @author Jon7even
  * @version 2.0

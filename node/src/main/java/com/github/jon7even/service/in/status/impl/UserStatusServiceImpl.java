@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 /**
- * Реализация сервиса отвечающего за статус бота для пользователей {@link UserStatusService}
+ * Реализация сервиса отвечающего за статус бота для пользователей {@link UserStatusService}.
  *
  * @author Jon7even
  * @version 2.0

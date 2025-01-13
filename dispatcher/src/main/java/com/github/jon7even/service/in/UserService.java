@@ -6,7 +6,7 @@ import com.github.jon7even.dto.UserCreateDto;
 import com.github.jon7even.dto.UserUpdateDto;
 
 /**
- * Интерфейс сервиса для взаимодействия с пользователями
+ * Интерфейс сервиса для взаимодействия с пользователями.
  *
  * @author Jon7even
  * @version 2.0
@@ -14,34 +14,34 @@ import com.github.jon7even.dto.UserUpdateDto;
 public interface UserService {
 
     /**
-     * Метод регистрирующий нового пользователя в системе
+     * Метод регистрирующий нового пользователя в системе.
      *
-     * @param userCreateDto заполненный объект DTO
-     * @return UserAuthFalseDto объект DTO для дальнейшей авторизации пользователя
+     * @param userCreateDto заполненный объект {@link UserCreateDto}
+     * @return UserAuthFalseDto объект {@link UserAuthFalseDto} для дальнейшей авторизации пользователя
      */
     UserAuthFalseDto createUser(UserCreateDto userCreateDto);
 
     /**
-     * Метод обновляющий данные существующего пользователя
+     * Метод обновляющий данные существующего пользователя.
      *
-     * @param userUpdateDto заполненный объект DTO
-     * @return UserAuthFalseDto объект DTO для дальнейшей авторизации пользователя
+     * @param userUpdateDto заполненный объект {@link UserUpdateDto}
+     * @return UserAuthFalseDto объект {@link UserAuthFalseDto} для дальнейшей авторизации пользователя
      */
     UserAuthFalseDto updateUser(UserUpdateDto userUpdateDto);
 
     /**
-     * Метод проверяющий имеется ли пользователь в БД
+     * Метод проверяющий имеется ли пользователь в БД.
      *
      * @param chatId - это chatId, который присваивает Telegram
-     * @return boolean ответ
+     * @return boolean есть ли пользователь в системе
      */
     boolean isExistUserByChatId(Long chatId);
 
     /**
-     * Метод изменяющий поле authorization у пользователя на true - пользователь авторизовался
+     * Метод изменяющий поле authorization у пользователя на true - пользователь авторизован.
      *
      * @param chatId - это chatId, который присваивает Telegram
-     * @return UserAuthTrueDto объект DTO для сохранения сессии в кэше
+     * @return UserAuthTrueDto объект {@link UserAuthTrueDto} для сохранения сессии в кэше
      */
     UserAuthTrueDto setAuthorizationTrue(Long chatId);
 }

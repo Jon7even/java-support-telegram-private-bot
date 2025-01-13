@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 /**
- * Класс DTO для представления пользователя, который не прошел процедуру аутентификации
+ * Класс DTO для представления неавторизованного пользователя.
  *
  * @author Jon7even
  * @version 2.0

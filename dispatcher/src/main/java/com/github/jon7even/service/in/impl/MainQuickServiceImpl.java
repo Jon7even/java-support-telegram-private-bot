@@ -17,7 +17,7 @@ import static com.github.jon7even.telegram.constants.DefaultMessageLogError.ERRO
 import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend.ERROR_TO_SEND;
 
 /**
- * Реализация сервиса быстрой обработки основных команд бота
+ * Реализация сервиса {@link MainQuickService} быстрой обработки основных команд бота.
  *
  * @author Jon7even
  * @version 2.0

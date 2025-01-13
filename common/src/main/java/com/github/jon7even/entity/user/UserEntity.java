@@ -15,7 +15,7 @@ import org.hibernate.annotations.ColumnDefault;
 import java.time.LocalDateTime;
 
 /**
- * Класс описывающий сущность пользователя
+ * Класс описывающий сущность пользователя.
  *
  * @author Jon7even
  * @version 2.0

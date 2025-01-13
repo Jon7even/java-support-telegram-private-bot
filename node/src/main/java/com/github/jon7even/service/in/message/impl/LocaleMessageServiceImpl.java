@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.Locale;
 
 /**
- * Реализация сервиса языковой локализации {@link LocaleMessageService}
+ * Реализация сервиса языковой локализации {@link LocaleMessageService}.
  *
  * @author Jon7even
  * @version 2.0
@@ -32,12 +32,12 @@ public class LocaleMessageServiceImpl implements LocaleMessageService {
     }
 
     @Override
-    public String getMessage(String message) {
-        return messageSource.getMessage(message, null, locale);
+    public String getMessage(String replyText) {
+        return messageSource.getMessage(replyText, null, locale);
     }
 
     @Override
-    public String getMessage(String message, Object... args) {
-        return messageSource.getMessage(message, args, locale);
+    public String getMessage(String replyText, Object... args) {
+        return messageSource.getMessage(replyText, args, locale);
     }
 }

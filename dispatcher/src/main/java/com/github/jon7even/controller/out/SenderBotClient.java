@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 /**
- * Класс для отправки сообщений в зарегистрированный Telegram бот
+ * Класс для отправки сообщений в зарегистрированный Telegram бот.
  *
  * @author Jon7even
  * @version 2.0
@@ -23,9 +23,9 @@ public class SenderBotClient extends OkHttpTelegramClient {
     }
 
     /**
-     * Метод для отправки текстовых сообщений пользователю
+     * Метод для отправки текстовых сообщений пользователю.
      *
-     * @param message заполненное сообщение, обязательно должно иметь chatId
+     * @param message объект {@link SendMessage} корректно-заполненное сообщение, обязательно должно иметь chatId
      */
     public void sendAnswerMessage(SendMessage message) {
         if (message != null) {

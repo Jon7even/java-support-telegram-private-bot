@@ -19,7 +19,7 @@ import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend
 import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend.WE_NOT_SUPPORT;
 
 /**
- * Реализация сервиса слушателя входящих сообщений от API Telegram {@link ConsumerService}
+ * Реализация сервиса {@link ConsumerService} слушателя входящих сообщений от сервиса Dispatcher.
  *
  * @author Jon7even
  * @version 2.0

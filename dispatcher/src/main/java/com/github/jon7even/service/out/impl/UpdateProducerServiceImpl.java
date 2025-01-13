@@ -8,10 +8,12 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 /**
- * Реализация сервиса для постановки запросов от пользователей в очередь для дальнейшей обработки другими сервисами
+ * Реализация сервиса {@link UpdateProducerService} для постановки запросов от пользователей в очередь для дальнейшей
+ * обработки другими сервисами.
  *
  * @author Jon7even
  * @version 2.0
+ * @apiNote Использует {@link RabbitTemplate}
  */
 @Slf4j
 @Service

@@ -14,7 +14,7 @@ import static com.github.jon7even.telegram.constants.DefaultMessageLogError.ERRO
 import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend.ERROR_SEND_TEXT;
 
 /**
- * Реализация сервиса {@link ProducerService} для отправки ответов в RabbitMq для дальнейшей обработки диспетчером
+ * Реализация сервиса {@link ProducerService} для отправки ответов в RabbitMq для дальнейшей обработки диспетчером.
  *
  * @author Jon7even
  * @version 2.0

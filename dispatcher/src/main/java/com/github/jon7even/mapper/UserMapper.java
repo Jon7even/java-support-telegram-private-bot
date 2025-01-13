@@ -13,7 +13,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.telegram.telegrambots.meta.api.objects.chat.Chat;
 
 /**
- * Интерфейс для маппинга DTO и сущностей пользователя
+ * Интерфейс для маппинга DTO и сущностей пользователя {@link UserEntity}.
  *
  * @author Jon7even
  * @version 2.0

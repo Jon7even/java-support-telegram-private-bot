@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**
- * Реализация сервиса конвертации сообщений {@link ReplyMessageService}
+ * Реализация сервиса получения сообщений для ответов из тагов {@link ReplyMessageService}.
  *
  * @author Jon7even
  * @version 2.0

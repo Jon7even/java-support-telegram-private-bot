@@ -11,7 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import static com.github.jon7even.telegram.constants.DefaultMessageLogError.ERROR_COMMAND_NOT_SUPPORT;
 
 /**
- * Реализация сервиса обработки данных от пользователей {@link HandlerService}
+ * Реализация сервиса обработки данных от пользователей {@link HandlerService}.
  *
  * @author Jon7even
  * @version 2.0
