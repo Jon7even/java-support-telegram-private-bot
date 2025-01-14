@@ -3,7 +3,8 @@ package com.github.jon7even.service.out.producer;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 /**
- * Интерфейс утилитарного сервиса, помогающий конструировать вид ответа для дальнейшей отправки в RabbitMq.
+ * Интерфейс утилитарного сервиса, помогающий формировать необходимый вид ответа пользователю
+ * и отправлять его в RabbitMq.
  *
  * @author Jon7even
  * @version 2.0
