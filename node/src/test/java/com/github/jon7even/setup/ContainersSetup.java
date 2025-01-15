@@ -14,7 +14,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
  * @apiNote использует современные аннотации, которые не требуют явного указывания секретов
  */
 @Testcontainers
-public class ContainersSetup extends GenericTests {
+public class ContainersSetup extends TestDataFactory {
 
     @Container
     @ServiceConnection

@@ -2,7 +2,7 @@ package com.github.jon7even.service.out.producer.impl;
 
 import com.github.jon7even.exception.ApplicationException;
 import com.github.jon7even.service.out.producer.SenderMessageService;
-import com.github.jon7even.setup.GenericTests;
+import com.github.jon7even.setup.TestDataFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
  */
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Тестирование методов сервиса ProducerServiceImpl")
-public class ProducerServiceImplTest extends GenericTests {
+public class ProducerServiceImplTest extends TestDataFactory {
 
     @InjectMocks
     private ProducerServiceImpl producerService;

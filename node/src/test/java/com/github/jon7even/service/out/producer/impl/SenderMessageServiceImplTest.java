@@ -1,6 +1,6 @@
 package com.github.jon7even.service.out.producer.impl;
 
-import com.github.jon7even.setup.GenericTests;
+import com.github.jon7even.setup.TestDataFactory;
 import com.github.jon7even.utils.MessageUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +32,7 @@ import static org.mockito.Mockito.verify;
 @Slf4j
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Тестирование методов сервиса SenderMessageServiceImpl")
-public class SenderMessageServiceImplTest extends GenericTests {
+public class SenderMessageServiceImplTest extends TestDataFactory {
 
     @InjectMocks
     private SenderMessageServiceImpl senderMessageService;

@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
  * @author Jon7even
  * @version 2.0
  */
-public class GenericTests {
+public class TestDataFactory {
 
     protected UserEntity userEntityOne;
     protected UserEntity userEntityTwo;

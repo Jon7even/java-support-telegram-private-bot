@@ -3,7 +3,7 @@ package com.github.jon7even.service.in.consumer.impl;
 import com.github.jon7even.exception.ApplicationException;
 import com.github.jon7even.service.in.handle.HandlerService;
 import com.github.jon7even.service.out.producer.SenderMessageService;
-import com.github.jon7even.setup.GenericTests;
+import com.github.jon7even.setup.TestDataFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,7 +31,7 @@ import static org.mockito.Mockito.when;
  */
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Тестирование методов сервиса ConsumerServiceImpl")
-public class ConsumerServiceImplTest extends GenericTests {
+public class ConsumerServiceImplTest extends TestDataFactory {
 
     @InjectMocks
     private ConsumerServiceImpl consumerService;

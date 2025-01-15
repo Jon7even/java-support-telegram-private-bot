@@ -7,7 +7,7 @@ import com.github.jon7even.mapper.UserMapperImpl;
 import com.github.jon7even.service.in.UserService;
 import com.github.jon7even.service.in.auth.cache.UserAuthFalseCache;
 import com.github.jon7even.service.in.auth.cache.UserAuthTrueCache;
-import com.github.jon7even.setup.PreparationForTests;
+import com.github.jon7even.setup.TestDataFactory;
 import com.github.jon7even.utils.MessageUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -39,7 +39,7 @@ import static org.mockito.Mockito.when;
  */
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Тестирование методов сервиса AuthorizationServiceImpl")
-public class AuthorizationServiceImplTest extends PreparationForTests {
+public class AuthorizationServiceImplTest extends TestDataFactory {
 
     @InjectMocks
     private AuthorizationServiceImpl authorizationService;
