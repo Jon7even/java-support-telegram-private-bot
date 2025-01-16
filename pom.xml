@@ -29,12 +29,13 @@
         <p.bot.groupId>com.github.jon7even</p.bot.groupId>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.release>${java.version}</maven.compiler.release>
         <maven.compiler.sourceEncoding>UTF-8</maven.compiler.sourceEncoding>
         <telegram.version>8.0.0</telegram.version>
         <emoji.version>5.1.1</emoji.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
-        <logback.version.fix>1.5.15</logback.version.fix>
+        <logback.version.fix>1.5.16</logback.version.fix>
         <apache.commons.version.fix>1.27.1</apache.commons.version.fix>
     </properties>
 
@@ -77,6 +78,18 @@
                 <groupId>com.vdurmont</groupId>
                 <artifactId>emoji-java</artifactId>
                 <version>${emoji.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>${logback.version.fix}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback.version.fix}</version>
             </dependency>
 
         </dependencies>
