@@ -17,7 +17,7 @@ import static com.github.jon7even.telegram.constants.DefaultMessageLogError.ERRO
 import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend.ERROR_TO_SEND;
 
 /**
- * Реализация сервиса быстрой обработки основных команд бота
+ * Реализация сервиса {@link MainQuickService} быстрой обработки основных команд бота.
  *
  * @author Jon7even
  * @version 2.0
@@ -42,15 +42,12 @@ public class MainQuickServiceImpl implements MainQuickService {
         String answer = "";
 
         switch (update.getMessage().getText()) {
-            case "/help":
-                answer = DefaultBaseMessagesToSend.HELP_TEXT;
-                break;
-            case "/start":
-                answer = DefaultBaseMessagesToSend.START_TEXT;
-                break;
-            default:
+            case "/help" -> answer = DefaultBaseMessagesToSend.HELP_TEXT;
+            case "/start" -> answer = DefaultBaseMessagesToSend.START_TEXT;
+            default -> {
                 answer = String.format("%s, %s", ERROR_TO_SEND, "неправильная логика сервиса обработки сообщений");
                 log.error("{} сбой сервиса диспетчера первичной обработки", ERROR_TO_EXECUTION_FOR_USER);
+            }
         }
         return MessageUtils.buildAnswerWithMessage(update.getMessage(), answer);
     }

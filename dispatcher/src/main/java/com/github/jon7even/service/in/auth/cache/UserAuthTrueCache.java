@@ -3,7 +3,7 @@ package com.github.jon7even.service.in.auth.cache;
 import com.github.jon7even.dto.UserAuthTrueDto;
 
 /**
- * Интерфейс сервиса хранения авторизованных пользователей в кэше
+ * Интерфейс сервиса хранения авторизованных пользователей в кэше.
  *
  * @author Jon7even
  * @version 2.0
@@ -11,14 +11,14 @@ import com.github.jon7even.dto.UserAuthTrueDto;
 public interface UserAuthTrueCache {
 
     /**
-     * Метод сохранения пользователя в кэше
+     * Метод сохранения пользователя в кэше.
      *
-     * @param userAuthTrueDto заполненный объект DTO
+     * @param userAuthTrueDto заполненный объект {@link UserAuthTrueDto}
      */
     void saveUserInCache(UserAuthTrueDto userAuthTrueDto);
 
     /**
-     * Метод проверяющий имеется ли пользователь в кэше авторизованных пользователей
+     * Метод проверяющий имеется ли пользователь в кэше авторизованных пользователей.
      *
      * @param chatIdUser - это chatId, который присваивает Telegram
      * @return boolean ответ
@@ -26,7 +26,7 @@ public interface UserAuthTrueCache {
     boolean isExistUserInCache(Long chatIdUser);
 
     /**
-     * Метод удаления пользователя из кэша (выход из аккаунта)
+     * Метод удаления пользователя из кэша (выход из аккаунта).
      *
      * @param chatIdUser - это chatId, который присваивает Telegram
      */

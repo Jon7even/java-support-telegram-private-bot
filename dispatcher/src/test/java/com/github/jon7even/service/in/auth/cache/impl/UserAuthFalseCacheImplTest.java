@@ -1,7 +1,7 @@
 package com.github.jon7even.service.in.auth.cache.impl;
 
 import com.github.jon7even.exception.AlreadyExistException;
-import com.github.jon7even.setup.PreparationForTests;
+import com.github.jon7even.setup.TestDataFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
  * @version 2.0
  */
 @DisplayName("Тестирование методов сервиса UserAuthFalseCacheImpl")
-public class UserAuthFalseCacheImplTest extends PreparationForTests {
+public class UserAuthFalseCacheImplTest extends TestDataFactory {
 
     private UserAuthFalseCacheImpl authFalseCache;
 

@@ -18,7 +18,7 @@ import static com.github.jon7even.configuration.RabbitQueue.TEXT_MESSAGE_UPDATE;
 import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend.WE_NOT_SUPPORT;
 
 /**
- * Реализация обработчика входящих сообщений от зарегистрированного Telegram бота
+ * Реализация сервиса {@link HandleUpdateBot}, который обрабатывает {@link Update} от Telegram API.
  *
  * @author Jon7even
  * @version 2.0
@@ -36,9 +36,6 @@ public class HandleUpdateBotImpl implements HandleUpdateBot {
 
     private final MainQuickService mainQuickService;
 
-    /**
-     * Реализация метода обработки входящих сообщений
-     */
     @Override
     public void processUpdate(Update update) {
         if (update == null) {

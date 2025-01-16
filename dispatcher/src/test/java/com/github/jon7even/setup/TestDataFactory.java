@@ -13,23 +13,17 @@ import java.time.LocalDateTime;
  * @author Jon7even
  * @version 2.0
  */
-public class PreparationForTests {
+public class TestDataFactory {
+
+    protected Long userIdOne = 1L;
 
     protected UserEntity userEntityOne;
     protected UserEntity userEntityTwo;
     protected UserEntity userEntityThree;
 
-    protected UserAuthTrueDto userAuthTrueDtoOne;
-    protected UserAuthTrueDto UserAuthTrueDtoTwo;
-    protected UserAuthTrueDto UserAuthTrueDtoThree;
-
-    protected UserAuthFalseDto userAuthFalseDtoOne;
-
     protected UserCreateDto userCreateDtoOne;
-
-    protected Long userIdOne = 1L;
-    protected Long userIdTwo = 2L;
-    protected Long userIdThree = 3L;
+    protected UserAuthTrueDto userAuthTrueDtoOne;
+    protected UserAuthFalseDto userAuthFalseDtoOne;
 
     protected void initUserEntity() {
 
@@ -63,20 +57,6 @@ public class PreparationForTests {
                 .firstName("FirstName")
                 .lastName("FirstLastName")
                 .userName("FirstUserName")
-                .build();
-
-        UserAuthTrueDtoTwo = UserAuthTrueDto.builder()
-                .chatId(2222222L)
-                .firstName("SecondName")
-                .lastName("SecondLastName")
-                .userName("SecondUserName")
-                .build();
-
-        UserAuthTrueDtoThree = UserAuthTrueDto.builder()
-                .chatId(3333333L)
-                .firstName("ThirdName")
-                .lastName("ThirdLastName")
-                .userName("ThirdUserName")
                 .build();
 
         userCreateDtoOne = UserCreateDto.builder()

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 /**
- * Интерфейс DAO для пользователя(UserEntity), использует JpaRepository
+ * Интерфейс DAO для пользователя {@link UserEntity}, использует JpaRepository.
  *
  * @author Jon7even
  * @version 2.0
@@ -18,7 +18,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     /**
-     * Метод проверки существования пользователя по chatId
+     * Метод проверки существования пользователя по chatId.
      *
      * @param chatId - это chatId, который присваивает Telegram
      * @return boolean есть ли пользователь в БД с таким chatId
@@ -26,10 +26,10 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     boolean existsByChatId(@Param("chatId") Long chatId);
 
     /**
-     * Метод поиска пользователя по chatId(присваивается Telegram)
+     * Метод поиска пользователя по chatId(присваивается Telegram).
      *
      * @param chatId - это chatId, который присваивает Telegram
-     * @return Entity пользователя, если он есть в системе
+     * @return Optional объект с {@link UserEntity} сущностью пользователя, если он есть в системе
      */
     Optional<UserEntity> findByChatId(@Param("chatId") Long chatId);
 }

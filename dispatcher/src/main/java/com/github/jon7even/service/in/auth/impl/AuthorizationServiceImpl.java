@@ -26,7 +26,7 @@ import static com.github.jon7even.telegram.constants.DefaultBaseMessagesToSend.U
 import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend.ERROR_TO_SEND;
 
 /**
- * Реализация сервиса авторизации пользователей
+ * Реализация сервиса {@link AuthorizationService} авторизации пользователей.
  *
  * @author Jon7even
  * @version 2.0

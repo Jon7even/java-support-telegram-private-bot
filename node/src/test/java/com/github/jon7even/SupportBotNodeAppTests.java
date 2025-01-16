@@ -6,8 +6,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.MessageSource;
 import org.springframework.test.context.ActiveProfiles;
+
+import java.util.Locale;
 
 import static com.github.jon7even.configuration.RabbitQueue.ANSWER_MESSAGE;
 import static com.github.jon7even.configuration.RabbitQueue.AUDIO_MESSAGE_UPDATE;
@@ -15,6 +19,7 @@ import static com.github.jon7even.configuration.RabbitQueue.CALLBACK_QUERY_UPDAT
 import static com.github.jon7even.configuration.RabbitQueue.DOC_MESSAGE_UPDATE;
 import static com.github.jon7even.configuration.RabbitQueue.PHOTO_MESSAGE_UPDATE;
 import static com.github.jon7even.configuration.RabbitQueue.TEXT_MESSAGE_UPDATE;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 
 /**
@@ -30,6 +35,13 @@ class SupportBotNodeAppTests extends ContainersSetup {
 
     @Autowired
     private RabbitAdmin rabbitAdmin;
+
+    @Autowired
+    private MessageSource messageSource;
+
+    @Value("${localeTag}")
+    @Autowired
+    private Locale locale;
 
     @Test
     @DisplayName("Проверка загрузки контекста приложения")
@@ -61,5 +73,17 @@ class SupportBotNodeAppTests extends ContainersSetup {
                 .isNotNull();
 
         softAssertions.assertAll();
+    }
+
+    @Test
+    @DisplayName("Проверка загрузки локализации сообщения из файла")
+    public void testMessageSourceLoaded() {
+        String expectedMessage = "test";
+
+        String actualMessage = messageSource.getMessage("reply.test", null, locale);
+
+        assertThat(actualMessage)
+                .isNotNull()
+                .isEqualTo(expectedMessage);
     }
 }

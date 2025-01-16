@@ -3,13 +3,14 @@ package com.github.jon7even.telegram.menu;
 import lombok.AllArgsConstructor;
 
 /**
- * Перечисление основных команд главного меню чат-бота
+ * Перечисление основных команд главного меню чат-бота.
  *
  * @author Jon7even
  * @version 2.0
  */
 @AllArgsConstructor
 public enum MainMenu {
+
     /**
      * Регистрация и инициализация пользователя
      */

@@ -6,11 +6,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 
 /**
- * Загрузка конфигурации языковой поддержки приложения
+ * Загрузка конфигурации языковой поддержки приложения.
  *
  * @author Jon7even
  * @version 2.0
- * @apiNote файл конфигурации языковой поддержки называется messages_ru_RU.properties, в нем находится RU локализация
+ * @apiNote Файл конфигурации языковой поддержки называется messages_ru_RU.properties, в нем находится RU локализация.
  */
 @Configuration
 public class MessagesSourceConfig {

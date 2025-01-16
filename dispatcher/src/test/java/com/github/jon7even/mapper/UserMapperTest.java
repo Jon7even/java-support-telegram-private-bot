@@ -5,7 +5,7 @@ import com.github.jon7even.dto.UserAuthTrueDto;
 import com.github.jon7even.dto.UserCreateDto;
 import com.github.jon7even.dto.UserUpdateDto;
 import com.github.jon7even.entity.user.UserEntity;
-import com.github.jon7even.setup.PreparationForTests;
+import com.github.jon7even.setup.TestDataFactory;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
  * @version 2.0
  */
 @DisplayName("Тестирование методов маппера UserMapperImpl")
-public class UserMapperTest extends PreparationForTests {
+public class UserMapperTest extends TestDataFactory {
 
     private UserMapper userMapper;
 

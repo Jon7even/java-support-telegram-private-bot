@@ -19,7 +19,7 @@ import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend
 import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend.WE_NOT_SUPPORT;
 
 /**
- * Реализация сервиса слушателя входящих сообщений от API Telegram {@link ConsumerService}
+ * Реализация сервиса {@link ConsumerService} слушателя входящих сообщений от сервиса Dispatcher.
  *
  * @author Jon7even
  * @version 2.0
@@ -29,7 +29,7 @@ import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend
 @RequiredArgsConstructor
 public class ConsumerServiceImpl implements ConsumerService {
 
-    private final HandlerService mainService;
+    private final HandlerService handlerService;
 
     private final SenderMessageService senderMessageService;
 
@@ -39,7 +39,7 @@ public class ConsumerServiceImpl implements ConsumerService {
         log.debug("Получена новая TEXT очередь update={}", update);
         log.info("Получена новая TEXT очередь text={}", update.getMessage().getText());
         try {
-            mainService.processTextMessage(update);
+            handlerService.processTextMessage(update);
         } catch (RuntimeException exception) {
             senderMessageService.sendError(update.getMessage().getChatId(), ERROR_RECEIVE);
             log.error("{} {}", ERROR_TO_EXECUTION_FOR_USER, exception.getMessage());
@@ -52,7 +52,7 @@ public class ConsumerServiceImpl implements ConsumerService {
         log.debug("Получена новая CALLBACK очередь update={}", update);
         log.info("Получена новая CALLBACK очередь data={}", update.getCallbackQuery().getData());
         try {
-            mainService.processCallbackQuery(update);
+            handlerService.processCallbackQuery(update);
         } catch (RuntimeException exception) {
             senderMessageService.sendError(update.getMessage().getChatId(), ERROR_RECEIVE);
             log.error("{} {}", ERROR_TO_EXECUTION_FOR_USER, exception.getMessage());

@@ -4,21 +4,25 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 
 /**
- * Интерфейс сервиса для отправки ответов в RabbitMq для дальнейшей обработки диспетчером
+ * Интерфейс сервиса для отправки ответов в RabbitMq для дальнейшей обработки диспетчером.
  *
  * @author Jon7even
  * @version 2.0
- * @apiNote Основная точка отправления данных из сервиса "Узел"
+ * @apiNote Основная точка отправления данных из сервиса "Node - Узел".
  */
 public interface ProducerService {
 
     /**
-     * Метод отправляющий ответ в виде текстового сообщения
+     * Метод отправляющий ответ в виде текстового сообщения.
+     *
+     * @param sendMessage объект {@link SendMessage} для отправления ответа в чат пользователю
      */
     void producerAnswerText(SendMessage sendMessage);
 
     /**
-     * Метод отправляющий ответ в виде редактирования текущего сообщения, которое имеется в чате
+     * Метод отправляющий ответ в виде редактирования текущего сообщения, которое имеется в чате.
+     *
+     * @param editMessageText объект {@link EditMessageText} для редактирования сообщения в чате пользователя
      */
     void producerAnswerEditText(EditMessageText editMessageText);
 }

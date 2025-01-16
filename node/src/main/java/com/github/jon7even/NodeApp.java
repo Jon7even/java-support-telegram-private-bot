@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * Основной класс запуска сервиса "Узел", управляется фреймворком SpringBoot
+ * Основной класс запуска сервиса "Node - Узел", управляется фреймворком SpringBoot.
  *
  * @author Jon7even
  * @version 2.0
