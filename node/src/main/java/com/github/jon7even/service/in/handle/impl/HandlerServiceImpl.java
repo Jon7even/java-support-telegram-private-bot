@@ -1,6 +1,8 @@
 package com.github.jon7even.service.in.handle.impl;
 
 import com.github.jon7even.service.in.handle.HandlerService;
+import com.github.jon7even.service.in.handle.UserHandlerService;
+import com.github.jon7even.service.in.handle.factory.UserHandlerFactory;
 import com.github.jon7even.service.in.message.ReplyMessageService;
 import com.github.jon7even.service.in.status.UserStatusService;
 import com.github.jon7even.service.out.producer.SenderMessageService;
@@ -29,30 +31,21 @@ public class HandlerServiceImpl implements HandlerService {
 
     private final UserStatusService userStatusService;
 
+    private final UserHandlerFactory userHandlerFactory;
+
     @Override
     public void processTextMessage(Update update) {
-        String resultTextFromMessage = update.getMessage().getText();
         Long chatId = update.getMessage().getChatId();
 
         log.debug("Выявляю текущий статус пользователя c [chatId={}]", chatId);
         BotState currentBotState = userStatusService.getBotStateForUser(chatId);
-        log.trace("Текущий статус пользователя c [chatId={}] является [BotState={}]", chatId, currentBotState);
+        log.info("Текущий статус пользователя c [chatId={}] является [BotState={}]", chatId, currentBotState);
 
-        if (currentBotState.equals(BotState.MAIN_START) || currentBotState.equals(BotState.MAIN_HELP)
-                || currentBotState.equals(BotState.MAIN_GIFTS)) {
-            switch (resultTextFromMessage) {
-                case "/gifts" -> senderMessageService.sendText(
-                        chatId, replyMessageService.getReplyText("reply.nonSupportedYet")
-                );
-                case "/ask" -> senderMessageService.sendText(chatId, replyMessageService.getReplyText("reply.bu"));
-                default -> {
-                    senderMessageService.sendText(chatId, replyMessageService.getReplyText("reply.nonSupport"));
-                    log.trace(ERROR_COMMAND_NOT_SUPPORT + "текст: [{}]", resultTextFromMessage);
-                }
-            }
-        } else{
-            senderMessageService.sendText(chatId, replyMessageService.getReplyText("reply.bu"));
-        }
+        log.debug("Определяю обработчик для пользователя c [chatId={}]", chatId);
+        UserHandlerService userHandlerService = userHandlerFactory.getHandlerForUser(currentBotState);
+        log.info("Пользователю c [chatId={}] выбран обработчик {}", chatId, userHandlerService.getClass().getName());
+
+        userHandlerService.handle(update);
     }
 
     @Override
