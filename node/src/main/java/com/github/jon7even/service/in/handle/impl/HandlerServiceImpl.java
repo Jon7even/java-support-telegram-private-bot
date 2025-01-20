@@ -12,8 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import static com.github.jon7even.telegram.constants.DefaultMessageLogError.ERROR_COMMAND_NOT_SUPPORT;
-
 /**
  * Реализация сервиса обработки данных от пользователей {@link HandlerService}.
  *
@@ -36,6 +34,23 @@ public class HandlerServiceImpl implements HandlerService {
     @Override
     public void processTextMessage(Update update) {
         Long chatId = update.getMessage().getChatId();
+        String text = update.getMessage().getText();
+        log.info("Пользователь c [chatId={}] прислал текст [text={}], начинаем обрабатывать...", chatId, text);
+        handleQuery(update);
+    }
+
+    @Override
+    public void processCallbackQuery(Update update) {
+        String queryCallbackQuery = update.getCallbackQuery().getData();
+        Long chatId = update.getCallbackQuery().getMessage().getChatId();
+        Integer messageId = update.getCallbackQuery().getMessage().getMessageId();
+        log.info("Пользователь c [chatId={}] нажал на клавиатуру в сообщении [messageId={}] и передает: [{}]",
+                chatId, queryCallbackQuery, messageId);
+        handleQuery(update);
+    }
+
+    private void handleQuery(Update update) {
+        Long chatId = update.getCallbackQuery().getMessage().getChatId();
 
         log.debug("Выявляю текущий статус пользователя c [chatId={}]", chatId);
         BotState currentBotState = userStatusService.getBotStateForUser(chatId);
@@ -46,24 +61,5 @@ public class HandlerServiceImpl implements HandlerService {
         log.info("Пользователю c [chatId={}] выбран обработчик {}", chatId, userHandlerService.getClass().getName());
 
         userHandlerService.handle(update);
-    }
-
-    @Override
-    public void processCallbackQuery(Update update) {
-        String queryCallbackQuery = update.getCallbackQuery().getData();
-        Long chatId = update.getCallbackQuery().getMessage().getChatId();
-        Integer messageId = update.getCallbackQuery().getMessage().getMessageId();
-        log.debug("Пользователь {} нажал на клавиатуру в сообщении {} и передает: {}",
-                chatId, queryCallbackQuery, messageId);
-
-        switch (queryCallbackQuery) {
-            case "/anyCallback" -> senderMessageService.sendEditText(
-                    chatId, replyMessageService.getReplyText("reply.callBack.AddNewCompany"), messageId
-            );
-            default -> {
-                senderMessageService.sendText(chatId, replyMessageService.getReplyText("reply.nonSupport"));
-                log.trace(ERROR_COMMAND_NOT_SUPPORT + "нажатие на клавиатуру [{}]", queryCallbackQuery);
-            }
-        }
     }
 }
