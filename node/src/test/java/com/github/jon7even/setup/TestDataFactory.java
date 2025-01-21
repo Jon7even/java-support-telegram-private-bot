@@ -4,6 +4,7 @@ import com.github.jon7even.entity.user.UserEntity;
 import com.github.jon7even.utils.MessageUtils;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.chat.Chat;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 
@@ -32,6 +33,7 @@ public class TestDataFactory {
     protected Message expectedMessage;
     protected SendMessage expectedSendMessage;
     protected EditMessageText expectedEditMessageText;
+    protected CallbackQuery callbackQueryMessage;
 
     protected void initMessage() {
         initUserEntity();
@@ -45,6 +47,7 @@ public class TestDataFactory {
                         .userName(userEntityOne.getLastName())
                         .build())
                 .text("test message")
+                .messageId(2)
                 .build();
 
         expectedSendMessage = MessageUtils.buildAnswerWithText(expectedMessage.getChatId(), "test message");
@@ -52,6 +55,10 @@ public class TestDataFactory {
         expectedEditMessageText = MessageUtils.buildAnswerWithEditText(
                 expectedMessage.getChatId(), "edit message", 1
         );
+
+        callbackQueryMessage = new CallbackQuery();
+        callbackQueryMessage.setMessage(expectedMessage);
+        callbackQueryMessage.setData("/test");
     }
 
     protected void initUserEntity() {

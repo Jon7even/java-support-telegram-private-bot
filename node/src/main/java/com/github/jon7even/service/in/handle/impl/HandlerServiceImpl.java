@@ -31,7 +31,7 @@ public class HandlerServiceImpl implements HandlerService {
         String text = update.getMessage().getText();
         log.info("Пользователь c [chatId={}] прислал текст [text={}], начинаем обрабатывать...", chatId, text);
 
-        handleQuery(update);
+        handleQuery(update, chatId);
     }
 
     @Override
@@ -42,12 +42,10 @@ public class HandlerServiceImpl implements HandlerService {
         log.info("Пользователь c [chatId={}] нажал на клавиатуру в сообщении [messageId={}] и передает: [{}]",
                 chatId, queryCallbackQuery, messageId);
 
-        handleQuery(update);
+        handleQuery(update, chatId);
     }
 
-    private void handleQuery(Update update) {
-        Long chatId = update.getCallbackQuery().getMessage().getChatId();
-
+    private void handleQuery(Update update, Long chatId) {
         log.debug("Выявляю текущий статус пользователя c [chatId={}]", chatId);
         BotState currentBotState = userStatusService.getBotStateForUser(chatId);
         log.info("Текущий статус пользователя c [chatId={}] является [BotState={}]", chatId, currentBotState);

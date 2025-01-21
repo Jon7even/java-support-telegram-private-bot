@@ -9,7 +9,7 @@ package com.github.jon7even.telegram;
 public enum BotState {
 
     /**
-     * Статус главного меню
+     * Статус главного меню обработки текста
      */
     MAIN_START,
 
@@ -26,5 +26,10 @@ public enum BotState {
     /**
      * Статус меню работы с нейросетями
      */
-    MAIN_ASK;
+    MAIN_ASK,
+
+    /**
+     * Статус главного меню обработки нажатия на клавиатуру
+     */
+    MAIN_CALLBACK;
 }
