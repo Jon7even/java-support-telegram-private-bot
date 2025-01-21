@@ -3,9 +3,7 @@ package com.github.jon7even.service.in.handle.impl;
 import com.github.jon7even.service.in.handle.HandlerService;
 import com.github.jon7even.service.in.handle.UserHandlerService;
 import com.github.jon7even.service.in.handle.factory.UserHandlerFactory;
-import com.github.jon7even.service.in.message.ReplyMessageService;
 import com.github.jon7even.service.in.status.UserStatusService;
-import com.github.jon7even.service.out.producer.SenderMessageService;
 import com.github.jon7even.telegram.BotState;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,10 +21,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @RequiredArgsConstructor
 public class HandlerServiceImpl implements HandlerService {
 
-    private final ReplyMessageService replyMessageService;
-
-    private final SenderMessageService senderMessageService;
-
     private final UserStatusService userStatusService;
 
     private final UserHandlerFactory userHandlerFactory;
@@ -36,6 +30,7 @@ public class HandlerServiceImpl implements HandlerService {
         Long chatId = update.getMessage().getChatId();
         String text = update.getMessage().getText();
         log.info("Пользователь c [chatId={}] прислал текст [text={}], начинаем обрабатывать...", chatId, text);
+
         handleQuery(update);
     }
 
@@ -46,6 +41,7 @@ public class HandlerServiceImpl implements HandlerService {
         Integer messageId = update.getCallbackQuery().getMessage().getMessageId();
         log.info("Пользователь c [chatId={}] нажал на клавиатуру в сообщении [messageId={}] и передает: [{}]",
                 chatId, queryCallbackQuery, messageId);
+
         handleQuery(update);
     }
 
