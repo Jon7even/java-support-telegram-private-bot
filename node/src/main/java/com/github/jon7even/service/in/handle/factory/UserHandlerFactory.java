@@ -1,10 +1,11 @@
 package com.github.jon7even.service.in.handle.factory;
 
 import com.github.jon7even.service.in.handle.UserHandlerService;
+import com.github.jon7even.service.in.handle.impl.StandardCallbackHandlerImpl;
+import com.github.jon7even.service.in.handle.impl.StandardTextHandlerImpl;
 import com.github.jon7even.service.in.status.UserStatusService;
 import com.github.jon7even.telegram.BotState;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -23,9 +24,13 @@ public class UserHandlerFactory {
 
     private final HashMap<BotState, UserHandlerService> mapOfHandlersForUser;
 
-    @Autowired
-    public UserHandlerFactory() {
+    public UserHandlerFactory(StandardTextHandlerImpl standardTextHandler,
+                              StandardCallbackHandlerImpl standardCallbackHandler) {
         this.mapOfHandlersForUser = new HashMap<>();
+
+        mapOfHandlersForUser.put(BotState.MAIN_START, standardTextHandler);
+        mapOfHandlersForUser.put(BotState.MAIN_HELP, standardTextHandler);
+        mapOfHandlersForUser.put(BotState.MAIN_CALLBACK, standardCallbackHandler);
     }
 
     public UserHandlerService getHandlerForUser(BotState state) {
