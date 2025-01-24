@@ -14,7 +14,9 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * Класс описывающий статус пользователя.
@@ -25,12 +27,14 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Table(name = "user_status", schema = "bot")
 public class UserStatus {
 
     @Id
+    @EqualsAndHashCode.Include
     @Column(name = "chat_id", nullable = false)
     private Long chatId;
 
@@ -39,6 +43,7 @@ public class UserStatus {
     private BotState status;
 
     @MapsId
+    @ToString.Exclude
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "chat_id", referencedColumnName = "chat_id")
     private UserEntity user;
