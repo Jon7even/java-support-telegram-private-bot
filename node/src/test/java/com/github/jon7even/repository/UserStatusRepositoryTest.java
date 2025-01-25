@@ -74,7 +74,7 @@ public class UserStatusRepositoryTest extends GenericRepositoryTest {
                 .build();
         UserStatusEntity expectedStatusTwo = UserStatusEntity.builder()
                 .chatId(userInBaseTwo.getChatId())
-                .status(BotState.MAIN_HE
+                .status(BotState.MAIN_HELP)
                 .build();
         UserStatusEntity expectedStatusThree = UserStatusEntity.builder()
                 .chatId(userInBaseThree.getChatId())
