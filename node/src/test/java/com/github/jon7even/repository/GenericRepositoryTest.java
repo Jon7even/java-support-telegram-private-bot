@@ -20,7 +20,7 @@ import org.springframework.test.context.ActiveProfiles;
 public class GenericRepositoryTest extends ContainersSetup {
 
     @Autowired
-    private UserRepository userRepository;
+    protected UserRepository userRepository;
 
     @BeforeEach
     public void setUpEntity() {
@@ -28,14 +28,14 @@ public class GenericRepositoryTest extends ContainersSetup {
     }
 
     protected UserEntity userInBaseOne;
-    protected UserEntity userInBaseSecond;
-    protected UserEntity userInBaseThird;
+    protected UserEntity userInBaseTwo;
+    protected UserEntity userInBaseThree;
 
     @BeforeEach
     public void addUser() {
         initUserEntity();
         userInBaseOne = userRepository.save(userEntityOne);
-        userInBaseSecond = userRepository.save(userEntityTwo);
-        userInBaseThird = userRepository.save(userEntityThree);
+        userInBaseTwo = userRepository.save(userEntityTwo);
+        userInBaseThree = userRepository.save(userEntityThree);
     }
 }
