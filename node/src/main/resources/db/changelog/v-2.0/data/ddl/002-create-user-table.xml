@@ -38,9 +38,15 @@
 
         </createTable>
 
+        <createIndex indexName="idx_user_chat_id" tableName="user" schemaName="bot">
+            <column name="chat_id"/>
+        </createIndex>
+
         <rollback>
+            <dropIndex indexName="idx_user_chat_id" tableName="user" schemaName="bot"/>
+            <dropUniqueConstraint tableName="user" constraintName="unq_user_login" schemaName="bot"/>
+            <dropPrimaryKey tableName="user" constraintName="pk_user" schemaName="bot"/>
             <dropAllForeignKeyConstraints baseTableName="user" baseTableSchemaName="bot"/>
-            <delete tableName="user" schemaName="bot"/>
             <dropTable tableName="user" schemaName="bot"/>
         </rollback>
 
