@@ -9,7 +9,7 @@
 
         <createTable tableName="user_status" schemaName="bot">
 
-            <column name="chatId" type="BIGINT">
+            <column name="chat_id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_status"/>
             </column>
 
@@ -19,20 +19,7 @@
 
         </createTable>
 
-        <addForeignKeyConstraint
-                baseTableSchemaName="bot"
-                baseTableName="user_status"
-                baseColumnNames="chat_id"
-                constraintName="fk_user_status_chat_id"
-                referencedTableSchemaName="bot"
-                referencedTableName="user"
-                referencedColumnNames="chat_id"
-                onDelete="CASCADE"
-                onUpdate="CASCADE"/>
-
         <rollback>
-            <dropAllForeignKeyConstraints baseTableName="user_status" baseTableSchemaName="bot"/>
-            <delete tableName="user_status" schemaName="bot"/>
             <dropTable tableName="user_status" schemaName="bot"/>
         </rollback>
 
