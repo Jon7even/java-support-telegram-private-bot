@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Тестирование репозитория {@link UserRepository}
+ * Тестирование методов репозитория {@link UserRepository}
  *
  * @author Jon7even
  * @version 2.0

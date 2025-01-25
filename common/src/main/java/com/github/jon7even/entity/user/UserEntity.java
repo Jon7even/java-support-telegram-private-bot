@@ -63,6 +63,8 @@ public class UserEntity {
     private Boolean authorization;
 
     @ToString.Exclude
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToOne(mappedBy = "user",
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            fetch = FetchType.LAZY, orphanRemoval = true)
     private UserStatus userStatus;
 }

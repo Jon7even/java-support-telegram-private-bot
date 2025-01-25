@@ -45,6 +45,6 @@ public class UserStatus {
     @MapsId
     @ToString.Exclude
     @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "chat_id", referencedColumnName = "chat_id")
+    @JoinColumn(name = "chat_id", referencedColumnName = "chat_id", nullable = false)
     private UserEntity user;
 }
