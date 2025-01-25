@@ -20,6 +20,7 @@
         </createTable>
 
         <rollback>
+            <dropPrimaryKey tableName="user_status" constraintName="pk_user_status" schemaName="bot"/>
             <dropTable tableName="user_status" schemaName="bot"/>
         </rollback>
 

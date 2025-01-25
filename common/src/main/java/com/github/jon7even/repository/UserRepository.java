@@ -12,7 +12,7 @@ import java.util.Optional;
  *
  * @author Jon7even
  * @version 2.0
- * @apiNote chatId присваивается самим Telegram и считается, что он уникальный
+ * @apiNote {@code chatId} присваивается самим Telegram и считается, что он уникальный.
  */
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
