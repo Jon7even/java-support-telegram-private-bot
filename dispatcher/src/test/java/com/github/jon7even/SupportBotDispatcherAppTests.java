@@ -1,13 +1,11 @@
 package com.github.jon7even;
 
-import com.github.jon7even.setup.ContainersSetup;
+import com.github.jon7even.setup.GenericMainAppTests;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import static com.github.jon7even.configuration.RabbitQueue.ANSWER_MESSAGE;
 import static com.github.jon7even.configuration.RabbitQueue.AUDIO_MESSAGE_UPDATE;
@@ -23,10 +21,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
  * @author Jon7even
  * @version 2.0
  */
-@ActiveProfiles(value = "test")
-@SpringBootTest(classes = DispatcherApp.class)
 @DisplayName("Тестирование запуска сервиса DispatcherApp")
-class SupportBotDispatcherAppTests extends ContainersSetup {
+class SupportBotDispatcherAppTests extends GenericMainAppTests {
 
     @Autowired
     private RabbitAdmin rabbitAdmin;

@@ -1,15 +1,10 @@
 package com.github.jon7even.repository;
 
 import com.github.jon7even.entity.user.UserEntity;
-import com.github.jon7even.setup.ContainersSetup;
+import com.github.jon7even.setup.GenericRepositoryTests;
 import org.assertj.core.api.SoftAssertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,19 +15,8 @@ import java.util.Optional;
  * @author Jon7even
  * @version 2.0
  */
-@DataJpaTest
-@ActiveProfiles(value = "test")
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @DisplayName("Тестирование методов репозитория UserRepository")
-public class UserRepositoryTest extends ContainersSetup {
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @BeforeEach
-    void setUpEntity() {
-        initUserEntity();
-    }
+public class UserRepositoryTest extends GenericRepositoryTests {
 
     @Test
     @DisplayName("Корректное сохранение трех сущностей пользователя")
