@@ -38,7 +38,6 @@ public class UserMapperTest extends TestDataFactory {
         UserEntity actualResult = userMapper.toEntityFromCreateDto(userCreateDtoOne);
 
         SoftAssertions softAssertions = new SoftAssertions();
-
         softAssertions.assertThat(actualResult)
                 .isNotNull();
         softAssertions.assertThat(actualResult.getId())
@@ -74,7 +73,6 @@ public class UserMapperTest extends TestDataFactory {
         UserCreateDto actualResult = userMapper.toDtoCreateFromMessage(expectedChatUser);
 
         SoftAssertions softAssertions = new SoftAssertions();
-
         softAssertions.assertThat(actualResult)
                 .isNotNull();
         softAssertions.assertThat(actualResult.getChatId())
@@ -108,7 +106,6 @@ public class UserMapperTest extends TestDataFactory {
         UserUpdateDto actualResult = userMapper.toDtoUpdateFromMessage(expectedChatUser);
 
         SoftAssertions softAssertions = new SoftAssertions();
-
         softAssertions.assertThat(actualResult)
                 .isNotNull();
         softAssertions.assertThat(actualResult.getChatId())
@@ -141,7 +138,6 @@ public class UserMapperTest extends TestDataFactory {
         UserAuthFalseDto actualResult = userMapper.toAuthFalseDtoFromEntity(expectedUser);
 
         SoftAssertions softAssertions = new SoftAssertions();
-
         softAssertions.assertThat(actualResult)
                 .isNotNull();
         softAssertions.assertThat(actualResult.getId())
@@ -180,7 +176,6 @@ public class UserMapperTest extends TestDataFactory {
         UserAuthTrueDto actualResult = userMapper.toAuthTrueDtoFromEntity(expectedUser);
 
         SoftAssertions softAssertions = new SoftAssertions();
-
         softAssertions.assertThat(actualResult)
                 .isNotNull();
         softAssertions.assertThat(actualResult.getId())
@@ -226,7 +221,6 @@ public class UserMapperTest extends TestDataFactory {
         userMapper.updateUserEntityFromDtoUpdate(actualUserFromUpdate, expectedUserUpdateDto, true);
 
         SoftAssertions softAssertions = new SoftAssertions();
-
         softAssertions.assertThat(actualUserFromUpdate)
                 .isNotNull();
         softAssertions.assertThat(actualUserFromUpdate.getId())
@@ -278,7 +272,6 @@ public class UserMapperTest extends TestDataFactory {
         userMapper.updateUserEntitySetAuthorizationIsTrue(actualUserFromUpdate);
 
         SoftAssertions softAssertions = new SoftAssertions();
-
         softAssertions.assertThat(actualUserFromUpdate)
                 .isNotNull();
         softAssertions.assertThat(actualUserFromUpdate.getId())

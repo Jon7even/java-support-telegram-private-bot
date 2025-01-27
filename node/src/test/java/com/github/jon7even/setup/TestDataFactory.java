@@ -36,6 +36,7 @@ public class TestDataFactory {
     protected CallbackQuery callbackQueryMessage;
 
     protected void initMessage() {
+
         initUserEntity();
 
         expectedMessage = Message.builder()

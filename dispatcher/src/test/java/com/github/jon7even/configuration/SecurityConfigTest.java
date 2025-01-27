@@ -34,9 +34,9 @@ public class SecurityConfigTest {
         when(mockSecurityConfig.getAttemptsAuth()).thenReturn(3);
 
         SoftAssertions softAssertions = new SoftAssertions();
-        assertThat(mockSecurityConfig.getKeyPass())
+        softAssertions.assertThat(mockSecurityConfig.getKeyPass())
                 .isEqualTo("testPass");
-        assertThat(mockSecurityConfig.getAttemptsAuth())
+        softAssertions.assertThat(mockSecurityConfig.getAttemptsAuth())
                 .isEqualTo(3);
         softAssertions.assertAll();
     }

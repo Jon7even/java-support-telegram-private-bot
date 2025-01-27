@@ -1,15 +1,13 @@
 package com.github.jon7even;
 
-import com.github.jon7even.setup.ContainersSetup;
+import com.github.jon7even.setup.GenericMainAppTests;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Locale;
 
@@ -28,10 +26,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
  * @author Jon7even
  * @version 2.0
  */
-@ActiveProfiles(value = "test")
-@SpringBootTest(classes = NodeApp.class)
 @DisplayName("Тестирование запуска сервиса NodeApp")
-class SupportBotNodeAppTests extends ContainersSetup {
+class SupportBotNodeAppTests extends GenericMainAppTests {
 
     @Autowired
     private RabbitAdmin rabbitAdmin;
@@ -58,7 +54,6 @@ class SupportBotNodeAppTests extends ContainersSetup {
     @DisplayName("Проверка создания очередей RabbitMq")
     public void testQueuesExist() {
         SoftAssertions softAssertions = new SoftAssertions();
-
         softAssertions.assertThat(rabbitAdmin.getQueueInfo(TEXT_MESSAGE_UPDATE))
                 .isNotNull();
         softAssertions.assertThat(rabbitAdmin.getQueueInfo(CALLBACK_QUERY_UPDATE))
@@ -71,7 +66,6 @@ class SupportBotNodeAppTests extends ContainersSetup {
                 .isNotNull();
         softAssertions.assertThat(rabbitAdmin.getQueueInfo(ANSWER_MESSAGE))
                 .isNotNull();
-
         softAssertions.assertAll();
     }
 
@@ -83,7 +77,7 @@ class SupportBotNodeAppTests extends ContainersSetup {
         String actualMessage = messageSource.getMessage("reply.test", null, locale);
 
         assertThat(actualMessage)
-                .isNotNull()
+                .isNotEmpty()
                 .isEqualTo(expectedMessage);
     }
 }

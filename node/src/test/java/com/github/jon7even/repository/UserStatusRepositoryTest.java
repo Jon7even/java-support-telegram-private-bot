@@ -1,6 +1,7 @@
 package com.github.jon7even.repository;
 
 import com.github.jon7even.entity.UserStatusEntity;
+import com.github.jon7even.setup.GenericRepositoryTests;
 import com.github.jon7even.telegram.BotState;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
@@ -16,7 +17,7 @@ import java.util.List;
  * @version 2.0
  */
 @DisplayName("Тестирование методов репозитория UserStatusRepository")
-public class UserStatusRepositoryTest extends GenericRepositoryTest {
+public class UserStatusRepositoryTest extends GenericRepositoryTests {
 
     @Autowired
     protected UserStatusRepository userStatusRepository;
@@ -32,7 +33,6 @@ public class UserStatusRepositoryTest extends GenericRepositoryTest {
         UserStatusEntity actualStatus = userStatusRepository.save(expectedStatus);
 
         SoftAssertions softAssertions = new SoftAssertions();
-
         softAssertions.assertThat(actualStatus)
                 .isNotNull();
         softAssertions.assertThat(actualStatus.getChatId())
@@ -55,7 +55,6 @@ public class UserStatusRepositoryTest extends GenericRepositoryTest {
         UserStatusEntity actualStatus = userStatusRepository.getById(chatId);
 
         SoftAssertions softAssertions = new SoftAssertions();
-
         softAssertions.assertThat(actualStatus)
                 .isNotNull();
         softAssertions.assertThat(actualStatus.getChatId())
@@ -88,7 +87,6 @@ public class UserStatusRepositoryTest extends GenericRepositoryTest {
         List<UserStatusEntity> actualResult = userStatusRepository.findAll();
 
         SoftAssertions softAssertions = new SoftAssertions();
-
         softAssertions.assertThat(actualResult)
                 .isNotNull();
         softAssertions.assertThat(actualResult)

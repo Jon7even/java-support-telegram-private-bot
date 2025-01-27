@@ -42,7 +42,6 @@ class SupportBotDispatcherAppTests extends GenericMainAppTests {
     @DisplayName("Проверка создания очередей RabbitMq")
     public void testQueuesExist() {
         SoftAssertions softAssertions = new SoftAssertions();
-
         softAssertions.assertThat(rabbitAdmin.getQueueInfo(TEXT_MESSAGE_UPDATE))
                 .isNotNull();
         softAssertions.assertThat(rabbitAdmin.getQueueInfo(CALLBACK_QUERY_UPDATE))
@@ -55,7 +54,6 @@ class SupportBotDispatcherAppTests extends GenericMainAppTests {
                 .isNotNull();
         softAssertions.assertThat(rabbitAdmin.getQueueInfo(ANSWER_MESSAGE))
                 .isNotNull();
-
         softAssertions.assertAll();
     }
 }

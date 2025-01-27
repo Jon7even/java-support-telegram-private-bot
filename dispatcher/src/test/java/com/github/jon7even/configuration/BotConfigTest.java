@@ -34,9 +34,9 @@ public class BotConfigTest {
         when(mockBotConfig.getToken()).thenReturn("testBotToken123");
 
         SoftAssertions softAssertions = new SoftAssertions();
-        assertThat(mockBotConfig.getName())
+        softAssertions.assertThat(mockBotConfig.getName())
                 .isEqualTo("testBotName");
-        assertThat(mockBotConfig.getToken())
+        softAssertions.assertThat(mockBotConfig.getToken())
                 .isEqualTo("testBotToken123");
         softAssertions.assertAll();
     }

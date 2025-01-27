@@ -28,7 +28,6 @@ public class UserRepositoryTest extends GenericRepositoryTests {
         List<UserEntity> actualResult = userRepository.findAll();
 
         SoftAssertions softAssertions = new SoftAssertions();
-
         softAssertions.assertThat(actualResult)
                 .isNotNull();
         softAssertions.assertThat(actualResult)
@@ -44,7 +43,6 @@ public class UserRepositoryTest extends GenericRepositoryTests {
         UserEntity actualUserOneFullName = userRepository.save(userEntityOne);
 
         SoftAssertions softAssertions = new SoftAssertions();
-
         softAssertions.assertThat(actualUserOneFullName)
                 .isNotNull();
         softAssertions.assertThat(actualUserOneFullName.getId())
@@ -70,7 +68,6 @@ public class UserRepositoryTest extends GenericRepositoryTests {
         UserEntity userTwoNull = userRepository.save(userEntityTwo);
 
         SoftAssertions softAssertions = new SoftAssertions();
-
         softAssertions.assertThat(userTwoNull)
                 .isNotNull();
         softAssertions.assertThat(userTwoNull.getId())
@@ -96,7 +93,6 @@ public class UserRepositoryTest extends GenericRepositoryTests {
         UserEntity userThreeAuthOn = userRepository.save(userEntityThree);
 
         SoftAssertions softAssertions = new SoftAssertions();
-
         softAssertions.assertThat(userThreeAuthOn)
                 .isNotNull();
         softAssertions.assertThat(userThreeAuthOn.getId())
@@ -127,7 +123,6 @@ public class UserRepositoryTest extends GenericRepositoryTests {
         Boolean actualResult = userRepository.existsByChatId(validId);
 
         SoftAssertions softAssertions = new SoftAssertions();
-
         softAssertions.assertThat(actualResult)
                 .isTrue();
         softAssertions.assertThat(validId)
@@ -144,7 +139,6 @@ public class UserRepositoryTest extends GenericRepositoryTests {
         Boolean actualResult = userRepository.existsByChatId(notValidId);
 
         SoftAssertions softAssertions = new SoftAssertions();
-
         softAssertions.assertThat(actualResult)
                 .isFalse();
         softAssertions.assertThat(notValidId)
@@ -161,7 +155,6 @@ public class UserRepositoryTest extends GenericRepositoryTests {
         Optional<UserEntity> actualResult = userRepository.findByChatId(validId);
 
         SoftAssertions softAssertions = new SoftAssertions();
-
         softAssertions.assertThat(actualResult)
                 .isPresent();
         softAssertions.assertThat(actualResult.get().getChatId())
@@ -180,7 +173,6 @@ public class UserRepositoryTest extends GenericRepositoryTests {
         Optional<UserEntity> actualResult = userRepository.findByChatId(notValidId);
 
         SoftAssertions softAssertions = new SoftAssertions();
-
         softAssertions.assertThat(actualResult)
                 .isNotPresent();
         softAssertions.assertThat(notValidId)
