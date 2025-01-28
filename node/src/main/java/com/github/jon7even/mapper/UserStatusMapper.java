@@ -17,4 +17,8 @@ public interface UserStatusMapper {
     @Mapping(source = "chatId", target = "chatId")
     @Mapping(source = "status", target = "status")
     UserStatusEntity toUserStatusEntityFromChatIdAndStatus(Long chatId, BotState status);
+
+    @Mapping(source = "chatId", target = "chatId")
+    @Mapping(constant = "MAIN_START", target = "status")
+    UserStatusEntity toDefaultUserStatusEntityFromChatId(Long chatId);
 }
