@@ -24,7 +24,7 @@ public class UserStatusMapperTest {
     }
 
     @Test
-    @DisplayName("Должен произойти правильный маппинг в сущность UserStatusEntity из BotState и chatId")
+    @DisplayName("Правильный маппинг в сущность UserStatusEntity из chatId и BotState")
     public void toUserStatusEntityFromChatIdAndStatus_ReturnsUserStatusEntity() {
         BotState botState = BotState.MAIN_ASK;
         Long chatId = 222222L;
@@ -34,6 +34,30 @@ public class UserStatusMapperTest {
                 .build();
 
         UserStatusEntity actualEntity = userStatusMapper.toUserStatusEntityFromChatIdAndStatus(chatId, botState);
+
+        SoftAssertions softAssertions = new SoftAssertions();
+        softAssertions.assertThat(actualEntity)
+                .isNotNull();
+        softAssertions.assertThat(actualEntity)
+                .isEqualTo(expectedEntity);
+        softAssertions.assertThat(actualEntity.getChatId())
+                .isEqualTo(expectedEntity.getChatId());
+        softAssertions.assertThat(actualEntity.getStatus())
+                .isEqualTo(expectedEntity.getStatus());
+        softAssertions.assertAll();
+    }
+
+    @Test
+    @DisplayName("Правильный маппинг в сущность UserStatusEntity со стандартным статусом MAIN_START из chatId")
+    public void toDefaultUserStatusEntityFromChatId() {
+        BotState botState = BotState.MAIN_START;
+        Long chatId = 722222L;
+        UserStatusEntity expectedEntity = UserStatusEntity.builder()
+                .chatId(chatId)
+                .status(botState)
+                .build();
+
+        UserStatusEntity actualEntity = userStatusMapper.toDefaultUserStatusEntityFromChatId(chatId);
 
         SoftAssertions softAssertions = new SoftAssertions();
         softAssertions.assertThat(actualEntity)
