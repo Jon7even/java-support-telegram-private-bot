@@ -41,6 +41,7 @@ public class TestDataFactory {
     protected UserStatusEntity expectedStatusDefault;
 
     protected void initUserStatus() {
+
         expectedStatusASK = UserStatusEntity.builder()
                 .chatId(chatIdOne)
                 .status(BotState.MAIN_ASK)
@@ -52,11 +53,9 @@ public class TestDataFactory {
                 .build();
     }
 
-
     protected void initMessage() {
 
         initUserEntity();
-
         expectedMessage = Message.builder()
                 .chat(Chat.builder()
                         .id(chatIdOne)

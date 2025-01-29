@@ -35,7 +35,7 @@ public class UserStatusServiceImpl implements UserStatusService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public BotState getBotStateForUser(Long chatId) {
         log.debug("Получаю статус пользователя c [chatId={}]", chatId);
         return userStatusRepository.findById(chatId)
