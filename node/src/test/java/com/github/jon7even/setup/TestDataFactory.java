@@ -1,6 +1,8 @@
 package com.github.jon7even.setup;
 
+import com.github.jon7even.entity.UserStatusEntity;
 import com.github.jon7even.entity.user.UserEntity;
+import com.github.jon7even.telegram.BotState;
 import com.github.jon7even.utils.MessageUtils;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
@@ -34,6 +36,22 @@ public class TestDataFactory {
     protected SendMessage expectedSendMessage;
     protected EditMessageText expectedEditMessageText;
     protected CallbackQuery callbackQueryMessage;
+
+    protected UserStatusEntity expectedStatusASK;
+    protected UserStatusEntity expectedStatusDefault;
+
+    protected void initUserStatus() {
+        expectedStatusASK = UserStatusEntity.builder()
+                .chatId(chatIdOne)
+                .status(BotState.MAIN_ASK)
+                .build();
+
+        expectedStatusDefault = UserStatusEntity.builder()
+                .chatId(chatIdTwo)
+                .status(BotState.MAIN_START)
+                .build();
+    }
+
 
     protected void initMessage() {
 

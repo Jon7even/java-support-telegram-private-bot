@@ -1,11 +1,13 @@
 package com.github.jon7even.mapper;
 
 import com.github.jon7even.entity.UserStatusEntity;
-import com.github.jon7even.telegram.BotState;
+import com.github.jon7even.setup.TestDataFactory;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import static com.github.jon7even.telegram.BotState.MAIN_ASK;
 
 /**
  * Тестирование маппера {@link UserStatusMapperImpl}
@@ -14,60 +16,47 @@ import org.junit.jupiter.api.Test;
  * @version 2.0
  */
 @DisplayName("Тестирование методов маппера UserStatusMapperImpl")
-public class UserStatusMapperTest {
+public class UserStatusMapperTest extends TestDataFactory {
 
     private UserStatusMapper userStatusMapper;
 
     @BeforeEach
     public void setUp() {
+        initUserStatus();
         userStatusMapper = new UserStatusMapperImpl();
     }
 
     @Test
     @DisplayName("Правильный маппинг в сущность UserStatusEntity из chatId и BotState")
     public void toUserStatusEntityFromChatIdAndStatus_ReturnsUserStatusEntity() {
-        BotState botState = BotState.MAIN_ASK;
-        Long chatId = 222222L;
-        UserStatusEntity expectedEntity = UserStatusEntity.builder()
-                .chatId(chatId)
-                .status(botState)
-                .build();
-
-        UserStatusEntity actualEntity = userStatusMapper.toUserStatusEntityFromChatIdAndStatus(chatId, botState);
+        UserStatusEntity actualEntity = userStatusMapper.toUserStatusEntityFromChatIdAndStatus(chatIdOne, MAIN_ASK);
 
         SoftAssertions softAssertions = new SoftAssertions();
         softAssertions.assertThat(actualEntity)
                 .isNotNull();
         softAssertions.assertThat(actualEntity)
-                .isEqualTo(expectedEntity);
+                .isEqualTo(expectedStatusASK);
         softAssertions.assertThat(actualEntity.getChatId())
-                .isEqualTo(expectedEntity.getChatId());
+                .isEqualTo(expectedStatusASK.getChatId());
         softAssertions.assertThat(actualEntity.getStatus())
-                .isEqualTo(expectedEntity.getStatus());
+                .isEqualTo(expectedStatusASK.getStatus());
         softAssertions.assertAll();
     }
 
     @Test
     @DisplayName("Правильный маппинг в сущность UserStatusEntity со стандартным статусом MAIN_START из chatId")
     public void toDefaultUserStatusEntityFromChatId() {
-        BotState botState = BotState.MAIN_START;
-        Long chatId = 722222L;
-        UserStatusEntity expectedEntity = UserStatusEntity.builder()
-                .chatId(chatId)
-                .status(botState)
-                .build();
-
-        UserStatusEntity actualEntity = userStatusMapper.toDefaultUserStatusEntityFromChatId(chatId);
+        UserStatusEntity actualEntity = userStatusMapper.toDefaultUserStatusEntityFromChatId(chatIdTwo);
 
         SoftAssertions softAssertions = new SoftAssertions();
         softAssertions.assertThat(actualEntity)
                 .isNotNull();
         softAssertions.assertThat(actualEntity)
-                .isEqualTo(expectedEntity);
+                .isEqualTo(expectedStatusDefault);
         softAssertions.assertThat(actualEntity.getChatId())
-                .isEqualTo(expectedEntity.getChatId());
+                .isEqualTo(expectedStatusDefault.getChatId());
         softAssertions.assertThat(actualEntity.getStatus())
-                .isEqualTo(expectedEntity.getStatus());
+                .isEqualTo(expectedStatusDefault.getStatus());
         softAssertions.assertAll();
     }
 }
