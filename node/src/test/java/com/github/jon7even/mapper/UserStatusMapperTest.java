@@ -18,12 +18,11 @@ import static com.github.jon7even.telegram.BotState.MAIN_ASK;
 @DisplayName("Тестирование методов маппера UserStatusMapperImpl")
 public class UserStatusMapperTest extends TestDataFactory {
 
-    private UserStatusMapper userStatusMapper;
+    private final UserStatusMapper userStatusMapper = new UserStatusMapperImpl();
 
     @BeforeEach
     public void setUp() {
         initUserStatus();
-        userStatusMapper = new UserStatusMapperImpl();
     }
 
     @Test

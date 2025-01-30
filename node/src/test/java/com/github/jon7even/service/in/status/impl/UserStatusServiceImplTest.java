@@ -23,7 +23,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * Тестирование отвечающего за статус бота для пользователей {@link UserStatusServiceImpl}
+ * Тестирование сервиса отвечающего за статус бота для пользователей {@link UserStatusServiceImpl}
  *
  * @author Jon7even
  * @version 2.0

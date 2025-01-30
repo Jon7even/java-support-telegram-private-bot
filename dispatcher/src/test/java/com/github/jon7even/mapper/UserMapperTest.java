@@ -23,11 +23,10 @@ import java.time.LocalDateTime;
 @DisplayName("Тестирование методов маппера UserMapperImpl")
 public class UserMapperTest extends TestDataFactory {
 
-    private UserMapper userMapper;
+    private final UserMapper userMapper = new UserMapperImpl();
 
     @BeforeEach
     public void setUp() {
-        userMapper = new UserMapperImpl();
         initUserEntity();
         initUserDto();
     }
