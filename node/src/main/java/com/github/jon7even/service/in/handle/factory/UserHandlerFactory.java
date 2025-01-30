@@ -34,6 +34,10 @@ public class UserHandlerFactory {
     }
 
     public UserHandlerService getHandlerForUser(BotState state) {
-        return mapOfHandlersForUser.getOrDefault(state, null);
+        return mapOfHandlersForUser.getOrDefault(state, getDefaultHandler());
+    }
+
+    private UserHandlerService getDefaultHandler() {
+       return mapOfHandlersForUser.get(BotState.MAIN_START);
     }
 }
