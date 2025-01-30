@@ -1,5 +1,6 @@
 package com.github.jon7even.service.in.handle.factory;
 
+import com.github.jon7even.exception.IllegalHandlerException;
 import com.github.jon7even.service.in.handle.UserHandlerService;
 import com.github.jon7even.service.in.handle.impl.StandardCallbackHandlerImpl;
 import com.github.jon7even.service.in.handle.impl.StandardTextHandlerImpl;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Фабрика для выдачи реализации необходимого обработчика пользователю.
@@ -24,13 +26,27 @@ public class UserHandlerFactory {
 
     private final HashMap<BotState, UserHandlerService> mapOfHandlersForUser;
 
-    public UserHandlerFactory(StandardTextHandlerImpl standardTextHandler,
-                              StandardCallbackHandlerImpl standardCallbackHandler) {
+    public UserHandlerFactory(List<UserHandlerService> handlers) {
         this.mapOfHandlersForUser = new HashMap<>();
+        initializeHandlers(handlers);
+    }
 
-        mapOfHandlersForUser.put(BotState.MAIN_START, standardTextHandler);
-        mapOfHandlersForUser.put(BotState.MAIN_HELP, standardTextHandler);
-        mapOfHandlersForUser.put(BotState.MAIN_CALLBACK, standardCallbackHandler);
+    private void initializeHandlers(List<UserHandlerService> handlers) {
+        for (UserHandlerService handler : handlers) {
+            switch (handler) {
+                case StandardTextHandlerImpl textHandler -> {
+                    mapOfHandlersForUser.put(BotState.MAIN_START, textHandler);
+                    mapOfHandlersForUser.put(BotState.MAIN_HELP, textHandler);
+                }
+                case StandardCallbackHandlerImpl callbackHandler -> {
+                    mapOfHandlersForUser.put(BotState.MAIN_CALLBACK, callbackHandler);
+                }
+                default -> {
+                    log.error("Вы добавили новый UserHandlerService, но не определили для него логику в фабрике");
+                    throw new IllegalHandlerException(handler.getClass().getName());
+                }
+            }
+        }
     }
 
     public UserHandlerService getHandlerForUser(BotState state) {
@@ -38,6 +54,6 @@ public class UserHandlerFactory {
     }
 
     private UserHandlerService getDefaultHandler() {
-       return mapOfHandlersForUser.get(BotState.MAIN_START);
+        return mapOfHandlersForUser.get(BotState.MAIN_START);
     }
 }
