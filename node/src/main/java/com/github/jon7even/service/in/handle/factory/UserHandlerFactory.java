@@ -2,6 +2,7 @@ package com.github.jon7even.service.in.handle.factory;
 
 import com.github.jon7even.exception.IllegalHandlerException;
 import com.github.jon7even.service.in.handle.UserHandlerService;
+import com.github.jon7even.service.in.handle.impl.AskHandlerImpl;
 import com.github.jon7even.service.in.handle.impl.StandardCallbackHandlerImpl;
 import com.github.jon7even.service.in.handle.impl.StandardTextHandlerImpl;
 import com.github.jon7even.service.in.status.UserStatusService;
@@ -40,6 +41,9 @@ public class UserHandlerFactory {
                 }
                 case StandardCallbackHandlerImpl callbackHandler -> {
                     mapOfHandlersForUser.put(BotState.MAIN_CALLBACK, callbackHandler);
+                }
+                case AskHandlerImpl askHandler -> {
+                    mapOfHandlersForUser.put(BotState.MAIN_ASK, askHandler);
                 }
                 default -> {
                     log.error("Вы добавили новый UserHandlerService, но не определили для него логику в фабрике");
