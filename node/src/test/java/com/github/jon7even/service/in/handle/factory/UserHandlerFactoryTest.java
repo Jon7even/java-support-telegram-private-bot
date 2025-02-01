@@ -23,13 +23,13 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
- * Тестирование сервиса получения сообщений из RabbitMq {@link UserHandlerFactory}
+ * Тестирование фабрики {@link UserHandlerFactory}
  *
  * @author Jon7even
  * @version 2.0
  */
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
-@DisplayName("Тестирование методов сервиса UserHandlerFactory")
+@DisplayName("Тестирование фабрики UserHandlerFactory")
 public class UserHandlerFactoryTest {
 
     private UserHandlerFactory userHandlerFactory;
