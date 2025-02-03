@@ -1,6 +1,17 @@
 server:
   port: ${SERVER_EXTERNAL_PORT_NODE}
 
+node:
+  api-ask:
+    base-url: https://example-api.com
+    timeouts:
+      connect: 5000       # Таймаут соединения c URL в миллисекундах
+      response: 10000     # Таймаут ожидания ответа в миллисекундах
+      read: 5000          # Таймаут чтения в миллисекундах
+    connection-pool:
+      max-connections: 7  # Максимальное количество соединений для пула
+      timeout: 5000       # Таймаут ожидания освобождения пула
+
 localeTag: ${LOCALE_TAG}
 
 logging:
