@@ -19,6 +19,11 @@
     <dependencies>
 
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>${p.bot.groupId}</groupId>
             <artifactId>common</artifactId>
             <version>${p.bot.version}</version>
@@ -42,7 +47,6 @@
                 <exclusion>
                     <groupId>org.json</groupId>
                     <artifactId>json</artifactId>
-
                 </exclusion>
             </exclusions>
         </dependency>
