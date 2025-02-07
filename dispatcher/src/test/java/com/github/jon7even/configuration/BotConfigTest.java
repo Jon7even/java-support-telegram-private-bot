@@ -4,12 +4,10 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.Mockito.when;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 /**
  * Тестирование загрузки конфигурации {@link BotConfig}
@@ -17,27 +15,25 @@ import static org.mockito.Mockito.when;
  * @author Jon7even
  * @version 2.0
  */
-
 @DisplayName("Тестирование загрузки конфигурации BotConfig")
-@ExtendWith(MockitoExtension.class)
+@EnableConfigurationProperties(BotConfig.class)
+@ExtendWith(SpringExtension.class)
+@TestPropertySource(properties = {
+        "bot.token.name=testBotName",
+        "bot.token.token=testBotToken123"
+})
 public class BotConfigTest {
 
-    @InjectMocks
+    @Autowired
     private BotConfig botConfig;
 
-    @Mock
-    private BotConfig mockBotConfig;
-
     @Test
-    public void testBotConfigLoading() {
-        when(mockBotConfig.getName()).thenReturn("testBotName");
-        when(mockBotConfig.getToken()).thenReturn("testBotToken123");
-
-        SoftAssertions softAssertions = new SoftAssertions();
-        softAssertions.assertThat(mockBotConfig.getName())
-                .isEqualTo("testBotName");
-        softAssertions.assertThat(mockBotConfig.getToken())
-                .isEqualTo("testBotToken123");
-        softAssertions.assertAll();
+    @DisplayName("Успешная загрузка BotConfig")
+    public void botConfigLoading_Success() {
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(botConfig.getName()).isEqualTo("testBotName");
+            softly.assertThat(botConfig.getToken()).isEqualTo("testBotToken123");
+            softly.assertAll();
+        });
     }
 }
