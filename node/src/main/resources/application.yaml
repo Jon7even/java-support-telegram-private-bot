@@ -8,7 +8,7 @@ node:
     timeoutResponse: 10000               # Таймаут ожидания ответа в миллисекундах
     timeoutRead: 5000                    # Таймаут чтения в миллисекундах
     timeoutPool: 5000                    # Таймаут ожидания освобождения пула
-    maxConnectionsPool: 7               # Максимальное количество соединений для пула
+    maxConnectionsPool: 7                # Максимальное количество соединений для пула
 
 localeTag: ${LOCALE_TAG}
 

@@ -1,6 +1,15 @@
 server:
   port: 7099
 
+node:
+  api-ask:
+    url: https://example-api.com         # url сервиса, который предоставляет API нейросети
+    timeoutConnect: 5000                 # Таймаут соединения c URL в миллисекундах
+    timeoutResponse: 10000               # Таймаут ожидания ответа в миллисекундах
+    timeoutRead: 5000                    # Таймаут чтения в миллисекундах
+    timeoutPool: 5000                    # Таймаут ожидания освобождения пула
+    maxConnectionsPool: 7                # Максимальное количество соединений для пула
+
 localeTag: ru-RU
 
 logging:

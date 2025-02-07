@@ -15,8 +15,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
  * @author Jon7even
  * @version 2.0
  */
-@ExtendWith(SpringExtension.class)
+@DisplayName("Тестирование загрузки конфигурации NodeApiAskConfig")
 @EnableConfigurationProperties(NodeApiAskConfig.class)
+@ExtendWith(SpringExtension.class)
 @TestPropertySource(properties = {
         "node.api-ask.url=https://example-api.com",
         "node.api-ask.timeout-connect=5000",
@@ -25,7 +26,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
         "node.api-ask.timeout-pool=5000",
         "node.api-ask.max-connections-pool=7"
 })
-@DisplayName("Тестирование загрузки конфигурации NodeApiAskConfig")
 public class NodeApiAskConfigTest {
 
     @Autowired
