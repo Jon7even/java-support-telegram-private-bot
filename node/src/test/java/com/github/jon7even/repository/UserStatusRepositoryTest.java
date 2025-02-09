@@ -32,14 +32,12 @@ public class UserStatusRepositoryTest extends GenericRepositoryTests {
 
         UserStatusEntity actualStatus = userStatusRepository.save(expectedStatus);
 
-        SoftAssertions softAssertions = new SoftAssertions();
-        softAssertions.assertThat(actualStatus)
-                .isNotNull();
-        softAssertions.assertThat(actualStatus.getChatId())
-                .isEqualTo(expectedStatus.getChatId());
-        softAssertions.assertThat(actualStatus.getStatus())
-                .isEqualTo(expectedStatus.getStatus());
-        softAssertions.assertAll();
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(actualStatus).isNotNull();
+            softly.assertThat(actualStatus.getChatId()).isEqualTo(expectedStatus.getChatId());
+            softly.assertThat(actualStatus.getStatus()).isEqualTo(expectedStatus.getStatus());
+            softly.assertAll();
+        });
     }
 
     @Test
@@ -54,14 +52,12 @@ public class UserStatusRepositoryTest extends GenericRepositoryTests {
 
         UserStatusEntity actualStatus = userStatusRepository.getById(chatId);
 
-        SoftAssertions softAssertions = new SoftAssertions();
-        softAssertions.assertThat(actualStatus)
-                .isNotNull();
-        softAssertions.assertThat(actualStatus.getChatId())
-                .isEqualTo(expectedStatus.getChatId());
-        softAssertions.assertThat(actualStatus.getStatus())
-                .isEqualTo(expectedStatus.getStatus());
-        softAssertions.assertAll();
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(actualStatus).isNotNull();
+            softly.assertThat(actualStatus.getChatId()).isEqualTo(expectedStatus.getChatId());
+            softly.assertThat(actualStatus.getStatus()).isEqualTo(expectedStatus.getStatus());
+            softly.assertAll();
+        });
     }
 
     @Test
@@ -79,6 +75,7 @@ public class UserStatusRepositoryTest extends GenericRepositoryTests {
                 .chatId(userInBaseThree.getChatId())
                 .status(BotState.MAIN_CALLBACK)
                 .build();
+        int expectedSizeOfList = 3;
 
         userStatusRepository.save(expectedStatusOne);
         userStatusRepository.save(expectedStatusTwo);
@@ -86,15 +83,13 @@ public class UserStatusRepositoryTest extends GenericRepositoryTests {
 
         List<UserStatusEntity> actualResult = userStatusRepository.findAll();
 
-        SoftAssertions softAssertions = new SoftAssertions();
-        softAssertions.assertThat(actualResult)
-                .isNotNull();
-        softAssertions.assertThat(actualResult)
-                .isNotEmpty();
-        softAssertions.assertThat(actualResult.size())
-                .isEqualTo(3);
-        softAssertions.assertThat(actualResult)
-                .containsExactlyInAnyOrder(expectedStatusOne, expectedStatusTwo, expectedStatusThree);
-        softAssertions.assertAll();
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(actualResult).isNotNull();
+            softly.assertThat(actualResult).isNotEmpty();
+            softly.assertThat(actualResult.size()).isEqualTo(expectedSizeOfList);
+            softly.assertThat(actualResult)
+                    .containsExactlyInAnyOrder(expectedStatusOne, expectedStatusTwo, expectedStatusThree);
+            softly.assertAll();
+        });
     }
 }

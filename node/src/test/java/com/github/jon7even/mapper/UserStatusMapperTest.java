@@ -30,16 +30,13 @@ public class UserStatusMapperTest extends TestDataFactory {
     public void toUserStatusEntityFromChatIdAndStatus_ReturnsUserStatusEntity() {
         UserStatusEntity actualEntity = userStatusMapper.toUserStatusEntityFromChatIdAndStatus(chatIdOne, MAIN_ASK);
 
-        SoftAssertions softAssertions = new SoftAssertions();
-        softAssertions.assertThat(actualEntity)
-                .isNotNull();
-        softAssertions.assertThat(actualEntity)
-                .isEqualTo(expectedStatusASK);
-        softAssertions.assertThat(actualEntity.getChatId())
-                .isEqualTo(expectedStatusASK.getChatId());
-        softAssertions.assertThat(actualEntity.getStatus())
-                .isEqualTo(expectedStatusASK.getStatus());
-        softAssertions.assertAll();
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(actualEntity).isNotNull();
+            softly.assertThat(actualEntity).isEqualTo(expectedStatusASK);
+            softly.assertThat(actualEntity.getChatId()).isEqualTo(expectedStatusASK.getChatId());
+            softly.assertThat(actualEntity.getStatus()).isEqualTo(expectedStatusASK.getStatus());
+            softly.assertAll();
+        });
     }
 
     @Test
@@ -47,15 +44,12 @@ public class UserStatusMapperTest extends TestDataFactory {
     public void toDefaultUserStatusEntityFromChatId() {
         UserStatusEntity actualEntity = userStatusMapper.toDefaultUserStatusEntityFromChatId(chatIdTwo);
 
-        SoftAssertions softAssertions = new SoftAssertions();
-        softAssertions.assertThat(actualEntity)
-                .isNotNull();
-        softAssertions.assertThat(actualEntity)
-                .isEqualTo(expectedStatusDefault);
-        softAssertions.assertThat(actualEntity.getChatId())
-                .isEqualTo(expectedStatusDefault.getChatId());
-        softAssertions.assertThat(actualEntity.getStatus())
-                .isEqualTo(expectedStatusDefault.getStatus());
-        softAssertions.assertAll();
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(actualEntity).isNotNull();
+            softly.assertThat(actualEntity).isEqualTo(expectedStatusDefault);
+            softly.assertThat(actualEntity.getChatId()).isEqualTo(expectedStatusDefault.getChatId());
+            softly.assertThat(actualEntity.getStatus()).isEqualTo(expectedStatusDefault.getStatus());
+            softly.assertAll();
+        });
     }
 }

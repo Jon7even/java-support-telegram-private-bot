@@ -66,11 +66,11 @@ public class UserStatusServiceImplTest extends TestDataFactory {
 
         BotState actualStatus = userStatusService.getBotStateForUser(chatIdOne);
 
-        SoftAssertions softAssertions = new SoftAssertions();
-        softAssertions.assertThat(actualStatus)
-                .isNotNull();
-        softAssertions.assertThat(actualStatus)
-                .isEqualTo(expectedStatusASK.getStatus());
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(actualStatus).isNotNull();
+            softly.assertThat(actualStatus).isEqualTo(expectedStatusASK.getStatus());
+            softly.assertAll();
+        });
 
         verify(userStatusRepository).findById(chatIdOne);
         verify(userStatusRepository, never()).save(any(UserStatusEntity.class));
@@ -85,11 +85,11 @@ public class UserStatusServiceImplTest extends TestDataFactory {
 
         BotState actualStatus = userStatusService.getBotStateForUser(chatIdTwo);
 
-        SoftAssertions softAssertions = new SoftAssertions();
-        softAssertions.assertThat(actualStatus)
-                .isNotNull();
-        softAssertions.assertThat(actualStatus)
-                .isEqualTo(expectedStatusDefault.getStatus());
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(actualStatus).isNotNull();
+            softly.assertThat(actualStatus).isEqualTo(expectedStatusDefault.getStatus());
+            softly.assertAll();
+        });
 
         verify(userStatusRepository).findById(chatIdTwo);
         verify(userStatusRepository).save(expectedStatusDefault);

@@ -41,19 +41,26 @@ class SupportBotDispatcherAppTests extends GenericMainAppTests {
     @Test
     @DisplayName("Проверка создания очередей RabbitMq")
     public void testQueuesExist() {
-        SoftAssertions softAssertions = new SoftAssertions();
-        softAssertions.assertThat(rabbitAdmin.getQueueInfo(TEXT_MESSAGE_UPDATE))
-                .isNotNull();
-        softAssertions.assertThat(rabbitAdmin.getQueueInfo(CALLBACK_QUERY_UPDATE))
-                .isNotNull();
-        softAssertions.assertThat(rabbitAdmin.getQueueInfo(DOC_MESSAGE_UPDATE))
-                .isNotNull();
-        softAssertions.assertThat(rabbitAdmin.getQueueInfo(PHOTO_MESSAGE_UPDATE))
-                .isNotNull();
-        softAssertions.assertThat(rabbitAdmin.getQueueInfo(AUDIO_MESSAGE_UPDATE))
-                .isNotNull();
-        softAssertions.assertThat(rabbitAdmin.getQueueInfo(ANSWER_MESSAGE))
-                .isNotNull();
-        softAssertions.assertAll();
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(rabbitAdmin.getQueueInfo(TEXT_MESSAGE_UPDATE)).isNotNull();
+            softly.assertThat(rabbitAdmin.getQueueInfo(TEXT_MESSAGE_UPDATE).getName())
+                    .isEqualTo(TEXT_MESSAGE_UPDATE);
+            softly.assertThat(rabbitAdmin.getQueueInfo(CALLBACK_QUERY_UPDATE)).isNotNull();
+            softly.assertThat(rabbitAdmin.getQueueInfo(CALLBACK_QUERY_UPDATE).getName())
+                    .isEqualTo(CALLBACK_QUERY_UPDATE);
+            softly.assertThat(rabbitAdmin.getQueueInfo(DOC_MESSAGE_UPDATE)).isNotNull();
+            softly.assertThat(rabbitAdmin.getQueueInfo(DOC_MESSAGE_UPDATE).getName())
+                    .isEqualTo(DOC_MESSAGE_UPDATE);
+            softly.assertThat(rabbitAdmin.getQueueInfo(PHOTO_MESSAGE_UPDATE)).isNotNull();
+            softly.assertThat(rabbitAdmin.getQueueInfo(PHOTO_MESSAGE_UPDATE).getName())
+                    .isEqualTo(PHOTO_MESSAGE_UPDATE);
+            softly.assertThat(rabbitAdmin.getQueueInfo(AUDIO_MESSAGE_UPDATE)).isNotNull();
+            softly.assertThat(rabbitAdmin.getQueueInfo(AUDIO_MESSAGE_UPDATE).getName())
+                    .isEqualTo(AUDIO_MESSAGE_UPDATE);
+            softly.assertThat(rabbitAdmin.getQueueInfo(ANSWER_MESSAGE)).isNotNull();
+            softly.assertThat(rabbitAdmin.getQueueInfo(ANSWER_MESSAGE).getName())
+                    .isEqualTo(ANSWER_MESSAGE);
+            softly.assertAll();
+        });
     }
 }
