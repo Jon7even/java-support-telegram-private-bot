@@ -3,8 +3,11 @@ package com.github.jon7even.repository;
 import com.github.jon7even.entity.user.UserEntity;
 import com.github.jon7even.setup.GenericRepositoryTests;
 import org.assertj.core.api.SoftAssertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +20,14 @@ import java.util.Optional;
  */
 @DisplayName("Тестирование методов репозитория UserRepository")
 public class UserRepositoryTest extends GenericRepositoryTests {
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    @BeforeEach
+    void setUp() {
+        jdbcTemplate.execute("TRUNCATE TABLE bot.user RESTART IDENTITY CASCADE");
+    }
 
     @Test
     @DisplayName("Корректное сохранение трех сущностей пользователя")
