@@ -82,10 +82,10 @@ spring:
     hikari:
       schema: bot
       connection-timeout: 30000
-      maximum-pool-size: 17
-      minimum-idle: 3
-      idle-timeout: 37777
-      max-lifetime: 1800777
+      maximum-pool-size: 7
+      minimum-idle: 1
+      idle-timeout: 7777
+      max-lifetime: 77777
       connection-test-timeout: 5000
       pool-name: NodePoolTest
       validation-timeout: 3777
