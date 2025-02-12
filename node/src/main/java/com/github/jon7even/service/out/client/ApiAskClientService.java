@@ -10,9 +10,11 @@ package com.github.jon7even.service.out.client;
 public interface ApiAskClientService {
 
     /**
-     * Метод для отправки запроса нейросети и получения ответа.
+     * Метод для отправки запроса нейросети и получения от неё ответа.
      *
      * @param request текст с вопросом
+     * @param URI     эндпоинт API
+     * @apiNote предполагается, что эндпоинты могут быть разными. Например - разные модели нейросетей.
      */
-    String sendAskAndGetAnswerFromApi(String request);
+    String sendAskAndGetAnswerFromApi(String request, String URI);
 }
