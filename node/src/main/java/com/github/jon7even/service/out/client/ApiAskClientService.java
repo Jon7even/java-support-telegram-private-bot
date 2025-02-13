@@ -1,5 +1,7 @@
 package com.github.jon7even.service.out.client;
 
+import reactor.core.publisher.Mono;
+
 /**
  * Интерфейс сервиса для делегирования отправки запросов и получения ответов от сервиса,
  * который предоставляет API к нейросетям.
@@ -16,5 +18,5 @@ public interface ApiAskClientService {
      * @param URI     эндпоинт API
      * @apiNote предполагается, что эндпоинты могут быть разными. Например - разные модели нейросетей.
      */
-    String sendAskAndGetAnswerFromApi(String request, String URI);
+    Mono<String> sendAskAndGetAnswerFromApi(String request, String URI);
 }
