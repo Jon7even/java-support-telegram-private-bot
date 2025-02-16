@@ -4,6 +4,7 @@ import com.github.jon7even.dto.external.ApiAskRequestDto;
 import com.github.jon7even.service.out.client.ApiAskClientService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -21,10 +22,13 @@ public class ApiAskClientServiceImpl implements ApiAskClientService {
 
     private final WebClient webClient;
 
+    @Value("${node.api-key.ask}")
+    private String apiKey;
+
     @Override
     public Mono<String> sendAskAndGetAnswerFromApi(String request, String URI) {
         ApiAskRequestDto askRequestDto = ApiAskRequestDto.builder()
-                .apiKey("key")
+                .apiKey(apiKey)
                 .message(request)
                 .build();
 
