@@ -1,13 +1,18 @@
 package com.github.jon7even.exception;
 
 /**
- * Класс описывающий исключение если ресурс был не найден
+ * Класс описывающий исключение если ресурс был не найден.
  *
  * @author Jon7even
  * @version 2.0
  */
 public class NotFoundException extends ApplicationException {
 
+    /**
+     * Конструктор, принимающий название ресурса который не найден.
+     *
+     * @param resource - сообщение об ошибке
+     */
     public NotFoundException(String resource) {
         super(getErrorMessage(resource));
     }

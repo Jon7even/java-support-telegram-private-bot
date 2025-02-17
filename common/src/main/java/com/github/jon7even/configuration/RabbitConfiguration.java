@@ -14,10 +14,13 @@ import static com.github.jon7even.configuration.RabbitQueue.PHOTO_MESSAGE_UPDATE
 import static com.github.jon7even.configuration.RabbitQueue.TEXT_MESSAGE_UPDATE;
 
 /**
- * Конфигурация для работы с брокером очередей RabbitMq
+ * Конфигурация для работы с брокером очередей RabbitMq.
  *
  * @author Jon7even
  * @version 2.0
+ * @apiNote Для удобства можно вынести в application.yaml. Однако для данного приложения было решено использовать
+ * именно использование бинов. Это удобно для тестов в том числе. Видно какие бины уже реализованы, какие возможно
+ * использовать в будущем. Если заранее известна цель бота - можно удалить ненужные поправив тесты.
  */
 @Configuration
 public class RabbitConfiguration {

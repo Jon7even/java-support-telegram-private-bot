@@ -3,7 +3,7 @@ package com.github.jon7even.telegram.menu;
 import lombok.AllArgsConstructor;
 
 /**
- * Перечисление возможных команд меню Подарки(GIFTS)
+ * Перечисление возможных команд из главного меню {@link MainMenu} Подарки (/gifts).
  *
  * @author Jon7even
  * @version 2.0
@@ -13,34 +13,20 @@ import lombok.AllArgsConstructor;
 public enum MenuGift {
 
     /**
-     * Добавить новую компанию
-     */
-    NEW_COMPANY("/newcompany"),
-
-    /**
-     * Выдать подарок компании из имеющихся
+     * Выдать подарок компании
      */
     GIVE_GIFT("/givegift"),
 
     /**
-     * Выдать подарок принудительно
+     * Забрать подарок у компании обратно (в случае ошибки)
      */
-    ASSIGN_BY_FORCE("/givemanual"),
+    REMOVE_GIFT("/removegift"),
 
     /**
-     * Поиск компании
-     */
-    SEARCH_COMPANY("/searchcompany"),
-
-    /**
-     * Удалить компанию
-     */
-    REMOVE_COMPANY("/removecompany"),
-
-    /**
-     * Список доступных подарков
+     * Список выданных подарков
      */
     LIST_GIFTS("/checkgifts");
+
     private final String command;
 
     @Override

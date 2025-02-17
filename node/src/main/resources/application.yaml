@@ -1,6 +1,17 @@
 server:
   port: ${SERVER_EXTERNAL_PORT_NODE}
 
+node:
+  api-ask:
+    url: https://example-api.com         # url сервиса, который предоставляет API нейросети
+    timeoutConnect: 5000                 # Таймаут соединения c URL в миллисекундах
+    timeoutResponse: 10000               # Таймаут ожидания ответа в миллисекундах
+    timeoutRead: 5000                    # Таймаут чтения в миллисекундах
+    timeoutPool: 5000                    # Таймаут ожидания освобождения пула
+    maxConnectionsPool: 7                # Максимальное количество соединений для пула
+  api-key:
+    ask: 12345678910                     # Секретный ключ для сервиса, который предоставляет API нейросети
+
 localeTag: ${LOCALE_TAG}
 
 logging:

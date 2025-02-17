@@ -8,10 +8,11 @@ import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 /**
- * Утилитарный класс для сборки ответа в Telegram для дальнейшей отправки
+ * Утилитарный класс для сборки ответа в Telegram для дальнейшей отправки.
  *
  * @author Jon7even
  * @version 2.0
+ * @apiNote Включает обновления 8й версии telegrambots.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class MessageUtils {

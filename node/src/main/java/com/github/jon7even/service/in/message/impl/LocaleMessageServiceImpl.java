@@ -1,6 +1,8 @@
 package com.github.jon7even.service.in.message.impl;
 
 import com.github.jon7even.service.in.message.LocaleMessageService;
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
@@ -8,30 +10,34 @@ import org.springframework.stereotype.Service;
 import java.util.Locale;
 
 /**
- * Реализация сервиса языковой локализации {@link LocaleMessageService}
+ * Реализация сервиса языковой локализации {@link LocaleMessageService}.
  *
  * @author Jon7even
  * @version 2.0
  */
 @Service
+@RequiredArgsConstructor
 public class LocaleMessageServiceImpl implements LocaleMessageService {
 
-    private final Locale locale;
+    @Value("${localeTag}")
+    private String localeTag;
+
+    private Locale locale;
 
     private final MessageSource messageSource;
 
-    public LocaleMessageServiceImpl(@Value("${localeTag}") String localeTag, MessageSource messageSource) {
+    @PostConstruct
+    public void initLocale() {
         this.locale = Locale.forLanguageTag(localeTag);
-        this.messageSource = messageSource;
     }
 
     @Override
-    public String getMessage(String message) {
-        return messageSource.getMessage(message, null, locale);
+    public String getMessage(String replyText) {
+        return messageSource.getMessage(replyText, null, locale);
     }
 
     @Override
-    public String getMessage(String message, Object... args) {
-        return messageSource.getMessage(message, args, locale);
+    public String getMessage(String replyText, Object... args) {
+        return messageSource.getMessage(replyText, args, locale);
     }
 }

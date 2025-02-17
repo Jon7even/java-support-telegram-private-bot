@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import static com.github.jon7even.telegram.constants.DefaultSystemMessagesToSend.ERROR_TO_SEND;
 
 /**
- * Реализация сервиса {@link SenderMessageService} для конструирования ответа для дальнейшей отправки в RabbitMq
+ * Реализация сервиса {@link SenderMessageService} формирования и отправления ответов в RabbitMq.
  *
  * @author Jon7even
  * @version 2.0
@@ -42,7 +42,7 @@ public class SenderMessageServiceImpl implements SenderMessageService {
 
     @Override
     public void sendError(Long chatId, String textToError) {
-        sendMessageText(MessageUtils.buildAnswerWithText(chatId,  String.format("%s %s", ERROR_TO_SEND, textToError)));
+        sendMessageText(MessageUtils.buildAnswerWithText(chatId, String.format("%s %s", ERROR_TO_SEND, textToError)));
     }
 
     private void sendMessageText(SendMessage message) {

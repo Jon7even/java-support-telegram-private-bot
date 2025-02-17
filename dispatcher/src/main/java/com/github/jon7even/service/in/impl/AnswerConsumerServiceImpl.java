@@ -11,7 +11,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import static com.github.jon7even.configuration.RabbitQueue.ANSWER_MESSAGE;
 
 /**
- * Реализация сервиса слушателя RabbitMq для отправки сообщений в Telegram bot
+ * Реализация сервиса {@link AnswerConsumerService} слушателя RabbitMq для отправки сообщений в Telegram bot.
  *
  * @author Jon7even
  * @version 2.0

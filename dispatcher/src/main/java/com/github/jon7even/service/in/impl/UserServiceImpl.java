@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Реализация сервиса взаимодействия с пользователями
+ * Реализация сервиса {@link UserService} взаимодействия с пользователями.
  *
  * @author Jon7even
  * @version 2.0

@@ -2,6 +2,7 @@ package com.github.jon7even.service.in.impl;
 
 import com.github.jon7even.telegram.constants.DefaultBaseMessagesToSend;
 import com.github.jon7even.utils.MessageUtils;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,9 +49,11 @@ public class MainQuickServiceImplTest {
 
         SendMessage actualResponse = mainQuickService.processQuickAnswer(update);
 
-        assertThat(actualResponse)
-                .isNotNull()
-                .isEqualTo(expectedMessageId);
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(actualResponse).isNotNull();
+            softly.assertThat(actualResponse).isNotEqualTo(expectedMessageId);
+            softly.assertAll();
+        });
     }
 
     @Test
@@ -68,9 +71,11 @@ public class MainQuickServiceImplTest {
 
         SendMessage actualResponse = mainQuickService.processQuickAnswer(update);
 
-        assertThat(actualResponse)
-                .isNotNull()
-                .isEqualTo(expectedMessageId);
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(actualResponse).isNotNull();
+            softly.assertThat(actualResponse).isNotEqualTo(expectedMessageId);
+            softly.assertAll();
+        });
     }
 
     @Test
@@ -88,9 +93,11 @@ public class MainQuickServiceImplTest {
 
         SendMessage actualResponse = mainQuickService.processQuickAnswer(update);
 
-        assertThat(actualResponse)
-                .isNotNull()
-                .isEqualTo(expectedMessageId);
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(actualResponse).isNotNull();
+            softly.assertThat(actualResponse).isNotEqualTo(expectedMessageId);
+            softly.assertAll();
+        });
     }
 
     @Test

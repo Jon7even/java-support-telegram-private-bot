@@ -12,13 +12,13 @@ import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateC
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 /**
- * Класс для получения сообщений от зарегистрированного Telegram бота для дальнейшей обработки
+ * Класс для получения {@link Update} сообщений от зарегистрированного Telegram бота для дальнейшей обработки.
  *
  * @author Jon7even
  * @version 2.0
  * @apiNote По своей сути является слушателем. Однако, это LongPollingBot, поэтому в реальности, он делает запрос в
- * сам Telegram для получения обновлений. Можно реализовать webhook, тогда приложение будет отвечать быстрей и
- * потреблять меньше ресурсов сервера.
+ * сам Telegram для получения обновлений. Можно реализовать Webhook, тогда приложение будет отвечать быстрей и
+ * потреблять меньше ресурсов сервера, поскольку update будет присылать сам Telegram.
  */
 @Slf4j
 @Component
@@ -30,7 +30,7 @@ public class TelegramConsumerSingleClient implements SpringLongPollingBot, LongP
     private final HandleUpdateBot handleUpdateBot;
 
     /**
-     * Переопределение метода получения секретного токена для регистрации Бота в Api Telegram
+     * Переопределение метода получения секретного токена для регистрации Бота в API Telegram.
      */
     @Override
     public String getBotToken() {
@@ -38,7 +38,7 @@ public class TelegramConsumerSingleClient implements SpringLongPollingBot, LongP
     }
 
     /**
-     * Переопределение метода обработки сообщений, делегирует обработчику входящих сообщений
+     * Переопределение метода обработки сообщений, делегирует обработчику входящих сообщений.
      */
     @Override
     public void consume(Update update) {
@@ -46,13 +46,16 @@ public class TelegramConsumerSingleClient implements SpringLongPollingBot, LongP
         handleUpdateBot.processUpdate(update);
     }
 
+    /**
+     * Переопределение метода получения сообщений, делегирует обработчику LongPolling.
+     */
     @Override
     public LongPollingUpdateConsumer getUpdatesConsumer() {
         return this;
     }
 
     /**
-     * Информационное сообщение в лог о текущем состоянии слушателя (boolean состояние)
+     * Информационное сообщение в лог о текущем состоянии слушателя (boolean состояние).
      */
     @AfterBotRegistration
     public void afterRegistration(BotSession botSession) {

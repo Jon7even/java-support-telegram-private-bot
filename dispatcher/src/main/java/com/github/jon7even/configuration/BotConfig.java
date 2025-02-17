@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Утилитарный класс загружающий токен и имя бота из переменных окружения
+ * Утилитарный класс загружающий токен и имя бота из application.yaml.
  *
  * @author Jon7even
  * @version 2.0

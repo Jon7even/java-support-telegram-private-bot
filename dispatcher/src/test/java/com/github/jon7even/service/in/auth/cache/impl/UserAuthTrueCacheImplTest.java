@@ -1,6 +1,6 @@
 package com.github.jon7even.service.in.auth.cache.impl;
 
-import com.github.jon7even.setup.PreparationForTests;
+import com.github.jon7even.setup.TestDataFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
  * @version 2.0
  */
 @DisplayName("Тестирование методов сервиса UserAuthTrueCacheImpl")
-public class UserAuthTrueCacheImplTest extends PreparationForTests {
+public class UserAuthTrueCacheImplTest extends TestDataFactory {
 
     private UserAuthTrueCacheImpl userAuthTrueCache;
 

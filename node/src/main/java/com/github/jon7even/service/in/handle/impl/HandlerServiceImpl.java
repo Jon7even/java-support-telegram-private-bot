@@ -1,26 +1,17 @@
 package com.github.jon7even.service.in.handle.impl;
 
-import com.github.jon7even.cache.UserDataCache;
 import com.github.jon7even.service.in.handle.HandlerService;
-import com.github.jon7even.service.in.message.ReplyMessageService;
-import com.github.jon7even.service.out.producer.SenderMessageService;
+import com.github.jon7even.service.in.handle.UserHandlerService;
+import com.github.jon7even.service.in.handle.factory.UserHandlerFactory;
+import com.github.jon7even.service.in.status.UserStatusService;
 import com.github.jon7even.telegram.BotState;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import static com.github.jon7even.telegram.emoji.Emoji.BANG;
-import static com.github.jon7even.telegram.emoji.Emoji.HEART;
-import static com.github.jon7even.telegram.emoji.Emoji.HEAVY_CHECK;
-import static com.github.jon7even.telegram.emoji.Emoji.MAGIC;
-import static com.github.jon7even.telegram.emoji.Emoji.NO_CHECK;
-import static com.github.jon7even.telegram.emoji.Emoji.QUESTION;
-import static com.github.jon7even.telegram.emoji.Emoji.SMAIL_BLUSH;
-import static com.github.jon7even.telegram.emoji.Emoji.STAR;
-
 /**
- * Реализация сервиса обработки данных от пользователей {@link HandlerService}
+ * Реализация сервиса обработки данных от пользователей {@link HandlerService}.
  *
  * @author Jon7even
  * @version 2.0
@@ -30,50 +21,39 @@ import static com.github.jon7even.telegram.emoji.Emoji.STAR;
 @RequiredArgsConstructor
 public class HandlerServiceImpl implements HandlerService {
 
-    private final UserDataCache userDataCache;
+    private final UserStatusService userStatusService;
 
-    private final ReplyMessageService replyMessageService;
-
-    private final SenderMessageService senderMessageService;
+    private final UserHandlerFactory userHandlerFactory;
 
     @Override
     public void processTextMessage(Update update) {
-        String resultMessage = update.getMessage().getText();
-        Long chaId = update.getMessage().getChatId();
+        Long chatId = update.getMessage().getChatId();
+        String text = update.getMessage().getText();
+        log.info("Пользователь c [chatId={}] прислал текст [text={}], начинаем обрабатывать...", chatId, text);
 
-        switch (resultMessage) {
-            case "/gifts":
-                senderMessageService.sendText(chaId, replyMessageService.getReplyText("reply.nonSupportedYet"));
-                break;
-            case "/ask":
-                senderMessageService.sendText(chaId,
-                        "Бу испугался! Не бойса! Данная команда еще находится в разработке"
-                );
-                break;
-            default:
-                senderMessageService.sendText(chaId, replyMessageService.getReplyText("reply.nonSupport"));
-                userDataCache.setBotStateForCacheUser(chaId, BotState.MAIN_HELP);
-                log.warn("Эту команду мы еще не поддерживаем. Команда пользователя: " + resultMessage);
-        }
+        handleQuery(update, chatId);
     }
 
     @Override
     public void processCallbackQuery(Update update) {
         String queryCallbackQuery = update.getCallbackQuery().getData();
-        Long chaId = update.getCallbackQuery().getMessage().getChatId();
+        Long chatId = update.getCallbackQuery().getMessage().getChatId();
         Integer messageId = update.getCallbackQuery().getMessage().getMessageId();
-        log.debug("Пользователь {} нажал на клавиатуру в сообщении {} и передает: {}",
-                chaId, queryCallbackQuery, messageId);
+        log.info("Пользователь c [chatId={}] нажал на клавиатуру в сообщении [messageId={}] и передает: [{}]",
+                chatId, queryCallbackQuery, messageId);
 
-        switch (queryCallbackQuery) {
-            case "/anyCallback":
-                senderMessageService.sendEditText(
-                        chaId, replyMessageService.getReplyText("reply.callBackAddNewCompany"), messageId
-                );
-                break;
-            default:
-                senderMessageService.sendText(chaId, replyMessageService.getReplyText("reply.nonSupport"));
-                log.warn("Эту команду мы еще не поддерживаем. Команда пользователя: " + queryCallbackQuery);
-        }
+        handleQuery(update, chatId);
+    }
+
+    private void handleQuery(Update update, Long chatId) {
+        log.debug("Выявляю текущий статус пользователя c [chatId={}]", chatId);
+        BotState currentBotState = userStatusService.getBotStateForUser(chatId);
+        log.info("Текущий статус пользователя c [chatId={}] является [BotState={}]", chatId, currentBotState);
+
+        log.debug("Определяю обработчик для пользователя c [chatId={}]", chatId);
+        UserHandlerService userHandlerService = userHandlerFactory.getHandlerForUser(currentBotState);
+        log.info("Пользователю c [chatId={}] выбран обработчик {}", chatId, userHandlerService.getClass().getName());
+
+        userHandlerService.handle(update);
     }
 }

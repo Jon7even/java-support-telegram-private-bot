@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Класс DTO для обновления данных пользователя
+ * Класс DTO для обновления данных пользователя.
  *
  * @author Jon7even
  * @version 2.0

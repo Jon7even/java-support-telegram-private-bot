@@ -4,7 +4,7 @@ import com.vdurmont.emoji.EmojiParser;
 import lombok.AllArgsConstructor;
 
 /**
- * Перечисление смайликов, которые поддерживаются ботом
+ * Перечисление смайликов, которые поддерживаются ботом.
  *
  * @author Jon7even
  * @version 2.0

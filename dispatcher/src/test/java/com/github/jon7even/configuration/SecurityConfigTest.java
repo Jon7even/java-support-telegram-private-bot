@@ -4,12 +4,10 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.Mockito.when;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 /**
  * Тестирование загрузки конфигурации {@link SecurityConfig}
@@ -19,25 +17,24 @@ import static org.mockito.Mockito.when;
  */
 
 @DisplayName("Тестирование загрузки конфигурации SecurityConfig")
-@ExtendWith(MockitoExtension.class)
+@EnableConfigurationProperties(SecurityConfig.class)
+@ExtendWith(SpringExtension.class)
+@TestPropertySource(properties = {
+        "bot.security.keyPass=testPass",
+        "bot.security.attemptsAuth=3"
+})
 public class SecurityConfigTest {
 
-    @InjectMocks
+    @Autowired
     private SecurityConfig securityConfig;
 
-    @Mock
-    private SecurityConfig mockSecurityConfig;
-
     @Test
-    public void testBotConfigLoading() {
-        when(mockSecurityConfig.getKeyPass()).thenReturn("testPass");
-        when(mockSecurityConfig.getAttemptsAuth()).thenReturn(3);
-
-        SoftAssertions softAssertions = new SoftAssertions();
-        assertThat(mockSecurityConfig.getKeyPass())
-                .isEqualTo("testPass");
-        assertThat(mockSecurityConfig.getAttemptsAuth())
-                .isEqualTo(3);
-        softAssertions.assertAll();
+    @DisplayName("Успешная загрузка SecurityConfig")
+    public void securityConfigLoading_Success() {
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(securityConfig.getKeyPass()).isEqualTo("testPass");
+            softly.assertThat(securityConfig.getAttemptsAuth()).isEqualTo(3);
+            softly.assertAll();
+        });
     }
 }
